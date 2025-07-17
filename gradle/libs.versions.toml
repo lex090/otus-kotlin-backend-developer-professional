@@ -1,8 +1,6 @@
 [versions]
-kotlinLanguage = "2.1"
+kotlin-language = "2.1"
 kotlin = "2.1.21"
-
-# BASE
 jvm-compiler = "21"
 jvm-language = "21"
 

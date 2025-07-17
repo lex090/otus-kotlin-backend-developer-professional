@@ -31,7 +31,7 @@ internal class BuildPluginMultiplatform : Plugin<Project> {
                 configureTargets(this@with)
                 sourceSets.configureEach {
                     languageSettings.apply {
-                        languageVersion = libs.versions.kotlinLanguage.get()
+                        languageVersion = libs.versions.kotlin.language.get()
                         progressiveMode = true
                         optIn("kotlin.time.ExperimentalTime")
                     }
