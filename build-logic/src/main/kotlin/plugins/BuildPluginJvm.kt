@@ -1,3 +1,5 @@
+package plugins
+
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,5 +21,4 @@ class BuildPluginJvm : Plugin<Project> {
             mavenCentral()
         }
     }
-
 }

@@ -6,7 +6,12 @@ gradlePlugin {
     plugins {
         create("buildPluginJvm") {
             id = "build-plugin-jvm"
-            implementationClass = "BuildPluginJvm"
+            implementationClass = "plugins.BuildPluginJvm"
+        }
+
+        create("buildPluginMultiplatform") {
+            id = "build-plugin-multiplatform"
+            implementationClass = "plugins.BuildPluginMultiplatform"
         }
     }
 }
