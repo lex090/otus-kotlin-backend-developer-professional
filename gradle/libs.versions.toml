@@ -1,0 +1,17 @@
+[versions]
+kotlin-language = "2.1"
+kotlin = "2.1.21"
+jvm-compiler = "21"
+jvm-language = "21"
+
+[libraries]
+kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+[bundles]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+build-plugin-jvm = { id = "build-plugin-jvm" }
+build-plugin-multiplatform = { id = "build-plugin-multiplatform" }
