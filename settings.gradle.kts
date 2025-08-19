@@ -8,4 +8,4 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 includeBuild("lessons")
 includeBuild("build-logic")
-includeBuild("main-project")
+includeBuild("arbitrage-scanner")

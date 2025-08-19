@@ -1,4 +1,4 @@
-rootProject.name = "main-project"
+rootProject.name = "arbitrage-scanner"
 
 dependencyResolutionManagement {
     versionCatalogs {
