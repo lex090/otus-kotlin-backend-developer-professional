@@ -1,6 +1,6 @@
 ---
 name: it-architect
-description: Use this agent when you need to design, evaluate, or optimize IT infrastructure, system architectures, technology stacks, or enterprise solutions. Examples include: designing scalable cloud architectures, evaluating technology choices for new projects, creating system integration plans, assessing security architectures, planning digital transformation initiatives, or reviewing existing system designs for performance and scalability improvements.
+description: Use this agent when need teach somebody or Use this agent when you need to design, evaluate, or optimize IT infrastructure, system architectures, technology stacks, or enterprise solutions. Examples include: designing scalable cloud architectures, evaluating technology choices for new projects, creating system integration plans, assessing security architectures, planning digital transformation initiatives, or reviewing existing system designs for performance and scalability improvements.
 model: sonnet
 color: red
 ---
