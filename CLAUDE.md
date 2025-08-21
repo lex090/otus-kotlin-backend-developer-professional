@@ -1,59 +1,63 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Этот файл содержит инструкции для Claude Code (claude.ai/code) при работе с кодом в данном репозитории.
 
-## Project Structure
+## Важно: Язык общения
 
-This is a multi-module Kotlin project for OTUS Kotlin Backend Developer Professional course. The project uses Gradle composite builds with three main components:
+**Все ответы и комментарии должны быть на русском языке.**
 
-- `lessons/` - Educational modules with course lessons (e.g., `m1l1-first`)
-- `main-project/` - Main application modules including multiplatform modules
-- `build-logic/` - Custom Gradle build plugins for standardized configuration
-- `arbitrage-scanner/` - Application module (appears to be empty/placeholder)
+## Структура проекта
 
-## Build System
+Это мульти-модульный Kotlin проект для курса OTUS "Kotlin Backend Developer Professional". Проект использует Gradle composite builds с тремя основными компонентами:
 
-The project uses Gradle with Kotlin DSL and custom build plugins located in `build-logic/`:
+- `lessons/` - Учебные модули с уроками курса (например, `m1l1-first`)
+- `main-project/` - Основные модули приложения, включая мультиплатформенные модули
+- `build-logic/` - Кастомные Gradle build плагины для стандартизированной конфигурации
+- `arbitrage-scanner/` - Модуль приложения (пока пустой/заготовка)
 
-- `BuildPluginJvm` - Configures JVM-only Kotlin modules 
-- `BuildPluginMultiplatform` - Configures Kotlin Multiplatform modules with JVM, Linux, and macOS targets
+## Система сборки
 
-Version catalog is defined in `gradle/libs.versions.toml` with Kotlin 2.1.21 and Java 21.
+Проект использует Gradle с Kotlin DSL и кастомные build плагины, расположенные в `build-logic/`:
 
-## Common Development Commands
+- `BuildPluginJvm` - Конфигурирует JVM-only Kotlin модули
+- `BuildPluginMultiplatform` - Конфигурирует Kotlin Multiplatform модули с JVM, Linux и macOS таргетами
 
-### Building
+Каталог версий определен в `gradle/libs.versions.toml` с Kotlin 2.1.21 и Java 21.
+
+## Основные команды для разработки
+
+### Сборка
 ```bash
-./gradlew build                    # Build all modules
-./gradlew :lessons:build          # Build lessons modules
-./gradlew :main-project:build     # Build main project modules
+./gradlew build                    # Собрать все модули
+./gradlew :lessons:build          # Собрать модули уроков
+./gradlew :main-project:build     # Собрать модули основного проекта
 ```
 
-### Testing
+### Тестирование
 ```bash
-./gradlew test                    # Run all tests
-./gradlew :lessons:m1l1-first:test    # Run specific lesson tests
+./gradlew test                    # Запустить все тесты
+./gradlew :lessons:m1l1-first:test    # Запустить тесты конкретного урока
 ```
 
-The test framework used is JUnit Platform with Kotlin Test.
+Используется фреймворк тестирования JUnit Platform с Kotlin Test.
 
-### Running Applications
+### Запуск приложений
 ```bash
-./gradlew :lessons:m1l1-first:run     # Run lesson application
-./gradlew :main-project:tmp-module:run # Run main project application
+./gradlew :lessons:m1l1-first:run     # Запустить приложение урока
+./gradlew :main-project:tmp-module:run # Запустить приложение основного проекта
 ```
 
-## Architecture Notes
+## Архитектурные заметки
 
-- Uses composite builds (`includeBuild`) to separate concerns between lessons, main project, and build logic
-- Custom build plugins standardize Java 21 toolchain configuration across modules
-- Multiplatform modules support JVM, Linux x64, macOS ARM64, and macOS x64 targets
-- Progressive Kotlin language features are enabled in multiplatform modules
-- All modules share common group `com.education.project` and version `1.0-SNAPSHOT`
+- Использует composite builds (`includeBuild`) для разделения ответственности между уроками, основным проектом и логикой сборки
+- Кастомные build плагины стандартизируют конфигурацию Java 21 toolchain во всех модулях
+- Мультиплатформенные модули поддерживают JVM, Linux x64, macOS ARM64 и macOS x64 таргеты
+- В мультиплатформенных модулях включены прогрессивные возможности языка Kotlin
+- Все модули используют общую группу `com.education.project` и версию `1.0-SNAPSHOT`
 
-## Module Types
+## Типы модулей
 
-- **JVM modules**: Use `alias(libs.plugins.build.plugin.jvm)` plugin
-- **Multiplatform modules**: Use `alias(libs.plugins.build.plugin.multiplatform)` plugin
-- **Lesson modules**: Located in `lessons/` with simple structure and tests
-- **Application modules**: Support both commonMain and platform-specific source sets
+- **JVM модули**: Используют плагин `alias(libs.plugins.build.plugin.jvm)`
+- **Мультиплатформенные модули**: Используют плагин `alias(libs.plugins.build.plugin.multiplatform)`
+- **Модули уроков**: Расположены в `lessons/` с простой структурой и тестами
+- **Модули приложений**: Поддерживают как commonMain, так и platform-специфичные source sets
