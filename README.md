@@ -14,5 +14,6 @@
 ## Документация
 
 1. [Целевая аудитория](docs/01-audience.md)
+2. [MVP описание](docs/02-mvp-description.md)
 
 
