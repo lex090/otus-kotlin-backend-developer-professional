@@ -10,3 +10,8 @@
 
 ### Mac OS ###
 .DS_Store
+
+### Claude AI ###
+/.claude/
+.mcp.json
+CLAUDE.md
