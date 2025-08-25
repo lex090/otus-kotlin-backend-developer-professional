@@ -105,7 +105,7 @@ class LiveTimerDomain private constructor(
     companion object {
         /**
          * Запрещаем создавать класс напрямую.
-         * Используем только метод.
+         * Используем только factory метод.
          *
          * @param onInstanceCreationFailedCallback - Используем для логирования если валидация
          *  модели при создании упала с ошибкой
