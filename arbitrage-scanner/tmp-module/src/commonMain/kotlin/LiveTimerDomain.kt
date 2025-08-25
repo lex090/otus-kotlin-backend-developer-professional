@@ -5,7 +5,7 @@
  * @param secondsFromEventStart - Количество секунд с начала старта события
  * @param secondsFromEventStartMd - Временная метка обновления secondsFromEventStart
  * @param isRunning - Запущен таймер или нет.
- * @param format - "mm:ss" // TODO тут пока вопрос как обрабатывать так как LocalTime не подходит.
+ * @param format - "mm:ss"
  *
  *  Пример данных которые приходят с бека.
  *  ```
@@ -77,12 +77,14 @@ class LiveTimerDomain private constructor(
         // Время, которое прошло с момента обновления данных до текущего времени в приложении
         val deltaTime = currentSystemTimestamp - secondsFromEventStartMd
 
-        // Если вдруг получилось что время отрицательное, то возвращаем null так как такое не надо отображать
-        if (deltaTime < 0) {
+        val resultTotalSeconds = secondsFromEventStart + deltaTime
+
+        // Кейс с переполнением переменной Long
+        if (resultTotalSeconds < 0) {
             return null
         }
 
-        return secondsFromEventStart + deltaTime
+        return resultTotalSeconds
     }
 
     private fun calculateDefaultTimer(): LiveTimerValue {
