@@ -285,4 +285,298 @@ internal class LiveTimerDomainTest {
             }
         }
     }
+
+    // ===== ADDITIONAL FACTORY METHOD TESTS FOR 100% COVERAGE =====
+
+    @Test
+    fun `createOrNull should return null when isShow is null`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = null,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+        
+        assertNull(timer, "Timer should be null when isShow is null")
+    }
+
+    @Test
+    fun `createOrNull should return null when isRunning is null`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = null,
+            format = "mm:ss"
+        )
+        
+        assertNull(timer, "Timer should be null when isRunning is null")
+    }
+
+    @Test
+    fun `createOrNull should return null when format is empty string`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = ""
+        )
+        
+        assertNull(timer, "Timer should be null when format is empty string")
+    }
+
+    @Test
+    fun `createOrNull should capture specific error messages in callback`() {
+        val capturedMessages = mutableListOf<String>()
+
+        // Test negative timerValueInSeconds error message
+        LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = -5L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss",
+            onInstanceCreationFailedCallback = { error ->
+                capturedMessages.add(error.message ?: "")
+            }
+        )
+
+        assertEquals(1, capturedMessages.size, "Should capture one error")
+        assertEquals(true, capturedMessages[0].contains("должен быть больше или равен 0"), 
+            "Should contain correct error message for negative timerValueInSeconds")
+    }
+
+    @Test
+    fun `createOrNull should capture error message for invalid secondsFromEventStartMd`() {
+        var capturedMessage: String? = null
+
+        LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = -1L,
+            isRunning = 1,
+            format = "mm:ss",
+            onInstanceCreationFailedCallback = { error ->
+                capturedMessage = error.message
+            }
+        )
+
+        assertNotNull(capturedMessage, "Should capture error message")
+        assertEquals(true, capturedMessage!!.contains("должен быть больше 0"), 
+            "Should contain correct error message for invalid secondsFromEventStartMd")
+    }
+
+    @Test
+    fun `createOrNull should capture error message for blank format`() {
+        var capturedMessage: String? = null
+
+        LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "   ",
+            onInstanceCreationFailedCallback = { error ->
+                capturedMessage = error.message
+            }
+        )
+
+        assertNotNull(capturedMessage, "Should capture error message")
+        assertEquals(true, capturedMessage!!.contains("не должен быть пустым"), 
+            "Should contain correct error message for blank format")
+    }
+
+    // ===== OVERFLOW AND EDGE CASE TESTS =====
+
+    @Test
+    fun `apply should handle potential overflow in running timer calculation`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = Long.MAX_VALUE - 100L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+        
+        // Try to cause overflow by adding large delta
+        val currentTime = 1200L // deltaTime = 200, would cause overflow
+        val result = timer?.apply(currentSystemTimestamp = currentTime)
+        
+        // With overflow protection, should return null to prevent showing incorrect time
+        assertNull(result, "Should return null when overflow occurs to protect UI from incorrect data")
+    }
+
+    @Test
+    fun `apply should work with secondsFromEventStart exactly zero`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 0L, // Exactly zero
+            timerValueInSecondsMd = 1000L,
+            isRunning = 0,
+            format = "mm:ss"
+        )
+        
+        val result = timer?.apply(currentSystemTimestamp = 2000L)
+        
+        assertNotNull(result, "Timer should work with zero seconds")
+        assertEquals(0L, result.totalSecondsFromEventStart, "Should return zero seconds")
+        assertEquals(false, result.isRunning, "Should not be running")
+    }
+
+    @Test
+    fun `apply should work with zero deltaTime for running timer`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 300L,
+            timerValueInSecondsMd = 5000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+        
+        // Exact same timestamp as update time
+        val result = timer?.apply(currentSystemTimestamp = 5000L)
+        
+        assertNotNull(result, "Timer should work with zero delta")
+        assertEquals(300L, result.totalSecondsFromEventStart, "Should return original value")
+        assertEquals(true, result.isRunning, "Should be running")
+    }
+
+    @Test
+    fun `apply should handle very large deltaTime values`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 100L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+        
+        val currentTime = Long.MAX_VALUE / 2 // Very large timestamp
+        val result = timer?.apply(currentSystemTimestamp = currentTime)
+        
+        // Should either handle gracefully or return null
+        if (result != null) {
+            assertEquals(true, result.totalSecondsFromEventStart >= 100L, 
+                "If result exists, should be at least original value")
+        }
+    }
+
+    @Test
+    fun `apply should handle edge case with maximum valid secondsFromEventStartMd`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 60L,
+            timerValueInSecondsMd = Long.MAX_VALUE / 2,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+        
+        val currentTime = Long.MAX_VALUE / 2 + 100L
+        val result = timer?.apply(currentSystemTimestamp = currentTime)
+        
+        if (result != null) {
+            assertEquals(true, result.totalSecondsFromEventStart >= 60L, 
+                "Should handle large timestamp values")
+        }
+    }
+
+    // ===== DATA CLASS LiveTimerValue TESTS =====
+
+    @Test
+    fun `LiveTimerValue should have correct equals implementation`() {
+        val value1 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        val value2 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        val value3 = LiveTimerDomain.LiveTimerValue(
+            isRunning = false,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        assertEquals(value1, value2, "Same values should be equal")
+        assertEquals(false, value1 == value3, "Different values should not be equal")
+    }
+
+    @Test
+    fun `LiveTimerValue should have correct hashCode implementation`() {
+        val value1 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        val value2 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        assertEquals(value1.hashCode(), value2.hashCode(), 
+            "Equal objects should have equal hash codes")
+    }
+
+    @Test
+    fun `LiveTimerValue should have correct toString implementation`() {
+        val value = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        val toString = value.toString()
+        
+        assertEquals(true, toString.contains("LiveTimerValue"), "Should contain class name")
+        assertEquals(true, toString.contains("isRunning=true"), "Should contain isRunning field")
+        assertEquals(true, toString.contains("totalSecondsFromEventStart=120"), "Should contain totalSecondsFromEventStart field")
+        assertEquals(true, toString.contains("format=mm:ss"), "Should contain format field")
+    }
+
+    @Test
+    fun `LiveTimerValue should support copy functionality`() {
+        val original = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L,
+            format = "mm:ss"
+        )
+        
+        val copied = original.copy(isRunning = false)
+        
+        assertEquals(false, copied.isRunning, "Copied value should have modified field")
+        assertEquals(120L, copied.totalSecondsFromEventStart, "Copied value should preserve other fields")
+        assertEquals("mm:ss", copied.format, "Copied value should preserve other fields")
+        assertEquals(true, original.isRunning, "Original should remain unchanged")
+    }
+
+    @Test
+    fun `LiveTimerValue should work with different field combinations`() {
+        val testCases = listOf(
+            Triple(true, 0L, "hh:mm:ss"),
+            Triple(false, Long.MAX_VALUE, "mm:ss"),
+            Triple(true, 3600L, "ss"),
+            Triple(false, 1L, "custom format")
+        )
+        
+        testCases.forEach { (isRunning, seconds, format) ->
+            val value = LiveTimerDomain.LiveTimerValue(
+                isRunning = isRunning,
+                totalSecondsFromEventStart = seconds,
+                format = format
+            )
+            
+            assertEquals(isRunning, value.isRunning, "isRunning should match")
+            assertEquals(seconds, value.totalSecondsFromEventStart, "seconds should match")
+            assertEquals(format, value.format, "format should match")
+        }
+    }
 }
