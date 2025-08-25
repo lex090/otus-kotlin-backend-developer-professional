@@ -1,8 +1,3 @@
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
-
-
 /**
  * Доменная модель таймера.
  *
@@ -29,12 +24,6 @@ class LiveTimerDomain private constructor(
     private val format: String,
 ) {
 
-    // TODO Возможно не понядобится
-    @OptIn(FormatStringsInDatetimeFormats::class)
-    private val formatter by lazy {
-        LocalTime.Format { byUnicodePattern(format) }
-    }
-
     /**
      * Валидация на уровне создания класса.
      * Проверяем валидность данных на возможную дальнейшую работу
@@ -49,13 +38,6 @@ class LiveTimerDomain private constructor(
         }
 
         require(format.isNotBlank()) { "Формат не должен быть пустым" }
-
-        /**
-         * Пробуем получить форматтер.
-         * Eсли не получится создать форматтер по полю format, то выскочит исключение.
-         * Пытаемся предотвратить работу с не корректными данным при создании класса.
-         */
-        formatter
     }
 
     /**
@@ -77,13 +59,12 @@ class LiveTimerDomain private constructor(
 
     private fun calculateIsRunningTimer(currentSystemTimestamp: Long): LiveTimerValue? {
         return runCatching {
-            val time = calculateActualTimestamp(currentSystemTimestamp = currentSystemTimestamp)
-            val localDate = LocalTime.fromSecondOfDay(time.toInt())
-            val formattedTime = formatter.format(localDate)
+            val secondsFromEventStart = calculateActualTimestamp(currentSystemTimestamp = currentSystemTimestamp)
 
             LiveTimerValue(
                 isRunning = true,
-                value = formattedTime,
+                totalSecondsFromEventStart = secondsFromEventStart,
+                format = format,
             )
         }.getOrNull()
     }
@@ -94,15 +75,12 @@ class LiveTimerDomain private constructor(
         return secondsFromEventStart + deltaTime
     }
 
-    private fun calculateDefaultTimer(): LiveTimerValue? {
-        return runCatching {
-            val localDate = LocalTime.fromSecondOfDay(secondsFromEventStart.toInt())
-            val formattedTime = formatter.format(localDate)
-            return LiveTimerValue(
-                isRunning = false,
-                value = formattedTime,
-            )
-        }.getOrNull()
+    private fun calculateDefaultTimer(): LiveTimerValue {
+        return LiveTimerValue(
+            isRunning = false,
+            totalSecondsFromEventStart = secondsFromEventStart,
+            format = format,
+        )
     }
 
     /**
@@ -110,7 +88,8 @@ class LiveTimerDomain private constructor(
      */
     data class LiveTimerValue(
         val isRunning: Boolean,
-        val value: String,
+        val totalSecondsFromEventStart: Long,
+        val format: String,
     )
 
     companion object {
