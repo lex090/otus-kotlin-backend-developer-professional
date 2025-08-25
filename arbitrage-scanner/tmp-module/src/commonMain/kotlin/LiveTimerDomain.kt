@@ -58,27 +58,30 @@ class LiveTimerDomain private constructor(
     }
 
     private fun calculateIsRunningTimer(currentSystemTimestamp: Long): LiveTimerValue? {
-        /**
-         * Проверка на то что текущее время системы не меньше времени когда таймер обновили на бекенде.
-         */
+        val secondsFromEventStart =
+            calculateActualTimestamp(currentSystemTimestamp = currentSystemTimestamp) ?: return null
+
+        return LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = secondsFromEventStart,
+            format = format,
+        )
+    }
+
+    private fun calculateActualTimestamp(currentSystemTimestamp: Long): Long? {
+        // Проверка на то что текущее время системы не меньше времени когда таймер обновили на бекенде.
         if (currentSystemTimestamp < secondsFromEventStartMd) {
             return null
         }
 
-        return runCatching {
-            val secondsFromEventStart = calculateActualTimestamp(currentSystemTimestamp = currentSystemTimestamp)
-
-            LiveTimerValue(
-                isRunning = true,
-                totalSecondsFromEventStart = secondsFromEventStart,
-                format = format,
-            )
-        }.getOrNull()
-    }
-
-    private fun calculateActualTimestamp(currentSystemTimestamp: Long): Long {
         // Время, которое прошло с момента обновления данных до текущего времени в приложении
         val deltaTime = currentSystemTimestamp - secondsFromEventStartMd
+
+        // Если вдруг получилось что время отрицательное, то возвращаем null так как такое не надо отображать
+        if (deltaTime < 0) {
+            return null
+        }
+
         return secondsFromEventStart + deltaTime
     }
 
