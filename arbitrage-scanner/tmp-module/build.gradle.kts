@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.build.plugin.multiplatform)
+    alias(libs.plugins.kover)
 }
 
 kotlin {
