@@ -3,10 +3,12 @@ kotlin-language = "2.1"
 kotlin = "2.1.21"
 jvm-compiler = "21"
 jvm-language = "21"
+kotlinx-datetime = "0.6.1"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [bundles]
 
