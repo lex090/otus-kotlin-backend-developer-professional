@@ -18,6 +18,10 @@
 
 1. [Целевая аудитория](docs/01-audience.md)
 2. [MVP описание](docs/02-mvp-description.md)
-3. [Главный экран приложения](docs/03-main-screen-ascii.md)
+3. Варианты отображения главного экрана
+   1. [Вариант 1](docs/03-main-screen-ascii-v1.md)
+   2. [Вариант 2](docs/03-main-screen-ascii-v2.md)
+   3. [Вариант 3](docs/03-main-screen-ascii-v3.md)
+   4. [Вариант 4](docs/03-main-screen-ascii-v4.md)
 
 
