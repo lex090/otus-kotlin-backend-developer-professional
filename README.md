@@ -16,12 +16,15 @@
 
 ## Документация
 
-1. [Целевая аудитория](docs/01-biz/01-audience.md)
-2. [MVP описание](docs/01-biz/02-mvp-description.md)
-3. Варианты отображения главного экрана
-   1. [Вариант 1](docs/02-ui/03-main-screen-ascii-v1.md)
-   2. [Вариант 2](docs/02-ui/03-main-screen-ascii-v2.md)
-   3. [Вариант 3](docs/02-ui/03-main-screen-ascii-v3.md)
-   4. [Вариант 4](docs/02-ui/03-main-screen-ascii-v4.md)
+1. [**Целевая аудитория**](docs/01-biz/01-audience.md)
+2. [**MVP описание**](docs/01-biz/02-mvp-description.md)
+3. **Варианты отображения главного экрана**
+    1. [Вариант 1](docs/02-ui/03-main-screen-ascii-v1.md)
+    2. [Вариант 2](docs/02-ui/03-main-screen-ascii-v2.md)
+    3. [Вариант 3](docs/02-ui/03-main-screen-ascii-v3.md)
+    4. [Вариант 4](docs/02-ui/03-main-screen-ascii-v4.md)
+4. **API**
+    1. [Arbitrage opportunity](docs/03-architecture/api/01-arbitrage-opportunity.md)
+    2. [Market price](docs/03-architecture/api/02-market-price.md)
 
 
