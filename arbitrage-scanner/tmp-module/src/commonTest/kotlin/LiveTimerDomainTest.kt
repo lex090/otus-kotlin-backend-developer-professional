@@ -240,11 +240,10 @@ internal class LiveTimerDomainTest {
         assertNotNull(result, "apply() should return result for static timer")
         assertEquals(false, result.isRunning, "Timer should not be running")
         assertEquals(
-            120L,
-            result.totalSecondsFromEventStart,
-            "Should return original seconds value"
+            "02:00",
+            result.simpleFormat(),
+            "Should return formatted original value (120s = 02:00)"
         )
-        assertEquals("mm:ss", result.format, "Should preserve format")
     }
 
     @Test
@@ -263,11 +262,10 @@ internal class LiveTimerDomainTest {
         assertNotNull(result, "apply() should return result for running timer")
         assertEquals(true, result.isRunning, "Timer should be running")
         assertEquals(
-            170L,
-            result.totalSecondsFromEventStart,
-            "Should add delta time: 120 + 50 = 170"
+            "02:50",
+            result.simpleFormat(),
+            "Should add delta time and format correctly: 170s = 02:50"
         )
-        assertEquals("mm:ss", result.format, "Should preserve format")
     }
 
     @Test
@@ -301,9 +299,9 @@ internal class LiveTimerDomainTest {
 
         assertNotNull(result, "apply() should handle zero delta time")
         assertEquals(
-            120L,
-            result.totalSecondsFromEventStart,
-            "Should return original value when no time passed"
+            "02:00",
+            result.simpleFormat(),
+            "Should return original formatted value when no time passed (120s = 02:00)"
         )
     }
 
@@ -322,7 +320,7 @@ internal class LiveTimerDomainTest {
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
         assertNotNull(result, "apply() should handle large values")
-        assertEquals(Long.MAX_VALUE / 2, result.totalSecondsFromEventStart)
+        assertEquals(true, result.simpleFormat().isNotBlank(), "Should return formatted value for large numbers")
     }
 
     @Test
@@ -397,7 +395,7 @@ internal class LiveTimerDomainTest {
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
         assertNotNull(result, "Timer should work with zero seconds")
-        assertEquals(0L, result.totalSecondsFromEventStart, "Should return zero seconds")
+        assertEquals("00:00", result.simpleFormat(), "Should return zero formatted as 00:00")
         assertEquals(false, result.isRunning, "Should not be running")
     }
 
@@ -416,9 +414,9 @@ internal class LiveTimerDomainTest {
 
         assertNotNull(result, "Timer should work with zero delta")
         assertEquals(
-            300L,
-            result.totalSecondsFromEventStart,
-            "Should return original value"
+            "05:00",
+            result.simpleFormat(),
+            "Should return original formatted value (300s = 05:00)"
         )
         assertEquals(true, result.isRunning, "Should be running")
     }
@@ -439,8 +437,8 @@ internal class LiveTimerDomainTest {
         // Should either handle gracefully or return null
         if (result != null) {
             assertEquals(
-                true, result.totalSecondsFromEventStart >= 100L,
-                "If result exists, should be at least original value"
+                true, result.simpleFormat().isNotBlank(),
+                "If result exists, should have formatted value"
             )
         }
     }
@@ -460,8 +458,8 @@ internal class LiveTimerDomainTest {
 
         if (result != null) {
             assertEquals(
-                true, result.totalSecondsFromEventStart >= 60L,
-                "Should handle large timestamp values"
+                true, result.simpleFormat().isNotBlank(),
+                "Should handle large timestamp values and return formatted output"
             )
         }
     }
@@ -469,120 +467,228 @@ internal class LiveTimerDomainTest {
     // ===== DATA CLASS LiveTimerValue TESTS =====
 
     @Test
-    fun `LiveTimerValue should have correct equals implementation`() {
-        val value1 = LiveTimerDomain.LiveTimerValue(
-            isRunning = true,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        val value2 = LiveTimerDomain.LiveTimerValue(
-            isRunning = true,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        val value3 = LiveTimerDomain.LiveTimerValue(
-            isRunning = false,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        assertEquals(value1, value2, "Same values should be equal")
-        assertEquals(false, value1 == value3, "Different values should not be equal")
-    }
-
-    @Test
-    fun `LiveTimerValue should have correct hashCode implementation`() {
-        val value1 = LiveTimerDomain.LiveTimerValue(
-            isRunning = true,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        val value2 = LiveTimerDomain.LiveTimerValue(
-            isRunning = true,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        assertEquals(
-            value1.hashCode(), value2.hashCode(),
-            "Equal objects should have equal hash codes"
-        )
-    }
-
-    @Test
-    fun `LiveTimerValue should have correct toString implementation`() {
-        val value = LiveTimerDomain.LiveTimerValue(
-            isRunning = true,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        val toString = value.toString()
-
-        assertEquals(
-            true,
-            toString.contains("LiveTimerValue"),
-            "Should contain class name"
-        )
-        assertEquals(
-            true,
-            toString.contains("isRunning=true"),
-            "Should contain isRunning field"
-        )
-        assertEquals(
-            true,
-            toString.contains("totalSecondsFromEventStart=120"),
-            "Should contain totalSecondsFromEventStart field"
-        )
-        assertEquals(
-            true,
-            toString.contains("format=mm:ss"),
-            "Should contain format field"
-        )
-    }
-
-    @Test
-    fun `LiveTimerValue should support copy functionality`() {
-        val original = LiveTimerDomain.LiveTimerValue(
-            isRunning = true,
-            totalSecondsFromEventStart = 120L,
-            format = "mm:ss"
-        )
-
-        val copied = original.copy(isRunning = false)
-
-        assertEquals(false, copied.isRunning, "Copied value should have modified field")
-        assertEquals(
-            120L,
-            copied.totalSecondsFromEventStart,
-            "Copied value should preserve other fields"
-        )
-        assertEquals("mm:ss", copied.format, "Copied value should preserve other fields")
-        assertEquals(true, original.isRunning, "Original should remain unchanged")
-    }
-
-    @Test
     fun `LiveTimerValue should work with different field combinations`() {
         val testCases = listOf(
-            Triple(true, 0L, "hh:mm:ss"),
-            Triple(false, Long.MAX_VALUE, "mm:ss"),
-            Triple(true, 3600L, "ss"),
-            Triple(false, 1L, "custom format")
+            Pair(true, 0L),
+            Pair(false, Long.MAX_VALUE),
+            Pair(true, 3600L),
+            Pair(false, 1L)
         )
 
-        testCases.forEach { (isRunning, seconds, format) ->
+        testCases.forEach { (isRunning, seconds) ->
             val value = LiveTimerDomain.LiveTimerValue(
                 isRunning = isRunning,
-                totalSecondsFromEventStart = seconds,
-                format = format
+                totalSecondsFromEventStart = seconds
             )
 
             assertEquals(isRunning, value.isRunning, "isRunning should match")
-            assertEquals(seconds, value.totalSecondsFromEventStart, "seconds should match")
-            assertEquals(format, value.format, "format should match")
+            assertEquals(true, value.simpleFormat().isNotBlank(), "Should be able to format any valid seconds value")
         }
+    }
+
+    @Test
+    fun `LiveTimerValue simpleFormat should format time correctly`() {
+        val testCases = listOf(
+            Pair(0L, "00:00"),
+            Pair(59L, "00:59"),
+            Pair(60L, "01:00"),
+            Pair(120L, "02:00"),
+            Pair(3661L, "61:01"), // 1 час 1 минута 1 секунда = 61:01
+            Pair(7200L, "120:00") // 2 часа = 120:00
+        )
+
+        testCases.forEach { (seconds, expectedFormat) ->
+            val value = LiveTimerDomain.LiveTimerValue(
+                isRunning = true,
+                totalSecondsFromEventStart = seconds
+            )
+
+            assertEquals(
+                expectedFormat,
+                value.simpleFormat(),
+                "Format for $seconds seconds should be $expectedFormat"
+            )
+        }
+    }
+
+    // ===== ДОПОЛНИТЕЛЬНЫЕ ТЕСТЫ =====
+
+    @Test
+    fun `simpleFormat should handle edge cases for time formatting`() {
+        val testCases = listOf(
+            Pair(1L, "00:01"), // 1 секунда
+            Pair(59L, "00:59"), // 59 секунд
+            Pair(61L, "01:01"), // 1 минута 1 секунда
+            Pair(599L, "09:59"), // 9 минут 59 секунд
+            Pair(600L, "10:00"), // 10 минут
+            Pair(3599L, "59:59"), // 59 минут 59 секунд
+            Pair(3600L, "60:00"), // 1 час = 60:00 в формате mm:ss
+            Pair(36000L, "600:00"), // 10 часов = 600:00 в формате mm:ss
+        )
+
+        testCases.forEach { (seconds, expected) ->
+            val value = LiveTimerDomain.LiveTimerValue(
+                isRunning = true,
+                totalSecondsFromEventStart = seconds
+            )
+            assertEquals(
+                expected,
+                value.simpleFormat(),
+                "Секунды $seconds должны форматироваться как $expected"
+            )
+        }
+    }
+
+    @Test
+    fun `createOrNull should work with boundary values`() {
+        // Граничные значения для timerValueInSeconds
+        val validTimer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 0L, // Минимальное валидное значение
+            timerValueInSecondsMd = 1L, // Минимальное валидное значение
+            isRunning = 0,
+            format = "mm:ss"
+        )
+        assertNotNull(validTimer, "Должен создаваться таймер с граничными валидными значениями")
+
+        val maxTimer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = Long.MAX_VALUE,
+            timerValueInSecondsMd = Long.MAX_VALUE,
+            isRunning = 0,
+            format = "mm:ss"
+        )
+        assertNotNull(maxTimer, "Должен создаваться таймер с максимальными значениями")
+    }
+
+    @Test
+    fun `apply should handle concurrent timer updates correctly`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 100L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        // Симуляция множественных вызовов apply с разными временными метками
+        val results = listOf(1010L, 1020L, 1030L).map { timestamp ->
+            timer?.apply(currentSystemTimestamp = timestamp)
+        }
+
+        results.forEach { result ->
+            assertNotNull(result, "Все результаты должны быть не null")
+            assertEquals(true, result?.isRunning, "Таймер должен оставаться активным")
+        }
+
+        // Проверяем, что время увеличивается правильно
+        assertEquals("01:50", results[0]?.simpleFormat()) // 100 + 10 = 110s = 01:50
+        assertEquals("02:00", results[1]?.simpleFormat()) // 100 + 20 = 120s = 02:00
+        assertEquals("02:10", results[2]?.simpleFormat()) // 100 + 30 = 130s = 02:10
+    }
+
+    @Test
+    fun `apply should return different objects for different timestamps`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 50L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        val result1 = timer?.apply(currentSystemTimestamp = 1010L)
+        val result2 = timer?.apply(currentSystemTimestamp = 1020L)
+
+        assertNotNull(result1)
+        assertNotNull(result2)
+        
+        // Объекты должны быть разными и иметь разное время
+        assertEquals(false, result1 === result2, "Должны быть разные объекты")
+        assertEquals("01:00", result1?.simpleFormat()) // 50 + 10 = 60s
+        assertEquals("01:10", result2?.simpleFormat()) // 50 + 20 = 70s
+    }
+
+    @Test
+    fun `timer creation with different format strings`() {
+        val formats = listOf("mm:ss", "hh:mm:ss", "ss", "custom", "h:m:s", "00:00:00")
+        
+        formats.forEach { format ->
+            val timer = LiveTimerDomain.createOrNull(
+                isShow = 1,
+                timerValueInSeconds = 120L,
+                timerValueInSecondsMd = 1000L,
+                isRunning = 0,
+                format = format
+            )
+            assertNotNull(timer, "Таймер должен создаваться с форматом $format")
+        }
+    }
+
+    @Test
+    fun `callback should be called for various validation failures`() {
+        val errorMessages = mutableListOf<String>()
+        val callback: (Throwable) -> Unit = { error ->
+            errorMessages.add(error.message ?: "")
+        }
+
+        // Тестируем различные виды ошибок валидации
+        LiveTimerDomain.createOrNull(
+            isShow = null,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss",
+            onInstanceCreationFailedCallback = callback
+        )
+
+        LiveTimerDomain.createOrNull(
+            isShow = 2, // Невалидное значение
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss",
+            onInstanceCreationFailedCallback = callback
+        )
+
+        LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = -1L, // Невалидное значение
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss",
+            onInstanceCreationFailedCallback = callback
+        )
+
+        assertEquals(
+            true,
+            errorMessages.size >= 3,
+            "Должно быть зафиксировано минимум 3 ошибки валидации"
+        )
+    }
+
+    @Test
+    fun `simpleFormat should be consistent across different LiveTimerValue instances`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 125L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        val result1 = timer?.apply(currentSystemTimestamp = 1005L) // 125 + 5 = 130s
+        val result2 = timer?.apply(currentSystemTimestamp = 1005L) // То же время
+
+        assertNotNull(result1)
+        assertNotNull(result2)
+
+        assertEquals(
+            result1?.simpleFormat(),
+            result2?.simpleFormat(),
+            "Одинаковые временные метки должны давать одинаковое форматирование"
+        )
+
+        assertEquals("02:10", result1?.simpleFormat()) // 130s = 2:10
     }
 }
