@@ -28,7 +28,8 @@
 5. **C4**
     1. [C1](docs/03-architecture/c4/01-c1-context.drawio.svg)
     2. [C2](docs/03-architecture/c4/02-c2-containers.drawio.svg)
-    3. [C3](docs/03-architecture/c4/03-c3-components.drawio.svg)
+    3. [C3-ArbitrageOpportunityService](docs/03-architecture/c4/03-c3-ArbitrageOpportunityService-component.drawio.svg)
+    4. [C3-CexMarketDataSnapshotService](docs/03-architecture/c4/03-c3-CexMarketDataSnapshotService-component.drawio.svg)
 
 
 
