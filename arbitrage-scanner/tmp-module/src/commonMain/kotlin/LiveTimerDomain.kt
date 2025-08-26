@@ -145,6 +145,30 @@ class LiveTimerDomain private constructor(
         )
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as LiveTimerDomain
+
+        if (isShow != other.isShow) return false
+        if (secondsFromEventStart != other.secondsFromEventStart) return false
+        if (secondsFromEventStartMd != other.secondsFromEventStartMd) return false
+        if (isRunning != other.isRunning) return false
+        if (format != other.format) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = isShow.hashCode()
+        result = 31 * result + secondsFromEventStart.hashCode()
+        result = 31 * result + secondsFromEventStartMd.hashCode()
+        result = 31 * result + isRunning.hashCode()
+        result = 31 * result + format.hashCode()
+        return result
+    }
+
     /**
      * Value объект, представляющий снимок состояния live-таймера в конкретный момент времени.
      *
@@ -167,6 +191,24 @@ class LiveTimerDomain private constructor(
             val mm = (totalSecondsFromEventStart / 60).toString().padStart(2, '0')
             val ss = (totalSecondsFromEventStart % 60).toString().padStart(2, '0')
             return "$mm:$ss"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other == null || this::class != other::class) return false
+
+            other as LiveTimerValue
+
+            if (isRunning != other.isRunning) return false
+            if (totalSecondsFromEventStart != other.totalSecondsFromEventStart) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = isRunning.hashCode()
+            result = 31 * result + totalSecondsFromEventStart.hashCode()
+            return result
         }
     }
 
