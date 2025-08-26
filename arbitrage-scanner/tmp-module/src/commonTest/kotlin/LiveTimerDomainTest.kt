@@ -105,7 +105,7 @@ internal class LiveTimerDomainTest {
     @Test
     fun `createOrNull should handle invalid isShow values`() {
         val timer = LiveTimerDomain.createOrNull(
-            isShow = 2, // Invalid value, only 0 and 1 are valid
+            isShow = 2, // Невалидное значение, только 0 и 1 валидны
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
             isRunning = 1,
@@ -121,7 +121,7 @@ internal class LiveTimerDomainTest {
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
-            isRunning = 3, // Invalid value, only 0 and 1 are valid
+            isRunning = 3, // Невалидное значение, только 0 и 1 валидны
             format = "mm:ss"
         )
 
@@ -173,7 +173,7 @@ internal class LiveTimerDomainTest {
 
         LiveTimerDomain.createOrNull(
             isShow = 1,
-            timerValueInSeconds = -10L, // This should cause validation error
+            timerValueInSeconds = -10L, // Это должно вызвать ошибку валидации
             timerValueInSecondsMd = 1000L,
             isRunning = 1,
             format = "mm:ss",
@@ -193,7 +193,7 @@ internal class LiveTimerDomainTest {
     fun `createOrNull should capture specific error messages in callback`() {
         val capturedMessages = mutableListOf<String>()
 
-        // Test negative timerValueInSeconds error message
+        // Тестирование сообщения об ошибке для отрицательного timerValueInSeconds
         LiveTimerDomain.createOrNull(
             isShow = 1,
             timerValueInSeconds = -5L,
@@ -213,7 +213,7 @@ internal class LiveTimerDomainTest {
     @Test
     fun `apply should return null when timer is not shown`() {
         val timer = LiveTimerDomain.createOrNull(
-            isShow = 0, // Timer should not be shown
+            isShow = 0, // Таймер не должен показываться
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
             isRunning = 1,
@@ -231,7 +231,7 @@ internal class LiveTimerDomainTest {
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
-            isRunning = 0, // Timer is not running
+            isRunning = 0, // Таймер не активен
             format = "mm:ss"
         )
 
@@ -252,11 +252,11 @@ internal class LiveTimerDomainTest {
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
-            isRunning = 1, // Timer is running
+            isRunning = 1, // Таймер активен
             format = "mm:ss"
         )
 
-        val currentTime = 1050L // 50 seconds after last update
+        val currentTime = 1050L // 50 секунд после последнего обновления
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
         assertNotNull(result, "apply() должен возвращать результат для активного таймера")
@@ -278,7 +278,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        val currentTime = 1500L // Less than update time (2000L)
+        val currentTime = 1500L // Меньше чем время обновления (2000L)
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
         assertNull(result, "apply() должен возвращать null когда системное время сдвинулось назад")
@@ -294,7 +294,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        val currentTime = 1000L // Same as update time
+        val currentTime = 1000L // То же, что и время обновления
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
         assertNotNull(result, "apply() должен обрабатывать нулевую дельту времени")
