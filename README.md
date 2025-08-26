@@ -25,6 +25,5 @@
     4. [Вариант 4](docs/02-ui/03-main-screen-ascii-v4.md)
 4. **API**
     1. [Arbitrage opportunity](docs/03-architecture/api/01-arbitrage-opportunity.md)
-    2. [Market price](docs/03-architecture/api/02-market-price.md)
 
 
