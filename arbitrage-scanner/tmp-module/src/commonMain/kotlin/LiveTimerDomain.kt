@@ -1,15 +1,15 @@
 /**
  * Доменная модель live-таймера спортивного события.
- * 
+ *
  * Инкапсулирует логику расчета текущего времени таймера с учетом системного времени
  * и защищает от некорректных данных (переполнение, отрицательные значения).
- * 
+ *
  * @param isShow Флаг отображения таймера в пользовательском интерфейсе
  * @param secondsFromEventStart Базовое время таймера в секундах на момент последнего обновления
  * @param secondsFromEventStartMd Unix timestamp (в секундах) момента последнего обновления данных с бэкенда
  * @param isRunning Флаг активности таймера (true - тикает в реальном времени, false - остановлен)
  * @param format Строка формата отображения времени (например, "mm:ss", "hh:mm:ss")
- * 
+ *
  * ### Пример JSON данных с бэкенда:
  * ```json
  * {
@@ -20,7 +20,7 @@
  *   "format": "mm:ss"
  * }
  * ```
- * 
+ *
  * ### Использование:
  * ```kotlin
  * val timer = LiveTimerDomain.createOrNull(
@@ -30,7 +30,7 @@
  *     isRunning = 1,
  *     format = "mm:ss"
  * )
- * 
+ *
  * val currentTime = System.currentTimeMillis() / 1000
  * val result = timer?.apply(currentTime)
  * ```
@@ -45,11 +45,11 @@ class LiveTimerDomain private constructor(
 
     /**
      * Валидация инвариантов доменной модели.
-     * 
+     *
      * Проверяет корректность входных данных и предотвращает создание объекта
      * с некорректными значениями, которые могут привести к ошибкам во время выполнения.
      * Применяет принцип "fail-fast" для раннего обнаружения проблем.
-     * 
+     *
      * @throws IllegalArgumentException если данные не соответствуют бизнес-правилам
      */
     init {
@@ -66,17 +66,17 @@ class LiveTimerDomain private constructor(
 
     /**
      * Вычисляет актуальное состояние таймера на основе текущего системного времени.
-     * 
+     *
      * Для активного таймера (isRunning=true) рассчитывает прошедшее время с момента
      * последнего обновления и прибавляет его к базовому значению. Для остановленного
      * таймера возвращает статичное значение.
-     * 
+     *
      * @param currentSystemTimestamp Unix timestamp текущего системного времени в секундах
      * @return [LiveTimerValue] с актуальными данными или null в следующих случаях:
      *   - Таймер не должен отображаться (isShow=false)
      *   - Системное время меньше времени последнего обновления (время "откатилось назад")
      *   - Произошло переполнение Long при вычислении (результат стал отрицательным)
-     * 
+     *
      * ### Пример использования:
      * ```kotlin
      * val currentTime = System.currentTimeMillis() / 1000
@@ -105,18 +105,17 @@ class LiveTimerDomain private constructor(
         return LiveTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = secondsFromEventStart,
-            format = format,
         )
     }
 
     /**
      * Вычисляет актуальное время таймера с учетом прошедшего системного времени.
-     * 
+     *
      * Алгоритм работы:
      * 1. Рассчитывает дельту времени между текущим моментом и последним обновлением
      * 2. Прибавляет дельту к базовому значению таймера
      * 3. Проверяет корректность результата (защита от переполнения и некорректного времени)
-     * 
+     *
      * @param currentSystemTimestamp Unix timestamp текущего системного времени в секундах
      * @return Актуальное время таймера в секундах или null при ошибке вычисления
      */
@@ -143,36 +142,43 @@ class LiveTimerDomain private constructor(
         return LiveTimerValue(
             isRunning = false,
             totalSecondsFromEventStart = secondsFromEventStart,
-            format = format,
         )
     }
 
     /**
      * Value объект, представляющий снимок состояния live-таймера в конкретный момент времени.
-     * 
+     *
      * Содержит все необходимые данные для отображения таймера в UI слое.
      * Является immutable и может безопасно передаваться между слоями приложения
      * без риска случайных изменений состояния.
-     * 
+     *
      * @property isRunning Флаг активности таймера (true - тикает в реальном времени, false - остановлен)
      * @property totalSecondsFromEventStart Общее время от начала события в секундах
-     * @property format Строка формата для отображения времени (например, "mm:ss")
      */
-    data class LiveTimerValue(
+    class LiveTimerValue(
         val isRunning: Boolean,
-        val totalSecondsFromEventStart: Long,
-        val format: String,
-    )
+        private val totalSecondsFromEventStart: Long,
+    ) {
+
+        /**
+         * Базовое форматирование таймера вида mm:ss.
+         */
+        fun simpleFormat(): String {
+            val mm = (totalSecondsFromEventStart / 60).toString().padStart(2, '0')
+            val ss = (totalSecondsFromEventStart % 60).toString().padStart(2, '0')
+            return "$mm:$ss"
+        }
+    }
 
     companion object {
         /**
          * Factory method для безопасного создания экземпляра LiveTimerDomain.
-         * 
+         *
          * Преобразует сырые данные с бэкенда в типизированную доменную модель
          * с полной валидацией входных параметров. Использует fail-safe подход:
          * при любой ошибке возвращает null вместо выброса исключения, что предотвращает
          * падение приложения из-за некорректных данных.
-         * 
+         *
          * @param isShow Флаг отображения таймера (0 - скрыт, 1 - показывать)
          * @param timerValueInSeconds Базовое время таймера в секундах с начала события
          * @param timerValueInSecondsMd Unix timestamp (в секундах) момента последнего обновления
@@ -180,7 +186,7 @@ class LiveTimerDomain private constructor(
          * @param format Строка формата отображения времени
          * @param onInstanceCreationFailedCallback Callback для обработки ошибок валидации (опционально)
          * @return Экземпляр [LiveTimerDomain] или null при некорректных данных
-         * 
+         *
          * ### Пример использования:
          * ```kotlin
          * val timer = LiveTimerDomain.createOrNull(
@@ -189,7 +195,7 @@ class LiveTimerDomain private constructor(
          *     timerValueInSecondsMd = jsonObject.getLong("tmr_md"),
          *     isRunning = jsonObject.getInt("is_run"),
          *     format = jsonObject.getString("format")
-         * ) { error -> 
+         * ) { error ->
          *     logger.warn("Timer creation failed", error)
          * }
          * ```
@@ -216,12 +222,12 @@ class LiveTimerDomain private constructor(
 
         /**
          * Внутренний метод валидации и создания экземпляра.
-         * 
+         *
          * Выполняет строгие проверки параметров и преобразование сырых данных
          * в строго типизированные значения доменной модели. Применяет fail-fast
          * подход с выбросом исключений при некорректных данных для быстрого
          * обнаружения проблем на этапе создания объекта.
-         * 
+         *
          * @throws IllegalArgumentException при null значениях обязательных параметров
          * @throws IllegalStateException при некорректных значениях флагов (отличных от 0 или 1)
          */

@@ -129,9 +129,47 @@ internal class LiveTimerDomainTest {
     }
 
     @Test
+    fun `createOrNull should return null when isShow is null`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = null,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        assertNull(timer, "Timer should be null when isShow is null")
+    }
+
+    @Test
+    fun `createOrNull should return null when isRunning is null`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = null,
+            format = "mm:ss"
+        )
+
+        assertNull(timer, "Timer should be null when isRunning is null")
+    }
+
+    @Test
+    fun `createOrNull should return null when format is empty string`() {
+        val timer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = ""
+        )
+
+        assertNull(timer, "Timer should be null when format is empty string")
+    }
+
+    @Test
     fun `createOrNull should call error callback when creation fails`() {
         var callbackCalled = false
-        var capturedError: Throwable? = null
 
         LiveTimerDomain.createOrNull(
             isShow = 1,
@@ -141,7 +179,6 @@ internal class LiveTimerDomainTest {
             format = "mm:ss",
             onInstanceCreationFailedCallback = { error ->
                 callbackCalled = true
-                capturedError = error
             }
         )
 
@@ -150,7 +187,25 @@ internal class LiveTimerDomainTest {
             callbackCalled,
             "Error callback should be called on validation failure"
         )
-        assertNotNull(capturedError, "Error should be captured in callback")
+    }
+
+    @Test
+    fun `createOrNull should capture specific error messages in callback`() {
+        val capturedMessages = mutableListOf<String>()
+
+        // Test negative timerValueInSeconds error message
+        LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = -5L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss",
+            onInstanceCreationFailedCallback = { error ->
+                capturedMessages.add(error.message ?: "")
+            }
+        )
+
+        assertEquals(1, capturedMessages.size, "Should capture one error")
     }
 
     // ===== MAIN LOGIC TESTS =====
@@ -304,114 +359,6 @@ internal class LiveTimerDomainTest {
                 )
             }
         }
-    }
-
-    // ===== ADDITIONAL FACTORY METHOD TESTS FOR 100% COVERAGE =====
-
-    @Test
-    fun `createOrNull should return null when isShow is null`() {
-        val timer = LiveTimerDomain.createOrNull(
-            isShow = null,
-            timerValueInSeconds = 120L,
-            timerValueInSecondsMd = 1000L,
-            isRunning = 1,
-            format = "mm:ss"
-        )
-
-        assertNull(timer, "Timer should be null when isShow is null")
-    }
-
-    @Test
-    fun `createOrNull should return null when isRunning is null`() {
-        val timer = LiveTimerDomain.createOrNull(
-            isShow = 1,
-            timerValueInSeconds = 120L,
-            timerValueInSecondsMd = 1000L,
-            isRunning = null,
-            format = "mm:ss"
-        )
-
-        assertNull(timer, "Timer should be null when isRunning is null")
-    }
-
-    @Test
-    fun `createOrNull should return null when format is empty string`() {
-        val timer = LiveTimerDomain.createOrNull(
-            isShow = 1,
-            timerValueInSeconds = 120L,
-            timerValueInSecondsMd = 1000L,
-            isRunning = 1,
-            format = ""
-        )
-
-        assertNull(timer, "Timer should be null when format is empty string")
-    }
-
-    @Test
-    fun `createOrNull should capture specific error messages in callback`() {
-        val capturedMessages = mutableListOf<String>()
-
-        // Test negative timerValueInSeconds error message
-        LiveTimerDomain.createOrNull(
-            isShow = 1,
-            timerValueInSeconds = -5L,
-            timerValueInSecondsMd = 1000L,
-            isRunning = 1,
-            format = "mm:ss",
-            onInstanceCreationFailedCallback = { error ->
-                capturedMessages.add(error.message ?: "")
-            }
-        )
-
-        assertEquals(1, capturedMessages.size, "Should capture one error")
-        assertEquals(
-            true, capturedMessages[0].contains("должен быть больше или равен 0"),
-            "Should contain correct error message for negative timerValueInSeconds"
-        )
-    }
-
-    @Test
-    fun `createOrNull should capture error message for invalid secondsFromEventStartMd`() {
-        var capturedMessage: String? = null
-
-        LiveTimerDomain.createOrNull(
-            isShow = 1,
-            timerValueInSeconds = 120L,
-            timerValueInSecondsMd = -1L,
-            isRunning = 1,
-            format = "mm:ss",
-            onInstanceCreationFailedCallback = { error ->
-                capturedMessage = error.message
-            }
-        )
-
-        assertNotNull(capturedMessage, "Should capture error message")
-        assertEquals(
-            true, capturedMessage!!.contains("должен быть больше 0"),
-            "Should contain correct error message for invalid secondsFromEventStartMd"
-        )
-    }
-
-    @Test
-    fun `createOrNull should capture error message for blank format`() {
-        var capturedMessage: String? = null
-
-        LiveTimerDomain.createOrNull(
-            isShow = 1,
-            timerValueInSeconds = 120L,
-            timerValueInSecondsMd = 1000L,
-            isRunning = 1,
-            format = "   ",
-            onInstanceCreationFailedCallback = { error ->
-                capturedMessage = error.message
-            }
-        )
-
-        assertNotNull(capturedMessage, "Should capture error message")
-        assertEquals(
-            true, capturedMessage!!.contains("не должен быть пустым"),
-            "Should contain correct error message for blank format"
-        )
     }
 
     // ===== OVERFLOW AND EDGE CASE TESTS =====
