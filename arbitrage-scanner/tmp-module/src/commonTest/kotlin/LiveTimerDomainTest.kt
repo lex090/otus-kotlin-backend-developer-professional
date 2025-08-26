@@ -320,7 +320,11 @@ internal class LiveTimerDomainTest {
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
         assertNotNull(result, "apply() should handle large values")
-        assertEquals(true, result.simpleFormat().isNotBlank(), "Should return formatted value for large numbers")
+        assertEquals(
+            true,
+            result.simpleFormat().isNotBlank(),
+            "Should return formatted value for large numbers"
+        )
     }
 
     @Test
@@ -395,7 +399,11 @@ internal class LiveTimerDomainTest {
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
         assertNotNull(result, "Timer should work with zero seconds")
-        assertEquals("00:00", result.simpleFormat(), "Should return zero formatted as 00:00")
+        assertEquals(
+            "00:00",
+            result.simpleFormat(),
+            "Should return zero formatted as 00:00"
+        )
         assertEquals(false, result.isRunning, "Should not be running")
     }
 
@@ -434,13 +442,11 @@ internal class LiveTimerDomainTest {
         val currentTime = Long.MAX_VALUE / 2 // Very large timestamp
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
-        // Should either handle gracefully or return null
-        if (result != null) {
-            assertEquals(
-                true, result.simpleFormat().isNotBlank(),
-                "If result exists, should have formatted value"
-            )
-        }
+        assertNotNull(result)
+        assertEquals(
+            true, result.simpleFormat().isNotBlank(),
+            "If result exists, should have formatted value"
+        )
     }
 
     @Test
@@ -456,12 +462,11 @@ internal class LiveTimerDomainTest {
         val currentTime = Long.MAX_VALUE / 2 + 100L
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
-        if (result != null) {
-            assertEquals(
-                true, result.simpleFormat().isNotBlank(),
-                "Should handle large timestamp values and return formatted output"
-            )
-        }
+        assertNotNull(result)
+        assertEquals(
+            true, result.simpleFormat().isNotBlank(),
+            "Should handle large timestamp values and return formatted output"
+        )
     }
 
     // ===== DATA CLASS LiveTimerValue TESTS =====
@@ -482,7 +487,11 @@ internal class LiveTimerDomainTest {
             )
 
             assertEquals(isRunning, value.isRunning, "isRunning should match")
-            assertEquals(true, value.simpleFormat().isNotBlank(), "Should be able to format any valid seconds value")
+            assertEquals(
+                true,
+                value.simpleFormat().isNotBlank(),
+                "Should be able to format any valid seconds value"
+            )
         }
     }
 
