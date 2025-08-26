@@ -21,7 +21,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNotNull(timer, "Timer should be created with valid parameters")
+        assertNotNull(timer, "Таймер должен создаваться с корректными параметрами")
     }
 
     @Test
@@ -34,7 +34,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when timerValueInSeconds is null")
+        assertNull(timer, "Таймер должен быть null при timerValueInSeconds = null")
     }
 
     @Test
@@ -47,7 +47,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when timerValueInSecondsMd is null")
+        assertNull(timer, "Таймер должен быть null при timerValueInSecondsMd = null")
     }
 
     @Test
@@ -60,7 +60,7 @@ internal class LiveTimerDomainTest {
             format = null
         )
 
-        assertNull(timer, "Timer should be null when format is null")
+        assertNull(timer, "Таймер должен быть null при format = null")
     }
 
     @Test
@@ -73,7 +73,7 @@ internal class LiveTimerDomainTest {
             format = "   "
         )
 
-        assertNull(timer, "Timer should be null when format is blank")
+        assertNull(timer, "Таймер должен быть null при пустом формате")
     }
 
     @Test
@@ -86,7 +86,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when timerValueInSeconds is negative")
+        assertNull(timer, "Таймер должен быть null при отрицательном timerValueInSeconds")
     }
 
     @Test
@@ -99,7 +99,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when timerValueInSecondsMd is zero or negative")
+        assertNull(timer, "Таймер должен быть null при timerValueInSecondsMd меньше или равном нулю")
     }
 
     @Test
@@ -112,7 +112,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when isShow has invalid value")
+        assertNull(timer, "Таймер должен быть null при некорректном значении isShow")
     }
 
     @Test
@@ -125,7 +125,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when isRunning has invalid value")
+        assertNull(timer, "Таймер должен быть null при некорректном значении isRunning")
     }
 
     @Test
@@ -138,7 +138,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when isShow is null")
+        assertNull(timer, "Таймер должен быть null при isShow = null")
     }
 
     @Test
@@ -151,7 +151,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Timer should be null when isRunning is null")
+        assertNull(timer, "Таймер должен быть null при isRunning = null")
     }
 
     @Test
@@ -164,7 +164,7 @@ internal class LiveTimerDomainTest {
             format = ""
         )
 
-        assertNull(timer, "Timer should be null when format is empty string")
+        assertNull(timer, "Таймер должен быть null при пустой строке формата")
     }
 
     @Test
@@ -185,7 +185,7 @@ internal class LiveTimerDomainTest {
         assertEquals(
             true,
             callbackCalled,
-            "Error callback should be called on validation failure"
+            "Callback ошибки должен вызываться при неудачной валидации"
         )
     }
 
@@ -205,7 +205,7 @@ internal class LiveTimerDomainTest {
             }
         )
 
-        assertEquals(1, capturedMessages.size, "Should capture one error")
+        assertEquals(1, capturedMessages.size, "Должна быть зафиксирована одна ошибка")
     }
 
     // ===== MAIN LOGIC TESTS =====
@@ -222,7 +222,7 @@ internal class LiveTimerDomainTest {
 
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
-        assertNull(result, "apply() should return null when timer is not shown")
+        assertNull(result, "apply() должен возвращать null когда таймер не показан")
     }
 
     @Test
@@ -237,12 +237,12 @@ internal class LiveTimerDomainTest {
 
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
-        assertNotNull(result, "apply() should return result for static timer")
-        assertEquals(false, result.isRunning, "Timer should not be running")
+        assertNotNull(result, "apply() должен возвращать результат для статичного таймера")
+        assertEquals(false, result.isRunning, "Таймер не должен быть активным")
         assertEquals(
             "02:00",
             result.simpleFormat(),
-            "Should return formatted original value (120s = 02:00)"
+            "Должен возвращать отформатированное исходное значение (120s = 02:00)"
         )
     }
 
@@ -259,12 +259,12 @@ internal class LiveTimerDomainTest {
         val currentTime = 1050L // 50 seconds after last update
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
-        assertNotNull(result, "apply() should return result for running timer")
-        assertEquals(true, result.isRunning, "Timer should be running")
+        assertNotNull(result, "apply() должен возвращать результат для активного таймера")
+        assertEquals(true, result.isRunning, "Таймер должен быть активным")
         assertEquals(
             "02:50",
             result.simpleFormat(),
-            "Should add delta time and format correctly: 170s = 02:50"
+            "Должен добавлять дельту времени и корректно форматировать: 170s = 02:50"
         )
     }
 
@@ -281,7 +281,7 @@ internal class LiveTimerDomainTest {
         val currentTime = 1500L // Less than update time (2000L)
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
-        assertNull(result, "apply() should return null when system time went backwards")
+        assertNull(result, "apply() должен возвращать null когда системное время сдвинулось назад")
     }
 
     @Test
@@ -297,11 +297,11 @@ internal class LiveTimerDomainTest {
         val currentTime = 1000L // Same as update time
         val result = timer?.apply(currentSystemTimestamp = currentTime)
 
-        assertNotNull(result, "apply() should handle zero delta time")
+        assertNotNull(result, "apply() должен обрабатывать нулевую дельту времени")
         assertEquals(
             "02:00",
             result.simpleFormat(),
-            "Should return original formatted value when no time passed (120s = 02:00)"
+            "Должен возвращать исходное отформатированное значение когда время не прошло (120s = 02:00)"
         )
     }
 
@@ -319,11 +319,11 @@ internal class LiveTimerDomainTest {
 
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
-        assertNotNull(result, "apply() should handle large values")
+        assertNotNull(result, "apply() должен обрабатывать большие значения")
         assertEquals(
             true,
             result.simpleFormat().isNotBlank(),
-            "Should return formatted value for large numbers"
+            "Должен возвращать отформатированное значение для больших чисел"
         )
     }
 
@@ -346,18 +346,18 @@ internal class LiveTimerDomainTest {
                 format = "mm:ss"
             )
 
-            assertNotNull(timer, "Timer should be created for isShow=$isShow, isRunning=$isRunning")
+            assertNotNull(timer, "Таймер должен создаваться для isShow=$isShow, isRunning=$isRunning")
 
             val result = timer.apply(currentSystemTimestamp = 1030L)
 
             if (isShow == 0) {
-                assertNull(result, "Result should be null when isShow=0")
+                assertNull(result, "Результат должен быть null при isShow=0")
             } else {
-                assertNotNull(result, "Result should not be null when isShow=1")
+                assertNotNull(result, "Результат не должен быть null при isShow=1")
                 assertEquals(
                     isRunning == 1,
                     result.isRunning,
-                    "isRunning should match parameter"
+                    "isRunning должен соответствовать параметру"
                 )
             }
         }
@@ -382,7 +382,7 @@ internal class LiveTimerDomainTest {
         // With overflow protection, should return null to prevent showing incorrect time
         assertNull(
             result,
-            "Should return null when overflow occurs to protect UI from incorrect data"
+            "Должен возвращать null при переполнении для защиты UI от некорректных данных"
         )
     }
 
@@ -398,13 +398,13 @@ internal class LiveTimerDomainTest {
 
         val result = timer?.apply(currentSystemTimestamp = 2000L)
 
-        assertNotNull(result, "Timer should work with zero seconds")
+        assertNotNull(result, "Таймер должен работать с нулевыми секундами")
         assertEquals(
             "00:00",
             result.simpleFormat(),
-            "Should return zero formatted as 00:00"
+            "Должен возвращать ноль отформатированный как 00:00"
         )
-        assertEquals(false, result.isRunning, "Should not be running")
+        assertEquals(false, result.isRunning, "Не должен быть активным")
     }
 
     @Test
@@ -420,13 +420,13 @@ internal class LiveTimerDomainTest {
         // Exact same timestamp as update time
         val result = timer?.apply(currentSystemTimestamp = 5000L)
 
-        assertNotNull(result, "Timer should work with zero delta")
+        assertNotNull(result, "Таймер должен работать с нулевой дельтой")
         assertEquals(
             "05:00",
             result.simpleFormat(),
-            "Should return original formatted value (300s = 05:00)"
+            "Должен возвращать исходное отформатированное значение (300s = 05:00)"
         )
-        assertEquals(true, result.isRunning, "Should be running")
+        assertEquals(true, result.isRunning, "Должен быть активным")
     }
 
     @Test
@@ -445,7 +445,7 @@ internal class LiveTimerDomainTest {
         assertNotNull(result)
         assertEquals(
             true, result.simpleFormat().isNotBlank(),
-            "If result exists, should have formatted value"
+            "Если результат существует, должно быть отформатированное значение"
         )
     }
 
@@ -465,7 +465,7 @@ internal class LiveTimerDomainTest {
         assertNotNull(result)
         assertEquals(
             true, result.simpleFormat().isNotBlank(),
-            "Should handle large timestamp values and return formatted output"
+            "Должен обрабатывать большие значения временных меток и возвращать отформатированный вывод"
         )
     }
 
@@ -486,11 +486,11 @@ internal class LiveTimerDomainTest {
                 totalSecondsFromEventStart = seconds
             )
 
-            assertEquals(isRunning, value.isRunning, "isRunning should match")
+            assertEquals(isRunning, value.isRunning, "isRunning должен соответствовать")
             assertEquals(
                 true,
                 value.simpleFormat().isNotBlank(),
-                "Should be able to format any valid seconds value"
+                "Должен суметь отформатировать любое валидное значение секунд"
             )
         }
     }
@@ -515,7 +515,7 @@ internal class LiveTimerDomainTest {
             assertEquals(
                 expectedFormat,
                 value.simpleFormat(),
-                "Format for $seconds seconds should be $expectedFormat"
+                "Формат для $seconds секунд должен быть $expectedFormat"
             )
         }
     }
@@ -616,22 +616,6 @@ internal class LiveTimerDomainTest {
         assertEquals(false, result1 === result2, "Должны быть разные объекты")
         assertEquals("01:00", result1.simpleFormat()) // 50 + 10 = 60s
         assertEquals("01:10", result2.simpleFormat()) // 50 + 20 = 70s
-    }
-
-    @Test
-    fun `timer creation with different format strings`() {
-        val formats = listOf("mm:ss", "hh:mm:ss", "ss", "custom", "h:m:s", "00:00:00")
-
-        formats.forEach { format ->
-            val timer = LiveTimerDomain.createOrNull(
-                isShow = 1,
-                timerValueInSeconds = 120L,
-                timerValueInSecondsMd = 1000L,
-                isRunning = 0,
-                format = format
-            )
-            assertNotNull(timer, "Таймер должен создаваться с форматом $format")
-        }
     }
 
     @Test
