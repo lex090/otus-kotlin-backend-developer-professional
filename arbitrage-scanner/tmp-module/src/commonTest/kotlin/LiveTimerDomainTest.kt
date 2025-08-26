@@ -177,7 +177,7 @@ internal class LiveTimerDomainTest {
             timerValueInSecondsMd = 1000L,
             isRunning = 1,
             format = "mm:ss",
-            onInstanceCreationFailedCallback = { error ->
+            onInstanceCreationFailedCallback = { _ ->
                 callbackCalled = true
             }
         )
@@ -578,7 +578,7 @@ internal class LiveTimerDomainTest {
 
         results.forEach { result ->
             assertNotNull(result, "Все результаты должны быть не null")
-            assertEquals(true, result?.isRunning, "Таймер должен оставаться активным")
+            assertEquals(true, result.isRunning, "Таймер должен оставаться активным")
         }
 
         // Проверяем, что время увеличивается правильно
@@ -602,17 +602,17 @@ internal class LiveTimerDomainTest {
 
         assertNotNull(result1)
         assertNotNull(result2)
-        
+
         // Объекты должны быть разными и иметь разное время
         assertEquals(false, result1 === result2, "Должны быть разные объекты")
-        assertEquals("01:00", result1?.simpleFormat()) // 50 + 10 = 60s
-        assertEquals("01:10", result2?.simpleFormat()) // 50 + 20 = 70s
+        assertEquals("01:00", result1.simpleFormat()) // 50 + 10 = 60s
+        assertEquals("01:10", result2.simpleFormat()) // 50 + 20 = 70s
     }
 
     @Test
     fun `timer creation with different format strings`() {
         val formats = listOf("mm:ss", "hh:mm:ss", "ss", "custom", "h:m:s", "00:00:00")
-        
+
         formats.forEach { format ->
             val timer = LiveTimerDomain.createOrNull(
                 isShow = 1,
@@ -684,11 +684,211 @@ internal class LiveTimerDomainTest {
         assertNotNull(result2)
 
         assertEquals(
-            result1?.simpleFormat(),
-            result2?.simpleFormat(),
+            result1.simpleFormat(),
+            result2.simpleFormat(),
             "Одинаковые временные метки должны давать одинаковое форматирование"
         )
 
-        assertEquals("02:10", result1?.simpleFormat()) // 130s = 2:10
+        assertEquals("02:10", result1.simpleFormat()) // 130s = 2:10
+    }
+
+    // ===== ТЕСТЫ ДЛЯ EQUALS() И HASHCODE() =====
+
+    @Test
+    fun `LiveTimerDomain equals should work correctly`() {
+        val timer1 = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        val timer2 = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        val timer3 = LiveTimerDomain.createOrNull(
+            isShow = 0, // Другое значение
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        assertNotNull(timer1)
+        assertNotNull(timer2)
+        assertNotNull(timer3)
+
+        // Проверка равенства
+        assertEquals(timer1, timer2, "Таймеры с одинаковыми параметрами должны быть равны")
+        assertEquals(false, timer1 == timer3, "Таймеры с разными параметрами должны быть не равны")
+
+        // Проверка рефлексивности
+        assertEquals(timer1, timer1, "Объект должен быть равен самому себе")
+
+        // Проверка с null
+        assertEquals(false, timer1.equals(null), "Объект не должен быть равен null")
+
+        // Проверка с объектом другого типа
+        assertEquals(false, timer1.equals("строка"), "Объект не должен быть равен объекту другого типа")
+    }
+
+    @Test
+    fun `LiveTimerDomain hashCode should work correctly`() {
+        val timer1 = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        val timer2 = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        assertNotNull(timer1)
+        assertNotNull(timer2)
+
+        // Равные объекты должны иметь одинаковый hashCode
+        assertEquals(
+            timer1.hashCode(),
+            timer2.hashCode(),
+            "Равные объекты должны иметь одинаковый hashCode"
+        )
+    }
+
+    @Test
+    fun `LiveTimerValue equals should work correctly`() {
+        val value1 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L
+        )
+
+        val value2 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L
+        )
+
+        val value3 = LiveTimerDomain.LiveTimerValue(
+            isRunning = false,
+            totalSecondsFromEventStart = 120L
+        )
+
+        // Проверка равенства
+        assertEquals(value1, value2, "Значения с одинаковыми параметрами должны быть равны")
+        assertEquals(false, value1 == value3, "Значения с разным isRunning должны быть не равны")
+
+        // Проверка рефлексивности
+        assertEquals(value1, value1, "Объект должен быть равен самому себе")
+
+        // Проверка с null
+        assertEquals(false, value1.equals(null), "Объект не должен быть равен null")
+
+        // Проверка с объектом другого типа
+        assertEquals(false, value1.equals("строка"), "Объект не должен быть равен объекту другого типа")
+    }
+
+    @Test
+    fun `LiveTimerValue hashCode should work correctly`() {
+        val value1 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L
+        )
+
+        val value2 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L
+        )
+
+        // Равные объекты должны иметь одинаковый hashCode
+        assertEquals(
+            value1.hashCode(),
+            value2.hashCode(),
+            "Равные объекты должны иметь одинаковый hashCode"
+        )
+    }
+
+    @Test
+    fun `LiveTimerDomain equals should test all field differences`() {
+        val baseTimer = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        // Тест различия в secondsFromEventStart
+        val differentSeconds = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 130L, // Разное значение
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        // Тест различия в secondsFromEventStartMd
+        val differentMd = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1100L, // Разное значение
+            isRunning = 1,
+            format = "mm:ss"
+        )
+
+        // Тест различия в isRunning
+        val differentRunning = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 0, // Разное значение
+            format = "mm:ss"
+        )
+
+        // Тест различия в format
+        val differentFormat = LiveTimerDomain.createOrNull(
+            isShow = 1,
+            timerValueInSeconds = 120L,
+            timerValueInSecondsMd = 1000L,
+            isRunning = 1,
+            format = "hh:mm:ss" // Разное значение
+        )
+
+        assertNotNull(baseTimer)
+        assertNotNull(differentSeconds)
+        assertNotNull(differentMd)
+        assertNotNull(differentRunning)
+        assertNotNull(differentFormat)
+
+        // Проверяем, что все различия обнаруживаются
+        assertEquals(false, baseTimer == differentSeconds, "Различие в secondsFromEventStart")
+        assertEquals(false, baseTimer == differentMd, "Различие в secondsFromEventStartMd")
+        assertEquals(false, baseTimer == differentRunning, "Различие в isRunning")
+        assertEquals(false, baseTimer == differentFormat, "Различие в format")
+    }
+
+    @Test
+    fun `LiveTimerValue equals should test totalSecondsFromEventStart difference`() {
+        val value1 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 120L
+        )
+
+        val value2 = LiveTimerDomain.LiveTimerValue(
+            isRunning = true,
+            totalSecondsFromEventStart = 130L // Разное значение
+        )
+
+        assertEquals(false, value1 == value2, "Значения с разным totalSecondsFromEventStart должны быть не равны")
     }
 }
