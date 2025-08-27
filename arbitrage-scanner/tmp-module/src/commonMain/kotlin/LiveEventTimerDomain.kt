@@ -4,11 +4,15 @@
  * Инкапсулирует логику расчета текущего времени таймера с учетом системного времени
  * и защищает от некорректных данных (переполнение, отрицательные значения).
  *
+ * ### ДОГОВОРЕННОСТЬ С АНАЛИТИКАМИ
+ * Параметр format на текущий момент не используется в логике приложения, по договоренностям
+ * с аналитиками, так как они пока не понимают как он будет использоваться и как развиваться.
+ *
  * @param isShow Флаг отображения таймера в пользовательском интерфейсе
  * @param secondsFromEventStart Базовое время таймера в секундах на момент последнего обновления
  * @param secondsFromEventStartMd Unix timestamp (в секундах) момента последнего обновления данных с бэкенда
  * @param isRunning Флаг активности таймера (true - тикает в реальном времени, false - остановлен)
- * @param format Строка формата отображения времени (например, "mm:ss", "hh:mm:ss")
+ * @param format Строка формата отображения времени (Пока только "mm:ss")
  *
  * ### Пример JSON данных с бэкенда:
  * ```json
@@ -35,11 +39,12 @@
  * val result = timer?.apply(currentTime)
  * ```
  */
-class LiveTimerDomain private constructor(
+class LiveEventTimerDomain private constructor(
     private val isShow: Boolean,
     private val secondsFromEventStart: Long,
     private val secondsFromEventStartMd: Long,
     private val isRunning: Boolean,
+    // На текущий момент не используется в логике приложения (см. Комментарий)
     private val format: String,
 ) {
 
@@ -54,11 +59,11 @@ class LiveTimerDomain private constructor(
      */
     init {
         require(secondsFromEventStart >= 0) {
-            "timerValueInSeconds -> $secondsFromEventStart должен быть больше или равен 0 "
+            "secondsFromEventStart -> $secondsFromEventStart должен быть больше или равен 0"
         }
 
         require(secondsFromEventStartMd > 0) {
-            "secondsFromEventStartMd -> $secondsFromEventStartMd должен быть больше 0 "
+            "secondsFromEventStartMd -> $secondsFromEventStartMd должен быть больше 0"
         }
 
         require(format.isNotBlank()) { "Формат не должен быть пустым" }
@@ -72,7 +77,7 @@ class LiveTimerDomain private constructor(
      * таймера возвращает статичное значение.
      *
      * @param currentSystemTimestamp Unix timestamp текущего системного времени в секундах
-     * @return [LiveTimerValue] с актуальными данными или null в следующих случаях:
+     * @return [LiveEventTimerValue] с актуальными данными или null в следующих случаях:
      *   - Таймер не должен отображаться (isShow=false)
      *   - Системное время меньше времени последнего обновления (время "откатилось назад")
      *   - Произошло переполнение Long при вычислении (результат стал отрицательным)
@@ -81,12 +86,9 @@ class LiveTimerDomain private constructor(
      * ```kotlin
      * val currentTime = System.currentTimeMillis() / 1000
      * val timerState = timer.apply(currentTime)
-     * if (timerState != null) {
-     *     println("Время: ${timerState.totalSecondsFromEventStart}s, формат: ${timerState.format}")
-     * }
      * ```
      */
-    fun apply(currentSystemTimestamp: Long): LiveTimerValue? {
+    fun apply(currentSystemTimestamp: Long): LiveEventTimerValue? {
         if (!isShow) {
             return null
         }
@@ -98,11 +100,11 @@ class LiveTimerDomain private constructor(
         return calculateDefaultTimer()
     }
 
-    private fun calculateIsRunningTimer(currentSystemTimestamp: Long): LiveTimerValue? {
+    private fun calculateIsRunningTimer(currentSystemTimestamp: Long): LiveEventTimerValue? {
         val secondsFromEventStart =
             calculateActualTimestamp(currentSystemTimestamp = currentSystemTimestamp) ?: return null
 
-        return LiveTimerValue(
+        return LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = secondsFromEventStart,
         )
@@ -138,8 +140,8 @@ class LiveTimerDomain private constructor(
         return resultTotalSeconds
     }
 
-    private fun calculateDefaultTimer(): LiveTimerValue {
-        return LiveTimerValue(
+    private fun calculateDefaultTimer(): LiveEventTimerValue {
+        return LiveEventTimerValue(
             isRunning = false,
             totalSecondsFromEventStart = secondsFromEventStart,
         )
@@ -149,7 +151,7 @@ class LiveTimerDomain private constructor(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as LiveTimerDomain
+        other as LiveEventTimerDomain
 
         if (isShow != other.isShow) return false
         if (secondsFromEventStart != other.secondsFromEventStart) return false
@@ -176,28 +178,35 @@ class LiveTimerDomain private constructor(
      * Является immutable и может безопасно передаваться между слоями приложения
      * без риска случайных изменений состояния.
      *
-     * @property isRunning Флаг активности таймера (true - тикает в реальном времени, false - остановлен)
+     * @property isRunning Флаг активности таймера
+     *  (true - тикает в реальном времени, false - остановлен)
      * @property totalSecondsFromEventStart Общее время от начала события в секундах
      */
-    class LiveTimerValue(
+    class LiveEventTimerValue(
         val isRunning: Boolean,
         private val totalSecondsFromEventStart: Long,
     ) {
 
         /**
+         * Минуты таймера (01, 10, 20, 90). От 0 сверху не ограничены.
+         */
+        val mm: String = (totalSecondsFromEventStart / 60).toString().padStart(2, '0')
+
+        /**
+         * Секунды таймера (00, 01, 05, 10, 59). От 0 до 59.
+         */
+        val ss: String = (totalSecondsFromEventStart % 60).toString().padStart(2, '0')
+
+        /**
          * Базовое форматирование таймера вида mm:ss.
          */
-        fun simpleFormat(): String {
-            val mm = (totalSecondsFromEventStart / 60).toString().padStart(2, '0')
-            val ss = (totalSecondsFromEventStart % 60).toString().padStart(2, '0')
-            return "$mm:$ss"
-        }
+        fun simpleFormat(): String = "$mm:$ss"
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other == null || this::class != other::class) return false
 
-            other as LiveTimerValue
+            other as LiveEventTimerValue
 
             if (isRunning != other.isRunning) return false
             if (totalSecondsFromEventStart != other.totalSecondsFromEventStart) return false
@@ -221,13 +230,16 @@ class LiveTimerDomain private constructor(
          * при любой ошибке возвращает null вместо выброса исключения, что предотвращает
          * падение приложения из-за некорректных данных.
          *
+         * ### ДОГОВОРЕННОСТЬ С АНАЛИТИКАМИ
+         * Параметр format на текущий момент не используется в логике приложения
+         *
          * @param isShow Флаг отображения таймера (0 - скрыт, 1 - показывать)
          * @param timerValueInSeconds Базовое время таймера в секундах с начала события
          * @param timerValueInSecondsMd Unix timestamp (в секундах) момента последнего обновления
          * @param isRunning Флаг активности таймера (0 - остановлен, 1 - активен)
          * @param format Строка формата отображения времени
          * @param onInstanceCreationFailedCallback Callback для обработки ошибок валидации (опционально)
-         * @return Экземпляр [LiveTimerDomain] или null при некорректных данных
+         * @return Экземпляр [LiveEventTimerDomain] или null при некорректных данных
          *
          * ### Пример использования:
          * ```kotlin
@@ -247,16 +259,21 @@ class LiveTimerDomain private constructor(
             timerValueInSeconds: Long?,
             timerValueInSecondsMd: Long?,
             isRunning: Int?,
-            format: String?,
+            format: String? = null,
             onInstanceCreationFailedCallback: ((Throwable) -> Unit)? = null,
-        ): LiveTimerDomain? {
+        ): LiveEventTimerDomain? {
             return runCatching {
                 validateParamsAndCreateInstance(
                     isShow = isShow,
                     timerValueInSeconds = timerValueInSeconds,
                     timerValueInSecondsMd = timerValueInSecondsMd,
                     isRunning = isRunning,
-                    format = format
+                    /**
+                     * Не важно, что сюда передаем дальше в логике параметр не участвует
+                     * Договоренности с аналитиками, так как они пока не понимают как этот параметр
+                     * должен использоваться и развиваться.
+                     */
+                    format = "mm:ss"
                 )
             }.onFailure { throwable -> onInstanceCreationFailedCallback?.invoke(throwable) }
                 .getOrDefault(null)
@@ -279,14 +296,14 @@ class LiveTimerDomain private constructor(
             timerValueInSecondsMd: Long?,
             isRunning: Int?,
             format: String?,
-        ): LiveTimerDomain {
+        ): LiveEventTimerDomain {
             requireNotNull(timerValueInSeconds) { "timerValueInSeconds не должен быть равен null" }
             requireNotNull(timerValueInSecondsMd) {
                 "timerValueInSecondsMd не должен быть равен null"
             }
             requireNotNull(format) { "format не должен быть равен null" }
 
-            return LiveTimerDomain(
+            return LiveEventTimerDomain(
                 isShow = when (isShow) {
                     1 -> true
                     0 -> false

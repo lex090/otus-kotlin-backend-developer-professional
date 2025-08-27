@@ -1,19 +1,18 @@
-package bc.core
+package bc.modules.features.api.external.domain.live
 
-import LiveTimerDomain
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-
-internal class LiveTimerDomainTest {
+internal class LiveEventTimerDomainTest {
 
     // ===== FACTORY METHOD TESTS =====
 
     @Test
     fun `createOrNull should create valid timer with correct parameters`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -26,7 +25,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should return null when timerValueInSeconds is null`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = null,
             timerValueInSecondsMd = 1000L,
@@ -39,7 +38,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should return null when timerValueInSecondsMd is null`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = null,
@@ -50,9 +49,14 @@ internal class LiveTimerDomainTest {
         assertNull(timer, "Таймер должен быть null при timerValueInSecondsMd = null")
     }
 
+    /**
+     * Пока игнорируем тест на проверку параметра format, по договоренностям с аналитиками.
+     * См. Подробный комментарий к классу LiveTimerDomain.
+     */
+    @Ignore
     @Test
     fun `createOrNull should return null when format is null`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -63,9 +67,14 @@ internal class LiveTimerDomainTest {
         assertNull(timer, "Таймер должен быть null при format = null")
     }
 
+    /**
+     * Пока игнорируем тест на проверку параметра format, по договоренностям с аналитиками.
+     * См. Подробный комментарий к классу LiveTimerDomain.
+     */
+    @Ignore
     @Test
     fun `createOrNull should return null when format is blank`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -78,7 +87,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should return null when timerValueInSeconds is negative`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = -10L,
             timerValueInSecondsMd = 1000L,
@@ -91,7 +100,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should return null when timerValueInSecondsMd is zero or negative`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 0L,
@@ -99,12 +108,15 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        assertNull(timer, "Таймер должен быть null при timerValueInSecondsMd меньше или равном нулю")
+        assertNull(
+            timer,
+            "Таймер должен быть null при timerValueInSecondsMd меньше или равном нулю"
+        )
     }
 
     @Test
     fun `createOrNull should handle invalid isShow values`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 2, // Невалидное значение, только 0 и 1 валидны
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -117,7 +129,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should handle invalid isRunning values`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -130,7 +142,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should return null when isShow is null`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = null,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -143,7 +155,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `createOrNull should return null when isRunning is null`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -154,9 +166,14 @@ internal class LiveTimerDomainTest {
         assertNull(timer, "Таймер должен быть null при isRunning = null")
     }
 
+    /**
+     * Пока игнорируем тест на проверку параметра format, по договоренностям с аналитиками.
+     * См. Подробный комментарий к классу LiveTimerDomain.
+     */
+    @Ignore
     @Test
     fun `createOrNull should return null when format is empty string`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -171,7 +188,7 @@ internal class LiveTimerDomainTest {
     fun `createOrNull should call error callback when creation fails`() {
         var callbackCalled = false
 
-        LiveTimerDomain.createOrNull(
+        LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = -10L, // Это должно вызвать ошибку валидации
             timerValueInSecondsMd = 1000L,
@@ -194,7 +211,7 @@ internal class LiveTimerDomainTest {
         val capturedMessages = mutableListOf<String>()
 
         // Тестирование сообщения об ошибке для отрицательного timerValueInSeconds
-        LiveTimerDomain.createOrNull(
+        LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = -5L,
             timerValueInSecondsMd = 1000L,
@@ -212,7 +229,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should return null when timer is not shown`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 0, // Таймер не должен показываться
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -227,7 +244,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should return static timer value when not running`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -248,7 +265,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should calculate running timer correctly`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -270,7 +287,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should return null when system time is less than update time`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 2000L,
@@ -286,7 +303,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should handle zero delta time correctly`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -309,7 +326,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should work with large time values`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = Long.MAX_VALUE / 2,
             timerValueInSecondsMd = 1000L,
@@ -332,13 +349,13 @@ internal class LiveTimerDomainTest {
         // Test all combinations of isShow and isRunning
         val testCases = listOf(
             Pair(0, 0), // Hidden, not running
-            Pair(0, 1), // Hidden, running  
+            Pair(0, 1), // Hidden, running
             Pair(1, 0), // Shown, not running
             Pair(1, 1)  // Shown, running
         )
 
         testCases.forEach { (isShow, isRunning) ->
-            val timer = LiveTimerDomain.createOrNull(
+            val timer = LiveEventTimerDomain.Companion.createOrNull(
                 isShow = isShow,
                 timerValueInSeconds = 60L,
                 timerValueInSecondsMd = 1000L,
@@ -346,7 +363,10 @@ internal class LiveTimerDomainTest {
                 format = "mm:ss"
             )
 
-            assertNotNull(timer, "Таймер должен создаваться для isShow=$isShow, isRunning=$isRunning")
+            assertNotNull(
+                timer,
+                "Таймер должен создаваться для isShow=$isShow, isRunning=$isRunning"
+            )
 
             val result = timer.apply(currentSystemTimestamp = 1030L)
 
@@ -367,7 +387,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should handle potential overflow in running timer calculation`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = Long.MAX_VALUE - 100L,
             timerValueInSecondsMd = 1000L,
@@ -388,7 +408,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should work with secondsFromEventStart exactly zero`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 0L, // Exactly zero
             timerValueInSecondsMd = 1000L,
@@ -409,7 +429,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should work with zero deltaTime for running timer`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 300L,
             timerValueInSecondsMd = 5000L,
@@ -431,7 +451,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should handle very large deltaTime values`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 100L,
             timerValueInSecondsMd = 1000L,
@@ -451,7 +471,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should handle edge case with maximum valid secondsFromEventStartMd`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 60L,
             timerValueInSecondsMd = Long.MAX_VALUE / 2,
@@ -481,7 +501,7 @@ internal class LiveTimerDomainTest {
         )
 
         testCases.forEach { (isRunning, seconds) ->
-            val value = LiveTimerDomain.LiveTimerValue(
+            val value = LiveEventTimerDomain.LiveEventTimerValue(
                 isRunning = isRunning,
                 totalSecondsFromEventStart = seconds
             )
@@ -507,7 +527,7 @@ internal class LiveTimerDomainTest {
         )
 
         testCases.forEach { (seconds, expectedFormat) ->
-            val value = LiveTimerDomain.LiveTimerValue(
+            val value = LiveEventTimerDomain.LiveEventTimerValue(
                 isRunning = true,
                 totalSecondsFromEventStart = seconds
             )
@@ -536,7 +556,7 @@ internal class LiveTimerDomainTest {
         )
 
         testCases.forEach { (seconds, expected) ->
-            val value = LiveTimerDomain.LiveTimerValue(
+            val value = LiveEventTimerDomain.LiveEventTimerValue(
                 isRunning = true,
                 totalSecondsFromEventStart = seconds
             )
@@ -551,7 +571,7 @@ internal class LiveTimerDomainTest {
     @Test
     fun `createOrNull should work with boundary values`() {
         // Граничные значения для timerValueInSeconds
-        val validTimer = LiveTimerDomain.createOrNull(
+        val validTimer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 0L, // Минимальное валидное значение
             timerValueInSecondsMd = 1L, // Минимальное валидное значение
@@ -560,7 +580,7 @@ internal class LiveTimerDomainTest {
         )
         assertNotNull(validTimer, "Должен создаваться таймер с граничными валидными значениями")
 
-        val maxTimer = LiveTimerDomain.createOrNull(
+        val maxTimer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = Long.MAX_VALUE,
             timerValueInSecondsMd = Long.MAX_VALUE,
@@ -572,7 +592,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should handle concurrent timer updates correctly`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 100L,
             timerValueInSecondsMd = 1000L,
@@ -598,7 +618,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `apply should return different objects for different timestamps`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 50L,
             timerValueInSecondsMd = 1000L,
@@ -626,7 +646,7 @@ internal class LiveTimerDomainTest {
         }
 
         // Тестируем различные виды ошибок валидации
-        LiveTimerDomain.createOrNull(
+        LiveEventTimerDomain.Companion.createOrNull(
             isShow = null,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -635,7 +655,7 @@ internal class LiveTimerDomainTest {
             onInstanceCreationFailedCallback = callback
         )
 
-        LiveTimerDomain.createOrNull(
+        LiveEventTimerDomain.Companion.createOrNull(
             isShow = 2, // Невалидное значение
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -644,7 +664,7 @@ internal class LiveTimerDomainTest {
             onInstanceCreationFailedCallback = callback
         )
 
-        LiveTimerDomain.createOrNull(
+        LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = -1L, // Невалидное значение
             timerValueInSecondsMd = 1000L,
@@ -662,7 +682,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `simpleFormat should be consistent across different LiveTimerValue instances`() {
-        val timer = LiveTimerDomain.createOrNull(
+        val timer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 125L,
             timerValueInSecondsMd = 1000L,
@@ -689,7 +709,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `LiveTimerDomain equals should work correctly`() {
-        val timer1 = LiveTimerDomain.createOrNull(
+        val timer1 = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -697,7 +717,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        val timer2 = LiveTimerDomain.createOrNull(
+        val timer2 = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -705,7 +725,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        val timer3 = LiveTimerDomain.createOrNull(
+        val timer3 = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 0, // Другое значение
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -728,12 +748,16 @@ internal class LiveTimerDomainTest {
         assertEquals(false, timer1.equals(null), "Объект не должен быть равен null")
 
         // Проверка с объектом другого типа
-        assertEquals(false, timer1.equals("строка"), "Объект не должен быть равен объекту другого типа")
+        assertEquals(
+            false,
+            timer1.equals("строка"),
+            "Объект не должен быть равен объекту другого типа"
+        )
     }
 
     @Test
     fun `LiveTimerDomain hashCode should work correctly`() {
-        val timer1 = LiveTimerDomain.createOrNull(
+        val timer1 = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -741,7 +765,7 @@ internal class LiveTimerDomainTest {
             format = "mm:ss"
         )
 
-        val timer2 = LiveTimerDomain.createOrNull(
+        val timer2 = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -762,17 +786,17 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `LiveTimerValue equals should work correctly`() {
-        val value1 = LiveTimerDomain.LiveTimerValue(
+        val value1 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = 120L
         )
 
-        val value2 = LiveTimerDomain.LiveTimerValue(
+        val value2 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = 120L
         )
 
-        val value3 = LiveTimerDomain.LiveTimerValue(
+        val value3 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = false,
             totalSecondsFromEventStart = 120L
         )
@@ -788,17 +812,21 @@ internal class LiveTimerDomainTest {
         assertEquals(false, value1.equals(null), "Объект не должен быть равен null")
 
         // Проверка с объектом другого типа
-        assertEquals(false, value1.equals("строка"), "Объект не должен быть равен объекту другого типа")
+        assertEquals(
+            false,
+            value1.equals("строка"),
+            "Объект не должен быть равен объекту другого типа"
+        )
     }
 
     @Test
     fun `LiveTimerValue hashCode should work correctly`() {
-        val value1 = LiveTimerDomain.LiveTimerValue(
+        val value1 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = 120L
         )
 
-        val value2 = LiveTimerDomain.LiveTimerValue(
+        val value2 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = 120L
         )
@@ -813,7 +841,7 @@ internal class LiveTimerDomainTest {
 
     @Test
     fun `LiveTimerDomain equals should test all field differences`() {
-        val baseTimer = LiveTimerDomain.createOrNull(
+        val baseTimer = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -822,7 +850,7 @@ internal class LiveTimerDomainTest {
         )
 
         // Тест различия в secondsFromEventStart
-        val differentSeconds = LiveTimerDomain.createOrNull(
+        val differentSeconds = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 130L, // Разное значение
             timerValueInSecondsMd = 1000L,
@@ -831,7 +859,7 @@ internal class LiveTimerDomainTest {
         )
 
         // Тест различия в secondsFromEventStartMd
-        val differentMd = LiveTimerDomain.createOrNull(
+        val differentMd = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1100L, // Разное значение
@@ -840,7 +868,7 @@ internal class LiveTimerDomainTest {
         )
 
         // Тест различия в isRunning
-        val differentRunning = LiveTimerDomain.createOrNull(
+        val differentRunning = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -849,7 +877,7 @@ internal class LiveTimerDomainTest {
         )
 
         // Тест различия в format
-        val differentFormat = LiveTimerDomain.createOrNull(
+        val differentFormat = LiveEventTimerDomain.Companion.createOrNull(
             isShow = 1,
             timerValueInSeconds = 120L,
             timerValueInSecondsMd = 1000L,
@@ -867,21 +895,30 @@ internal class LiveTimerDomainTest {
         assertEquals(false, baseTimer == differentSeconds, "Различие в secondsFromEventStart")
         assertEquals(false, baseTimer == differentMd, "Различие в secondsFromEventStartMd")
         assertEquals(false, baseTimer == differentRunning, "Различие в isRunning")
-        assertEquals(false, baseTimer == differentFormat, "Различие в format")
+        /**
+         * Пока игнорируем тест параметра format, по договоренностям с аналитиками.
+         * См. Подробный комментарий к классу LiveTimerDomain.
+         * @Ignore
+         */
+//        assertEquals(false, baseTimer == differentFormat, "Различие в format")
     }
 
     @Test
     fun `LiveTimerValue equals should test totalSecondsFromEventStart difference`() {
-        val value1 = LiveTimerDomain.LiveTimerValue(
+        val value1 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = 120L
         )
 
-        val value2 = LiveTimerDomain.LiveTimerValue(
+        val value2 = LiveEventTimerDomain.LiveEventTimerValue(
             isRunning = true,
             totalSecondsFromEventStart = 130L // Разное значение
         )
 
-        assertEquals(false, value1 == value2, "Значения с разным totalSecondsFromEventStart должны быть не равны")
+        assertEquals(
+            false,
+            value1 == value2,
+            "Значения с разным totalSecondsFromEventStart должны быть не равны"
+        )
     }
 }
