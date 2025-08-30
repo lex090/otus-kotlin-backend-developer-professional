@@ -27,6 +27,57 @@ components:
 
     # COMMON SCHEMAS
 
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          enum: [ success, error ]
+          description: Поле-дескриминатор для вычисления типа запроса
+      discriminator:
+        description: Поле-дескриминатор для вычисления типа запроса
+        propertyName: responseType
+        mapping:
+          success: '#/components/schemas/IResponseSuccess'
+          error: '#/components/schemas/IResponseError'
+
+    IResponseSuccess:
+      type: object
+      description: Базовый интерфейс для успешных ответов
+      properties:
+        responseType:
+          type: string
+          enum: [ success ]
+      discriminator:
+        propertyName: responseType
+        mapping:
+          read: '#/components/schemas/ArbitrageOpportunityReadResponse'
+
+    IResponseError:
+      type: object
+      description: Базовый интерфейс для ошибочных ответов
+      properties:
+        responseType:
+          type: string
+          enum: [ error ]
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
     ArbitrageOpportunity:
       type: object
       properties:
@@ -111,7 +162,10 @@ components:
 
     ArbitrageOpportunityReadResponse:
       allOf:
+        - $ref: '#/components/schemas/IResponse'
         - $ref: '#/components/schemas/ArbitrageOpportunity'
+
+    # REQUESTS
 
 tags:
   - name: ArbitrageOpportunities
