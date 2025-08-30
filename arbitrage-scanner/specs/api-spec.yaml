@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Arbitrage Scanner API
+  description: API сканера арбитража криптовалют
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+    description: Локальный сервер разработки
+
+paths:
+  /arbitrage-opportunities/read:
+    post:
+      tags:
+        - ArbitrageOpportunities
+      summary: Получить список всех арбитражных возможностей
+      operationId: readArbitrageOpportunities
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbitrageOpportunitiesReadResponse'
+
+components:
+  schemas:
+    ArbitrageOpportunitiesReadResponse:
+      type: object
+      properties:
+        opportunities:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/ArbitrageOpportunityObject'
+          description: Список арбитражных возможностей
+
+    ArbitrageOpportunityStatusObject:
+      type: object
+      properties:
+        value:
+          type: string
+          enum: [ active, expired ]
+          description: Статус арбитражной возможности
+        timestampStart:
+          type: integer
+          format: int64
+          description: Время начала арбитражной возможности
+        timestampEnd:
+          type: integer
+          format: int64
+          description: Время конца арбитражной возможности
+
+    ArbitrageOpportunityObject:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор арбитражной возможности
+        tokenPair:
+          type: string
+          description: Торговая пара для арбитража
+        buyExchange:
+          type: string
+          description: Биржа для покупки
+        sellExchange:
+          type: string
+          description: Биржа для продажи
+        buyPrice:
+          type: number
+          format: double
+          description: Цена покупки
+        sellPrice:
+          type: number
+          format: double
+          description: Цена продажи
+        priceDifference:
+          type: number
+          minimum: 0
+          maximum: 100
+          format: double
+          description: Текущее расхождение цен в процентах
+        status:
+          type: object
+          description: Статус арбитражной возможности
+          $ref: '#/components/schemas/ArbitrageOpportunityStatusObject'
+
+tags:
+  - name: ArbitrageOpportunities
+    description: Операции, связанные с арбитражем криптовалют
