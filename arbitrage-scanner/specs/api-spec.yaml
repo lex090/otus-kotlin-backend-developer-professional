@@ -20,35 +20,55 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArbitrageOpportunitiesReadResponse'
+                $ref: '#/components/schemas/ArbitrageOpportunityObject'
 
 components:
   schemas:
-    ArbitrageOpportunitiesReadResponse:
-      type: object
-      properties:
-        opportunities:
-          type: array
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/ArbitrageOpportunityObject'
-          description: Список арбитражных возможностей
+    #    ArbitrageOpportunitiesReadResponse:
+    #      type: object
+    #      properties:
+    #        opportunities:
+    #          type: array
+    #          uniqueItems: true
+    #          items:
+    #            $ref: '#/components/schemas/ArbitrageOpportunityObject'
+    #          description: Список арбитражных возможностей
 
-    ArbitrageOpportunityStatusObject:
+    ArbitrageOpportunityStatus:
       type: object
+      discriminator:
+        propertyName: value
+        mapping:
+          active: "#/components/schemas/ActiveArbitrageOpportunityStatus"
+          expired: "#/components/schemas/ExpiredArbitrageOpportunityStatus"
+      oneOf:
+        - $ref: '#/components/schemas/ActiveArbitrageOpportunityStatus'
+        - $ref: '#/components/schemas/ExpiredArbitrageOpportunityStatus'
+
+    ActiveArbitrageOpportunityStatus:
+      type: object
+      required: [ value, timestampStart ]
       properties:
         value:
           type: string
-          enum: [ active, expired ]
-          description: Статус арбитражной возможности
+          enum: [ active ]
         timestampStart:
           type: integer
           format: int64
-          description: Время начала арбитражной возможности
+
+    ExpiredArbitrageOpportunityStatus:
+      type: object
+      required: [ value, timestampStart, timestampEnd ]
+      properties:
+        value:
+          type: string
+          enum: [ expired ]
+        timestampStart:
+          type: integer
+          format: int64
         timestampEnd:
           type: integer
           format: int64
-          description: Время конца арбитражной возможности
 
     ArbitrageOpportunityObject:
       type: object
@@ -82,7 +102,7 @@ components:
         status:
           type: object
           description: Статус арбитражной возможности
-          $ref: '#/components/schemas/ArbitrageOpportunityStatusObject'
+          $ref: '#/components/schemas/ArbitrageOpportunityStatus'
 
 tags:
   - name: ArbitrageOpportunities
