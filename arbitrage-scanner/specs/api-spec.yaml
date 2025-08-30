@@ -20,62 +20,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArbitrageOpportunityObject'
+                $ref: '#/components/schemas/ArbitrageOpportunityReadResponse'
 
 components:
   schemas:
-    #    ArbitrageOpportunitiesReadResponse:
-    #      type: object
-    #      properties:
-    #        opportunities:
-    #          type: array
-    #          uniqueItems: true
-    #          items:
-    #            $ref: '#/components/schemas/ArbitrageOpportunityObject'
-    #          description: Список арбитражных возможностей
 
-    ArbitrageOpportunityStatus:
-      type: object
-      discriminator:
-        propertyName: value
-        mapping:
-          active: "#/components/schemas/ActiveArbitrageOpportunityStatus"
-          expired: "#/components/schemas/ExpiredArbitrageOpportunityStatus"
-      oneOf:
-        - $ref: '#/components/schemas/ActiveArbitrageOpportunityStatus'
-        - $ref: '#/components/schemas/ExpiredArbitrageOpportunityStatus'
+    # COMMON SCHEMAS
 
-    ActiveArbitrageOpportunityStatus:
-      type: object
-      required: [ value, timestampStart ]
-      properties:
-        value:
-          type: string
-          enum: [ active ]
-        timestampStart:
-          type: integer
-          format: int64
-
-    ExpiredArbitrageOpportunityStatus:
-      type: object
-      required: [ value, timestampStart, timestampEnd ]
-      properties:
-        value:
-          type: string
-          enum: [ expired ]
-        timestampStart:
-          type: integer
-          format: int64
-        timestampEnd:
-          type: integer
-          format: int64
-
-    ArbitrageOpportunityObject:
+    ArbitrageOpportunity:
       type: object
       properties:
         id:
-          type: string
-          description: Уникальный идентификатор арбитражной возможности
+          $ref: '#/components/schemas/ArbitrageOpportunityId'
         tokenPair:
           type: string
           description: Торговая пара для арбитража
@@ -100,9 +56,62 @@ components:
           format: double
           description: Текущее расхождение цен в процентах
         status:
-          type: object
-          description: Статус арбитражной возможности
           $ref: '#/components/schemas/ArbitrageOpportunityStatus'
+
+    ArbitrageOpportunityId:
+      type: string
+      description: Уникальный идентификатор арбитражной возможности
+      example: "1893746293640137"
+
+    ArbitrageOpportunityStatus:
+      type: object
+      description: Статус арбитражной возможности
+      discriminator:
+        propertyName: value
+        mapping:
+          active: "#/components/schemas/ActiveArbitrageOpportunityStatus"
+          expired: "#/components/schemas/ExpiredArbitrageOpportunityStatus"
+      oneOf:
+        - $ref: '#/components/schemas/ActiveArbitrageOpportunityStatus'
+        - $ref: '#/components/schemas/ExpiredArbitrageOpportunityStatus'
+
+    ActiveArbitrageOpportunityStatus:
+      type: object
+      required: [ value, timestampStart ]
+      properties:
+        value:
+          type: string
+          enum: [ active ]
+        timestampStart:
+          type: integer
+          format: int64
+      example:
+        value: active
+        timestampStart: 1625247600
+
+    ExpiredArbitrageOpportunityStatus:
+      type: object
+      required: [ value, timestampStart, timestampEnd ]
+      properties:
+        value:
+          type: string
+          enum: [ expired ]
+        timestampStart:
+          type: integer
+          format: int64
+        timestampEnd:
+          type: integer
+          format: int64
+      example:
+        value: expired
+        timestampStart: 1625247600
+        timestampEnd: 1625334000
+
+    # RESPONSES
+
+    ArbitrageOpportunityReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/ArbitrageOpportunity'
 
 tags:
   - name: ArbitrageOpportunities
