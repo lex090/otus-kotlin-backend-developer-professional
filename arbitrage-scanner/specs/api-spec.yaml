@@ -33,38 +33,24 @@ components:
       properties:
         responseType:
           type: string
-          enum: [ success, error ]
           description: Поле-дескриминатор для вычисления типа запроса
-      discriminator:
-        description: Поле-дескриминатор для вычисления типа запроса
-        propertyName: responseType
-        mapping:
-          success: '#/components/schemas/IResponseSuccess'
-          error: '#/components/schemas/IResponseError'
-
-    IResponseSuccess:
-      type: object
-      description: Базовый интерфейс для успешных ответов
-      properties:
-        responseType:
-          type: string
-          enum: [ success ]
-      discriminator:
-        propertyName: responseType
-        mapping:
-          read: '#/components/schemas/ArbitrageOpportunityReadResponse'
-
-    IResponseError:
-      type: object
-      description: Базовый интерфейс для ошибочных ответов
-      properties:
-        responseType:
-          type: string
-          enum: [ error ]
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
         errors:
           type: array
           items:
             $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          read: '#/components/schemas/AdReadResponse'
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
 
     Error:
       type: object
