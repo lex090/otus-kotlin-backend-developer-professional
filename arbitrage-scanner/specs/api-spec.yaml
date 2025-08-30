@@ -27,6 +27,19 @@ components:
 
     # COMMON SCHEMAS
 
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: read
+      discriminator:
+        propertyName: requestType
+        mapping:
+          read: '#/components/schemas/ArbitrageOpportunityReadRequest'
+
     IResponse:
       type: object
       description: Базовый интерфейс для всех ответов
@@ -44,7 +57,7 @@ components:
       discriminator:
         propertyName: responseType
         mapping:
-          read: '#/components/schemas/AdReadResponse'
+          read: '#/components/schemas/ArbitrageOpportunityReadResponse'
 
     ResponseResult:
       type: string
@@ -152,6 +165,13 @@ components:
         - $ref: '#/components/schemas/ArbitrageOpportunity'
 
     # REQUESTS
+    ArbitrageOpportunityReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ArbitrageOpportunityId'
 
 tags:
   - name: ArbitrageOpportunities
