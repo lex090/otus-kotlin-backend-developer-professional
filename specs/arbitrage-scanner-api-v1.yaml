@@ -177,7 +177,7 @@ components:
         - type: object
           description: Список найденных объектов
           properties:
-            ads:
+            arbitrageOpportunities:
               type: array
               items:
                 $ref: '#/components/schemas/ArbitrageOpportunity'
