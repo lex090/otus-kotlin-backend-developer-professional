@@ -154,15 +154,11 @@ components:
       enum: [ active, expired ]
 
     ArbitrageOpportunitySpread:
-      type: object
+      type: number
       description: Спред арбитражной возможности
-      properties:
-        priceDifference:
-          type: number
-          minimum: 0
-          maximum: 100
-          format: double
-          description: Текущее расхождение цен в процентах
+      minimum: 0
+      maximum: 100
+      format: double
 
     ArbitrageOpportunitySearchFilter:
       type: object
