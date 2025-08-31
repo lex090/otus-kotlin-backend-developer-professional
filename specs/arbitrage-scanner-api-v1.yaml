@@ -12,7 +12,7 @@ paths:
     post:
       tags:
         - ArbitrageOpportunities
-      summary: Получить список всех арбитражных возможностей
+      summary: Получить арбитражную возможность
       operationId: readArbitrageOpportunities
       requestBody:
         required: true
@@ -27,6 +27,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ArbitrageOpportunityReadResponse'
+
+  /arbitrage-opportunities/search:
+    post:
+      tags:
+        - ArbitrageOpportunities
+      summary: Получить список арбитражных возможностей по фильтру
+      operationId: searchArbitrageOpportunities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbitrageOpportunitySearchRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbitrageOpportunitySearchResponse'
 
 components:
   schemas:
