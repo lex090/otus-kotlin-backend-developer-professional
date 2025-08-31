@@ -18,5 +18,4 @@ plugins {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include("tmp-module")
-include("arbitrage-scanner-api")
+include("arbitrage-scanner-api-v1")

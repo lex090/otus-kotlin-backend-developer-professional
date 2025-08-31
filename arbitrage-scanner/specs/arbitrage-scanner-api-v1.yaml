@@ -122,46 +122,20 @@ components:
     ArbitrageOpportunityStatus:
       type: object
       description: Статус арбитражной возможности
-      discriminator:
-        propertyName: value
-        mapping:
-          active: "#/components/schemas/ActiveArbitrageOpportunityStatus"
-          expired: "#/components/schemas/ExpiredArbitrageOpportunityStatus"
-      oneOf:
-        - $ref: '#/components/schemas/ActiveArbitrageOpportunityStatus'
-        - $ref: '#/components/schemas/ExpiredArbitrageOpportunityStatus'
-
-    ActiveArbitrageOpportunityStatus:
-      type: object
-      required: [ value, timestampStart ]
       properties:
-        value:
-          type: string
-          enum: [ active ]
-        timestampStart:
-          type: integer
-          format: int64
-      example:
-        value: active
-        timestampStart: 1625247600
-
-    ExpiredArbitrageOpportunityStatus:
-      type: object
-      required: [ value, timestampStart, timestampEnd ]
-      properties:
-        value:
-          type: string
-          enum: [ expired ]
+        statusType:
+          $ref: '#/components/schemas/ArbitrageOpportunityStatusType'
         timestampStart:
           type: integer
           format: int64
         timestampEnd:
           type: integer
           format: int64
-      example:
-        value: expired
-        timestampStart: 1625247600
-        timestampEnd: 1625334000
+
+    ArbitrageOpportunityStatusType:
+      type: string
+      description: Тип статуса
+      enum: [ active, expired ]
 
     # RESPONSES
 
