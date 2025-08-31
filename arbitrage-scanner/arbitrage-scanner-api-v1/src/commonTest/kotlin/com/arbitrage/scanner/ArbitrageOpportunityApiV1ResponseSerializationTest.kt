@@ -19,12 +19,12 @@ class ArbitrageOpportunityApiV1ResponseSerializationTest {
         sellExchange = "PancakeSwap",
         buyPrice = 50000.0,
         sellPrice = 51000.0,
-        priceDifference = 2.0,
+        spread = 2.0,
         status = ArbitrageOpportunityStatus(statusType = ArbitrageOpportunityStatusType.ACTIVE)
     )
 
     private val givenJsonString =
-        """{"responseType":"read","result":"success","errors":[],"id":"test-id","tokenPair":"BTC/USDT","buyExchange":"Binance","sellExchange":"PancakeSwap","buyPrice":50000.0,"sellPrice":51000.0,"priceDifference":2.0,"status":{"statusType":"active"}}"""
+        """{"responseType":"read","result":"success","errors":[],"id":"test-id","tokenPair":"BTC/USDT","buyExchange":"Binance","sellExchange":"PancakeSwap","buyPrice":50000.0,"sellPrice":51000.0,"spread":2.0,"status":{"statusType":"active"}}"""
 
     private val json = Json { ignoreUnknownKeys = true }
 
