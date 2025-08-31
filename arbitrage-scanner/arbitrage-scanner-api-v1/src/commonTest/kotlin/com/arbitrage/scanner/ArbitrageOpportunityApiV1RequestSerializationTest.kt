@@ -27,11 +27,9 @@ class ArbitrageOpportunityApiV1RequestSerializationTest {
 
     @Test
     fun testSerializationRoundTrip() {
-        val originalRequest = ArbitrageOpportunityReadRequest(id = "round-trip-test")
-
-        val jsonString = json.toRequestJsonString(originalRequest)
+        val jsonString = json.toRequestJsonString(givenRequest)
         val deserializedRequest = json.fromRequestJsonString<ArbitrageOpportunityReadRequest>(jsonString)
 
-        assertEquals(originalRequest, deserializedRequest)
+        assertEquals(givenRequest, deserializedRequest)
     }
 }
