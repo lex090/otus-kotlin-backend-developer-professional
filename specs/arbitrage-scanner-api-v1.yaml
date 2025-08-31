@@ -198,6 +198,7 @@ components:
     ArbitrageOpportunityReadRequest:
       allOf:
         - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ArbitrageOpportunityRequestDebug'
         - type: object
           properties:
             id:
@@ -206,10 +207,41 @@ components:
     ArbitrageOpportunitySearchRequest:
       allOf:
         - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ArbitrageOpportunityRequestDebug'
         - type: object
           properties:
             filter:
               $ref: '#/components/schemas/ArbitrageOpportunitySearchFilter'
+
+    # STUBS ======================
+    ArbitrageOpportunityRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    ArbitrageOpportunityRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/ArbitrageOpportunityDebug'
+
+    ArbitrageOpportunityDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/ArbitrageOpportunityRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/ArbitrageOpportunityRequestDebugStubs'
+
+    ArbitrageOpportunityRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
 
 tags:
   - name: ArbitrageOpportunities
