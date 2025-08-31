@@ -6,6 +6,6 @@ plugins {
 }
 
 ext {
-    val specDir = layout.projectDirectory.dir("./specs")
+    val specDir = layout.projectDirectory.dir("../specs")
     set("arbitrage-scanner-api-v1", specDir.file("arbitrage-scanner-api-v1.yaml").toString())
 }
