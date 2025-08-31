@@ -105,12 +105,8 @@ components:
           type: number
           format: double
           description: Цена продажи
-        priceDifference:
-          type: number
-          minimum: 0
-          maximum: 100
-          format: double
-          description: Текущее расхождение цен в процентах
+        spread:
+          $ref: '#/components/schemas/ArbitrageOpportunitySpread'
         status:
           $ref: '#/components/schemas/ArbitrageOpportunityStatus'
 
@@ -137,12 +133,50 @@ components:
       description: Тип статуса
       enum: [ active, expired ]
 
+    ArbitrageOpportunitySpread:
+      type: object
+      description: Спред арбитражной возможности
+      properties:
+        priceDifference:
+          type: number
+          minimum: 0
+          maximum: 100
+          format: double
+          description: Текущее расхождение цен в процентах
+
+    ArbitrageOpportunitySearchFilter:
+      type: object
+      description: Фильтр для поиска арбитражных возможностей
+      properties:
+        id:
+          $ref: '#/components/schemas/ArbitrageOpportunityId'
+        tokenPair:
+          type: string
+          description: Торговая пара для арбитража
+        spread:
+          $ref: '#/components/schemas/ArbitrageOpportunitySpread'
+
+    ArbitrageOpportunityMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            ads:
+              type: array
+              items:
+                $ref: '#/components/schemas/ArbitrageOpportunity'
+
     # RESPONSES
 
     ArbitrageOpportunityReadResponse:
       allOf:
         - $ref: '#/components/schemas/IResponse'
         - $ref: '#/components/schemas/ArbitrageOpportunity'
+
+    ArbitrageOpportunitySearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ArbitrageOpportunityMulti'
 
     # REQUESTS
     ArbitrageOpportunityReadRequest:
@@ -152,6 +186,14 @@ components:
           properties:
             id:
               $ref: '#/components/schemas/ArbitrageOpportunityId'
+
+    ArbitrageOpportunitySearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - type: object
+          properties:
+            filter:
+              $ref: '#/components/schemas/ArbitrageOpportunitySearchFilter'
 
 tags:
   - name: ArbitrageOpportunities
