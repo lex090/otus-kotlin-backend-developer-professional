@@ -3,17 +3,11 @@ package com.arbitrage.scanner.models
 import kotlin.jvm.JvmInline
 
 data class CexPrice(
-    val id: CexPriceId,
+    val currencyId: CexCurrencyId,
     val exchangeId: CexExchangeId,
     val priceRaw: CexPriceRaw,
     val timeStamp: TimeStamp,
 ) {
-    @JvmInline
-    value class CexPriceId(val value: String) {
-        companion object {
-            val DEFAULT = CexPriceId("")
-        }
-    }
 
     @JvmInline
     value class CexPriceRaw(val value: Double) { // TODO Тут надо что типо BigDecimal использовать
@@ -24,7 +18,7 @@ data class CexPrice(
 
     companion object {
         val DEFAULT = CexPrice(
-            id = CexPriceId.DEFAULT,
+            currencyId = CexCurrencyId.DEFAULT,
             exchangeId = CexExchangeId.DEFAULT,
             priceRaw = CexPriceRaw.DEFAULT,
             timeStamp = TimeStamp.DEFAULT
