@@ -1,6 +1,6 @@
 package com.arbitrage.scanner.base
 
-enum class ProcessingState {
+enum class State {
     NONE,
     RUNNING,
     FAILING,
