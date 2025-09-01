@@ -4,7 +4,7 @@ import com.arbitrage.scanner.base.Timestamp
 import kotlin.jvm.JvmInline
 
 data class DexPrice(
-    val currencyId: DexCurrencyId,
+    val currencyId: DexTokenId,
     val exchangeId: DexExchangeId,
     val chainId: DexChainId,
     val priceRaw: DexPriceRaw,
@@ -20,7 +20,7 @@ data class DexPrice(
 
     companion object {
         val DEFAULT = DexPrice(
-            currencyId = DexCurrencyId.DEFAULT,
+            currencyId = DexTokenId.DEFAULT,
             exchangeId = DexExchangeId.DEFAULT,
             chainId = DexChainId.DEFAULT,
             priceRaw = DexPriceRaw.DEFAULT,

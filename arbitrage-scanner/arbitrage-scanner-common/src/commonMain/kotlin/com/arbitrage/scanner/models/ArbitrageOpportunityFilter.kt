@@ -1,19 +1,19 @@
 package com.arbitrage.scanner.models
 
 data class ArbitrageOpportunityFilter(
-    val dexCurrencyIds: Set<DexCurrencyId>,
+    val dexTokenIds: Set<DexTokenId>,
     val dexExchangeIds: Set<DexExchangeId>,
     val dexChainIds: Set<DexChainId>,
-    val cexCurrencyIds: Set<CexCurrencyId>,
+    val cexTokenIds: Set<CexTokenId>,
     val cexExchangeIds: Set<CexExchangeId>,
     val spread: ArbitrageOpportunitySpread,
 ) {
     companion object {
         val DEFAULT = ArbitrageOpportunityFilter(
-            dexCurrencyIds = emptySet(),
+            dexTokenIds = emptySet(),
             dexExchangeIds = emptySet(),
             dexChainIds = emptySet(),
-            cexCurrencyIds = emptySet(),
+            cexTokenIds = emptySet(),
             cexExchangeIds = emptySet(),
             spread = ArbitrageOpportunitySpread.DEFAULT,
         )

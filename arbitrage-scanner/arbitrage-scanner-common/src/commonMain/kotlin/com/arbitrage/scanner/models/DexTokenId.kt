@@ -3,8 +3,8 @@ package com.arbitrage.scanner.models
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class DexCurrencyId(val value: String) {
+value class DexTokenId(val value: String) {
     companion object {
-        val DEFAULT = DexCurrencyId("")
+        val DEFAULT = DexTokenId("")
     }
 }
