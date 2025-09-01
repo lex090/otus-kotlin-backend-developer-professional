@@ -19,3 +19,4 @@ plugins {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include("arbitrage-scanner-api-v1")
+include("arbitrage-scanner-common")
