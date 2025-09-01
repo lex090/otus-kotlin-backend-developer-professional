@@ -4,7 +4,7 @@ import com.arbitrage.scanner.base.Timestamp
 import kotlin.jvm.JvmInline
 
 data class CexPrice(
-    val currencyId: CexTokenId,
+    val tokenId: CexTokenId,
     val exchangeId: CexExchangeId,
     val priceRaw: CexPriceRaw,
     val timeStamp: Timestamp,
@@ -19,7 +19,7 @@ data class CexPrice(
 
     companion object {
         val DEFAULT = CexPrice(
-            currencyId = CexTokenId.DEFAULT,
+            tokenId = CexTokenId.DEFAULT,
             exchangeId = CexExchangeId.DEFAULT,
             priceRaw = CexPriceRaw.DEFAULT,
             timeStamp = Timestamp.DEFAULT
