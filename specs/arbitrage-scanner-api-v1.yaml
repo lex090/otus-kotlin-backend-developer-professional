@@ -103,28 +103,77 @@ components:
         message:
           type: string
 
+    DexPrice:
+      type: object
+      description: Агрегированные данные по цене с DEX
+      properties:
+        currencyId:
+          $ref: '#/components/schemas/DexTokenId'
+        chainId:
+          $ref: '#/components/schemas/DexChainId'
+        exchangeId:
+          $ref: '#/components/schemas/DexExchangeId'
+        priceRaw:
+          $ref: '#/components/schemas/DexPriceRaw'
+
+    DexTokenId:
+      type: string
+      description: Уникальный идентификатор валюты на DEX
+
+    DexChainId:
+      type: string
+      description: Уникальный идентификатор сети
+
+    DexExchangeId:
+      type: string
+      description: Уникальный идентификатор DEX крипта биржи
+
+    DexPriceRaw:
+      type: number
+      description: Цена в "сырых" единицах (без учета делимости валюты)
+      format: double
+
+    CexPrice:
+      type: object
+      description: Агрегированные данные по цене с CEX
+      properties:
+        tokenId:
+          $ref: '#/components/schemas/CexTokenId'
+        exchangeId:
+          $ref: '#/components/schemas/CexExchangeId'
+        priceRaw:
+          $ref: '#/components/schemas/CexPriceRaw'
+
+    CexTokenId:
+      type: string
+      description: Уникальный идентификатор валюты на CEX
+
+    CexExchangeId:
+      type: string
+      description: Уникальный идентификатор CEX крипта биржи
+
+    CexPriceRaw:
+      type: number
+      description: Цена в "сырых" единицах (без учета делимости валюты)
+      format: double
+
     ArbitrageOpportunity:
+      discriminator:
+        propertyName: opportunityType
+        mapping:
+          DexToCexSimpleArbitrageOpportunity: '#/components/schemas/DexToCexSimpleArbitrageOpportunity'
+      oneOf:
+        - $ref: '#/components/schemas/DexToCexSimpleArbitrageOpportunity'
+
+    DexToCexSimpleArbitrageOpportunity:
       type: object
       properties:
         id:
           $ref: '#/components/schemas/ArbitrageOpportunityId'
-        tokenPair:
-          type: string
-          description: Торговая пара для арбитража
-        buyExchange:
-          type: string
-          description: Биржа для покупки
-        sellExchange:
-          type: string
-          description: Биржа для продажи
-        buyPrice:
-          type: number
-          format: double
-          description: Цена покупки
-        sellPrice:
-          type: number
-          format: double
-          description: Цена продажи
+        dexPrice:
+          $ref: '#/components/schemas/DexPrice'
+        cexPrice:
+          $ref: '#/components/schemas/CexPrice'
         spread:
           $ref: '#/components/schemas/ArbitrageOpportunitySpread'
         status:
@@ -164,11 +213,31 @@ components:
       type: object
       description: Фильтр для поиска арбитражных возможностей
       properties:
-        id:
-          $ref: '#/components/schemas/ArbitrageOpportunityId'
-        tokenPair:
-          type: string
-          description: Торговая пара для арбитража
+        dexTokenIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DexTokenId'
+        dexExchangeIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DexExchangeId'
+        dexChainIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DexChainId'
+        cexTokenIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/CexTokenId'
+        cexExchangeIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/CexExchangeId'
         spread:
           $ref: '#/components/schemas/ArbitrageOpportunitySpread'
 
