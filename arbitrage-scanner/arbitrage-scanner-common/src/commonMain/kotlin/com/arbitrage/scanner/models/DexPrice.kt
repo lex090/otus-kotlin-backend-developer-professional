@@ -1,5 +1,6 @@
 package com.arbitrage.scanner.models
 
+import com.arbitrage.scanner.base.Timestamp
 import kotlin.jvm.JvmInline
 
 data class DexPrice(
@@ -7,7 +8,7 @@ data class DexPrice(
     val exchangeId: DexExchangeId,
     val chainId: DexChainId,
     val priceRaw: DexPriceRaw,
-    val timeStamp: TimeStamp,
+    val timeStamp: Timestamp,
 ) {
 
     @JvmInline
@@ -23,7 +24,7 @@ data class DexPrice(
             exchangeId = DexExchangeId.DEFAULT,
             chainId = DexChainId.DEFAULT,
             priceRaw = DexPriceRaw.DEFAULT,
-            timeStamp = TimeStamp.DEFAULT
+            timeStamp = Timestamp.DEFAULT
         )
     }
 }

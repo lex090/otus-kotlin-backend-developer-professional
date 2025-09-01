@@ -1,9 +1,11 @@
 package com.arbitrage.scanner.models
 
+import com.arbitrage.scanner.base.Timestamp
+
 sealed class ArbitrageOpportunity {
     abstract val id: ArbitrageOpportunityId
-    abstract val startTimeStamp: TimeStamp
-    abstract val endTimeStamp: TimeStamp?
+    abstract val startTimestamp: Timestamp
+    abstract val endTimestamp: Timestamp?
 
     fun type(): ArbitrageOpportunityType {
         return when (this) {
@@ -13,14 +15,14 @@ sealed class ArbitrageOpportunity {
 
     fun isActive(): ArbitrageOpportunityStatus =
         when {
-            endTimeStamp == null -> ArbitrageOpportunityStatus.ACTIVE
+            endTimestamp == null -> ArbitrageOpportunityStatus.ACTIVE
             else -> ArbitrageOpportunityStatus.EXPIRED
         }
 
-    class DexToCexSimpleArbitrageOpportunity(
+    class DexToCexSimpleArbitrageOpportunity private constructor(
         override val id: ArbitrageOpportunityId,
-        override val startTimeStamp: TimeStamp,
-        override val endTimeStamp: TimeStamp?,
+        override val startTimestamp: Timestamp,
+        override val endTimestamp: Timestamp?,
         val dexPrice: DexPrice,
         val cexPrice: CexPrice,
         val spread: ArbitrageOpportunitySpread,
@@ -33,8 +35,8 @@ sealed class ArbitrageOpportunity {
             other as DexToCexSimpleArbitrageOpportunity
 
             if (id != other.id) return false
-            if (startTimeStamp != other.startTimeStamp) return false
-            if (endTimeStamp != other.endTimeStamp) return false
+            if (startTimestamp != other.startTimestamp) return false
+            if (endTimestamp != other.endTimestamp) return false
             if (dexPrice != other.dexPrice) return false
             if (cexPrice != other.cexPrice) return false
             if (spread != other.spread) return false
@@ -44,8 +46,8 @@ sealed class ArbitrageOpportunity {
 
         override fun hashCode(): Int {
             var result = id.hashCode()
-            result = 31 * result + startTimeStamp.hashCode()
-            result = 31 * result + (endTimeStamp?.hashCode() ?: 0)
+            result = 31 * result + startTimestamp.hashCode()
+            result = 31 * result + (endTimestamp?.hashCode() ?: 0)
             result = 31 * result + dexPrice.hashCode()
             result = 31 * result + cexPrice.hashCode()
             result = 31 * result + spread.hashCode()
@@ -58,9 +60,27 @@ sealed class ArbitrageOpportunity {
                 dexPrice = DexPrice.DEFAULT,
                 cexPrice = CexPrice.DEFAULT,
                 spread = ArbitrageOpportunitySpread.DEFAULT,
-                startTimeStamp = TimeStamp.DEFAULT,
-                endTimeStamp = TimeStamp.DEFAULT,
+                startTimestamp = Timestamp.DEFAULT,
+                endTimestamp = Timestamp.DEFAULT,
             )
+
+            fun create(
+                id: ArbitrageOpportunityId,
+                startTimestamp: Timestamp,
+                endTimestamp: Timestamp?,
+                dexPrice: DexPrice,
+                cexPrice: CexPrice,
+                spread: ArbitrageOpportunitySpread,
+            ): DexToCexSimpleArbitrageOpportunity {
+                return DexToCexSimpleArbitrageOpportunity(
+                    id = id,
+                    startTimestamp = startTimestamp,
+                    endTimestamp = endTimestamp,
+                    dexPrice = dexPrice,
+                    cexPrice = cexPrice,
+                    spread = spread,
+                )
+            }
         }
     }
 }

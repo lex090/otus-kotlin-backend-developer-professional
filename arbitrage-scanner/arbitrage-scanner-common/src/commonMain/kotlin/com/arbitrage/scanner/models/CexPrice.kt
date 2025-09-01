@@ -1,12 +1,13 @@
 package com.arbitrage.scanner.models
 
+import com.arbitrage.scanner.base.Timestamp
 import kotlin.jvm.JvmInline
 
 data class CexPrice(
     val currencyId: CexCurrencyId,
     val exchangeId: CexExchangeId,
     val priceRaw: CexPriceRaw,
-    val timeStamp: TimeStamp,
+    val timeStamp: Timestamp,
 ) {
 
     @JvmInline
@@ -21,7 +22,7 @@ data class CexPrice(
             currencyId = CexCurrencyId.DEFAULT,
             exchangeId = CexExchangeId.DEFAULT,
             priceRaw = CexPriceRaw.DEFAULT,
-            timeStamp = TimeStamp.DEFAULT
+            timeStamp = Timestamp.DEFAULT
         )
     }
 }
