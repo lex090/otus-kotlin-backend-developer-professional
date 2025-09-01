@@ -107,7 +107,7 @@ components:
       type: object
       description: Агрегированные данные по цене с DEX
       properties:
-        currencyId:
+        tokenId:
           $ref: '#/components/schemas/DexTokenId'
         chainId:
           $ref: '#/components/schemas/DexChainId'
