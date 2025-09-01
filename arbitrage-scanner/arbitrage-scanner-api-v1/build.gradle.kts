@@ -17,6 +17,7 @@ kotlin {
             kotlin.srcDir(layout.buildDirectory.dir("generate-resources/src/commonMain/kotlin"))
             dependencies {
                 implementation(libs.kotlinx.serialization.json)
+                implementation(project(":arbitrage-scanner-common"))
             }
         }
         commonTest {

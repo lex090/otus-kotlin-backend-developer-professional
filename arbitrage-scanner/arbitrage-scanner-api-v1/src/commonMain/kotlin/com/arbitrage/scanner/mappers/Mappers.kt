@@ -1,0 +1,1 @@
+package com.arbitrage.scanner.mappers
