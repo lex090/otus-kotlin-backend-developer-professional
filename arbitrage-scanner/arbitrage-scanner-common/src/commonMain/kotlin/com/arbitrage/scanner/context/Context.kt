@@ -4,9 +4,11 @@ import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.Error
 import com.arbitrage.scanner.base.RequestId
 import com.arbitrage.scanner.base.State
+import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.models.ArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.stubs.Stubs
 
 data class Context(
@@ -17,9 +19,11 @@ data class Context(
     val stubCase: Stubs,
 
     val requestId: RequestId,
-    val startTimestamp: Long,
-    val arbitrageOpportunityFilterRequest: ArbitrageOpportunityFilter,
+    val startTimestamp: Timestamp,
 
-    val arbitrageOpportunityResponse: ArbitrageOpportunity,
-    val arbitrageOpportunitiesResponse: Set<ArbitrageOpportunity>,
+    val arbitrageOpportunityReadRequest: ArbitrageOpportunityId,
+    val arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter,
+
+    val arbitrageOpportunityReadResponse: ArbitrageOpportunity,
+    val arbitrageOpportunitySearchResponse: Set<ArbitrageOpportunity>,
 )

@@ -11,7 +11,7 @@ data class CexPrice(
 ) {
 
     @JvmInline
-    value class CexPriceRaw(val value: Double) { // TODO Тут надо что типо BigDecimal использовать
+    value class CexPriceRaw(val value: Double) { // TODO Тут надо что типа BigDecimal использовать
         companion object {
             val DEFAULT = CexPriceRaw(0.0)
         }

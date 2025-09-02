@@ -12,7 +12,7 @@ data class DexPrice(
 ) {
 
     @JvmInline
-    value class DexPriceRaw(val value: Double) { // TODO Тут надо что типо BigDecimal использовать
+    value class DexPriceRaw(val value: Double) { // TODO Тут надо что типа BigDecimal использовать
         companion object {
             val DEFAULT = DexPriceRaw(0.0)
         }

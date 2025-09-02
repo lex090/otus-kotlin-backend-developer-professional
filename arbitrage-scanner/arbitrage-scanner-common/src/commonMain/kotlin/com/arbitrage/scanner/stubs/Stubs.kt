@@ -5,5 +5,4 @@ enum class Stubs {
     SUCCESS,
     NOT_FOUND,
     BAD_ID,
-    DB_ERROR,
 }
