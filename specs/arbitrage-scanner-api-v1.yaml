@@ -249,7 +249,10 @@ components:
     ArbitrageOpportunityReadResponse:
       allOf:
         - $ref: '#/components/schemas/IResponse'
-        - $ref: '#/components/schemas/ArbitrageOpportunity'
+        - type: object
+          properties:
+            arbitrageOpportunity:
+              $ref: '#/components/schemas/ArbitrageOpportunity'
 
     ArbitrageOpportunitySearchResponse:
       allOf:
