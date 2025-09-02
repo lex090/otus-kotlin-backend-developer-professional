@@ -58,7 +58,7 @@ fun DexToCexSimpleArbitrageOpportunity.toTransport(): DexToCexSimpleArbitrageOpp
         dexPrice = this.dexPrice.toTransportDexPrice(),
         cexPrice = this.cexPrice.toTransportCexPrice(),
         spread = this.spread.toTransport(),
-        statusType = this.isActive.toTransport(),
+        statusType = this.status.toTransport(),
         timestampStart = this.startTimestamp.toTransport(),
         timestampEnd = this.endTimestamp.toTransport(),
     )
@@ -71,6 +71,7 @@ private fun Context.toTransportSearch(): ArbitrageOpportunitySearchResponse {
         arbitrageOpportunities = arbitrageOpportunitySearchResponse
             .map(ArbitrageOpportunity::toTransport)
             .takeIf(List<ArbitrageOpportunityApi>::isNotEmpty)
+            .orEmpty()
     )
 }
 

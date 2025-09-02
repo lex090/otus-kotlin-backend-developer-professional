@@ -12,7 +12,7 @@ sealed class ArbitrageOpportunity {
             is DexToCexSimpleArbitrageOpportunity -> ArbitrageOpportunityType.DEX_TO_CEX_SIMPLE
         }
 
-    val isActive: ArbitrageOpportunityStatus =
+    val status: ArbitrageOpportunityStatus =
         when {
             endTimestamp == null -> ArbitrageOpportunityStatus.ACTIVE
             else -> ArbitrageOpportunityStatus.EXPIRED
