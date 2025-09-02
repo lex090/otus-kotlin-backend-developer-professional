@@ -1,6 +1,9 @@
 package com.arbitrage.scanner
 
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,10 +12,13 @@ class ArbitrageOpportunityApiV1RequestSerializationTest {
 
     private val givenRequest = ArbitrageOpportunityReadRequest(
         id = "test-id",
-        debug = null
+        debug = ArbitrageOpportunityDebug(
+            mode = ArbitrageOpportunityRequestDebugMode.STUB,
+            stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+        )
     )
 
-    private val givenJsonString = """{"requestType":"read","id":"test-id"}"""
+    private val givenJsonString = """{"requestType":"read","debug":{"mode":"stub","stub":"success"},"id":"test-id"}"""
 
     private val json = Json { ignoreUnknownKeys = true }
 
