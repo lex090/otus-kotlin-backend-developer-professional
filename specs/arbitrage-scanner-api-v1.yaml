@@ -65,6 +65,7 @@ components:
         propertyName: requestType
         mapping:
           read: '#/components/schemas/ArbitrageOpportunityReadRequest'
+          search: '#/components/schemas/ArbitrageOpportunitySearchRequest'
 
     IResponse:
       type: object
@@ -84,6 +85,7 @@ components:
         propertyName: responseType
         mapping:
           read: '#/components/schemas/ArbitrageOpportunityReadResponse'
+          search: '#/components/schemas/ArbitrageOpportunitySearchResponse'
 
     ResponseResult:
       type: string
@@ -158,6 +160,9 @@ components:
       format: double
 
     ArbitrageOpportunity:
+      properties:
+        opportunityType:
+          $ref: '#/components/schemas/ArbitrageOpportunityType'
       discriminator:
         propertyName: opportunityType
         mapping:
@@ -165,25 +170,31 @@ components:
       oneOf:
         - $ref: '#/components/schemas/DexToCexSimpleArbitrageOpportunity'
 
+    ArbitrageOpportunityType:
+      type: string
+      enum: [ DexToCexSimpleArbitrageOpportunity ]
+
     DexToCexSimpleArbitrageOpportunity:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/ArbitrageOpportunityId'
-        dexPrice:
-          $ref: '#/components/schemas/DexPrice'
-        cexPrice:
-          $ref: '#/components/schemas/CexPrice'
-        spread:
-          $ref: '#/components/schemas/ArbitrageOpportunitySpread'
-        statusType:
-          $ref: '#/components/schemas/ArbitrageOpportunityStatusType'
-        timestampStart:
-          type: integer
-          format: int64
-        timestampEnd:
-          type: integer
-          format: int64
+      allOf:
+        - $ref: '#/components/schemas/ArbitrageOpportunity'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ArbitrageOpportunityId'
+            dexPrice:
+              $ref: '#/components/schemas/DexPrice'
+            cexPrice:
+              $ref: '#/components/schemas/CexPrice'
+            spread:
+              $ref: '#/components/schemas/ArbitrageOpportunitySpread'
+            statusType:
+              $ref: '#/components/schemas/ArbitrageOpportunityStatusType'
+            timestampStart:
+              type: integer
+              format: int64
+            timestampEnd:
+              type: integer
+              format: int64
 
     ArbitrageOpportunityId:
       type: string

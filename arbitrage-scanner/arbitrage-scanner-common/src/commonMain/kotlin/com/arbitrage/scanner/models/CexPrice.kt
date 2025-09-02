@@ -12,6 +12,11 @@ data class CexPrice(
 
     @JvmInline
     value class CexPriceRaw(val value: Double) { // TODO Тут надо что типа BigDecimal использовать
+
+        fun isDefault(): Boolean = this == DEFAULT
+
+        fun isNotDefault(): Boolean = !isDefault()
+
         companion object {
             val DEFAULT = CexPriceRaw(0.0)
         }

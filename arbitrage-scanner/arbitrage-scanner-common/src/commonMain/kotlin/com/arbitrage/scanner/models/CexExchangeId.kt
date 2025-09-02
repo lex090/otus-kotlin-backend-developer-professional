@@ -4,6 +4,11 @@ import kotlin.jvm.JvmInline
 
 @JvmInline
 value class CexExchangeId(val value: String) {
+
+    fun isDefault(): Boolean = this == DEFAULT
+
+    fun isNotDefault(): Boolean = !isDefault()
+
     companion object {
         val DEFAULT = CexExchangeId("")
     }

@@ -13,6 +13,11 @@ data class DexPrice(
 
     @JvmInline
     value class DexPriceRaw(val value: Double) { // TODO Тут надо что типа BigDecimal использовать
+
+        fun isDefault(): Boolean = this == DEFAULT
+
+        fun isNotDefault(): Boolean = !isDefault()
+
         companion object {
             val DEFAULT = DexPriceRaw(0.0)
         }

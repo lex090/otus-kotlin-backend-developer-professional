@@ -2,14 +2,33 @@ package com.arbitrage.scanner.mappers
 
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusType
 import com.arbitrage.scanner.api.v1.models.Error
 import com.arbitrage.scanner.api.v1.models.IResponse
 import com.arbitrage.scanner.api.v1.models.ResponseResult
 import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.base.State
+import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.context.Context
+import com.arbitrage.scanner.models.ArbitrageOpportunity
+import com.arbitrage.scanner.models.ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
+import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexPrice
+import com.arbitrage.scanner.models.CexPrice.CexPriceRaw
+import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.DexChainId
+import com.arbitrage.scanner.models.DexExchangeId
+import com.arbitrage.scanner.models.DexPrice
+import com.arbitrage.scanner.models.DexPrice.DexPriceRaw
+import com.arbitrage.scanner.models.DexTokenId
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunity as ArbitrageOpportunityApi
+import com.arbitrage.scanner.api.v1.models.CexPrice as CexPriceApi
+import com.arbitrage.scanner.api.v1.models.DexPrice as DexPriceApi
+import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity as DexToCexSimpleArbitrageOpportunityApi
 
 fun Context.toTransport(): IResponse {
     return when (command) {
@@ -19,15 +38,29 @@ fun Context.toTransport(): IResponse {
     }
 }
 
-fun Context.toTransportRead(): ArbitrageOpportunityReadResponse {
+private fun Context.toTransportRead(): ArbitrageOpportunityReadResponse {
     return ArbitrageOpportunityReadResponse(
         result = state.toResponseResult(),
         errors = internalErrors.transform(InternalError::toTransportError),
-        id = arbitrageOpportunityReadResponse.id.toTransportId(),
-        dexPrice = TODO(),
-        cexPrice = TODO(),
-        spread = TODO(),
-        status = TODO()
+        arbitrageOpportunity = arbitrageOpportunityReadResponse.toTransport(),
+    )
+}
+
+private fun ArbitrageOpportunity.toTransport(): ArbitrageOpportunityApi {
+    return when (this) {
+        is DexToCexSimpleArbitrageOpportunity -> toTransport()
+    }
+}
+
+fun DexToCexSimpleArbitrageOpportunity.toTransport(): DexToCexSimpleArbitrageOpportunityApi {
+    return DexToCexSimpleArbitrageOpportunityApi(
+        id = this.id.toTransportId(),
+        dexPrice = this.dexPrice.toTransportDexPrice(),
+        cexPrice = this.cexPrice.toTransportCexPrice(),
+        spread = this.spread.toTransport(),
+        statusType = this.isActive.toTransport(),
+        timestampStart = this.startTimestamp.toTransport(),
+        timestampEnd = this.endTimestamp.toTransport(),
     )
 }
 
@@ -35,7 +68,9 @@ private fun Context.toTransportSearch(): ArbitrageOpportunitySearchResponse {
     return ArbitrageOpportunitySearchResponse(
         result = state.toResponseResult(),
         errors = internalErrors.transform(InternalError::toTransportError),
-        arbitrageOpportunities = TODO()
+        arbitrageOpportunities = arbitrageOpportunitySearchResponse
+            .map(ArbitrageOpportunity::toTransport)
+            .takeIf(List<ArbitrageOpportunityApi>::isNotEmpty)
     )
 }
 
@@ -59,4 +94,55 @@ private fun InternalError.toTransportError() = Error(
 )
 
 private fun ArbitrageOpportunityId.toTransportId(): String? =
-    this.takeIf { it != ArbitrageOpportunityId.DEFAULT }?.value
+    this.takeIf(ArbitrageOpportunityId::isNotDefault)?.value
+
+private fun DexPrice.toTransportDexPrice(): DexPriceApi {
+    return DexPriceApi(
+        tokenId = tokenId.toTransportId(),
+        chainId = chainId.toTransportId(),
+        exchangeId = exchangeId.toTransportId(),
+        priceRaw = priceRaw.toTransportRawPrice()
+    )
+}
+
+fun DexTokenId.toTransportId(): String? =
+    this.takeIf(DexTokenId::isNotDefault)?.value
+
+fun DexChainId.toTransportId(): String? =
+    this.takeIf(DexChainId::isNotDefault)?.value
+
+fun DexExchangeId.toTransportId(): String? =
+    this.takeIf(DexExchangeId::isNotDefault)?.value
+
+fun DexPriceRaw.toTransportRawPrice(): Double? =
+    this.takeIf(DexPriceRaw::isNotDefault)?.value
+
+private fun CexPrice.toTransportCexPrice(): CexPriceApi {
+    return CexPriceApi(
+        tokenId = tokenId.toTransportId(),
+        exchangeId = exchangeId.toTransportId(),
+        priceRaw = priceRaw.toTransportRawPrice()
+    )
+}
+
+fun CexTokenId.toTransportId(): String? =
+    this.takeIf(CexTokenId::isNotDefault)?.value
+
+fun CexExchangeId.toTransportId(): String? =
+    this.takeIf(CexExchangeId::isNotDefault)?.value
+
+fun CexPriceRaw.toTransportRawPrice(): Double? =
+    this.takeIf(CexPriceRaw::isNotDefault)?.value
+
+fun ArbitrageOpportunitySpread.toTransport(): Double? =
+    this.takeIf(ArbitrageOpportunitySpread::isNotDefault)?.value
+
+fun ArbitrageOpportunityStatus.toTransport(): ArbitrageOpportunityStatusType {
+    return when (this) {
+        ArbitrageOpportunityStatus.ACTIVE -> ArbitrageOpportunityStatusType.ACTIVE
+        ArbitrageOpportunityStatus.EXPIRED -> ArbitrageOpportunityStatusType.EXPIRED
+    }
+}
+
+fun Timestamp?.toTransport(): Long? =
+    this?.takeIf(Timestamp::isNotDefault)?.value
