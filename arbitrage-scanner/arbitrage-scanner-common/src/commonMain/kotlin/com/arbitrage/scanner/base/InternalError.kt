@@ -1,6 +1,6 @@
 package com.arbitrage.scanner.base
 
-data class Error(
+data class InternalError(
     val code: String = "",
     val group: String = "",
     val field: String = "",

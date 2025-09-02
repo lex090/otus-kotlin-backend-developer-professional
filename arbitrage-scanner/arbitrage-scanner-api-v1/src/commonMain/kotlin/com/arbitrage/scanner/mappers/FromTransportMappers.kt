@@ -35,7 +35,7 @@ fun fromTransport(request: ArbitrageOpportunityReadRequest): Context {
     return Context(
         command = Command.READ,
         state = State.NONE,
-        error = emptyList(),
+        internalErrors = emptyList(),
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),
         requestId = RequestId.DEFAULT,
@@ -51,7 +51,7 @@ fun fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
     return Context(
         command = Command.SEARCH,
         state = State.NONE,
-        error = emptyList(),
+        internalErrors = emptyList(),
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),
         requestId = RequestId.DEFAULT,
@@ -63,7 +63,7 @@ fun fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
     )
 }
 
-fun ArbitrageOpportunityDebug?.toWorkMode(): WorkMode {
+private fun ArbitrageOpportunityDebug?.toWorkMode(): WorkMode {
     return when (this?.mode) {
         ArbitrageOpportunityRequestDebugMode.PROD -> WorkMode.PROD
         ArbitrageOpportunityRequestDebugMode.TEST -> WorkMode.TEST
@@ -72,7 +72,7 @@ fun ArbitrageOpportunityDebug?.toWorkMode(): WorkMode {
     }
 }
 
-fun ArbitrageOpportunityDebug?.toStubCase(): Stubs {
+private fun ArbitrageOpportunityDebug?.toStubCase(): Stubs {
     return when (this?.stub) {
         ArbitrageOpportunityRequestDebugStubs.SUCCESS -> Stubs.SUCCESS
         ArbitrageOpportunityRequestDebugStubs.NOT_FOUND -> Stubs.NOT_FOUND
@@ -81,11 +81,11 @@ fun ArbitrageOpportunityDebug?.toStubCase(): Stubs {
     }
 }
 
-fun String?.toArbitrageOpportunityId(): ArbitrageOpportunityId {
+private fun String?.toArbitrageOpportunityId(): ArbitrageOpportunityId {
     return this?.let(::ArbitrageOpportunityId) ?: ArbitrageOpportunityId.DEFAULT
 }
 
-fun ArbitrageOpportunitySearchFilter?.toArbitrageOpportunityFilter(): ArbitrageOpportunityFilter {
+private fun ArbitrageOpportunitySearchFilter?.toArbitrageOpportunityFilter(): ArbitrageOpportunityFilter {
     return ArbitrageOpportunityFilter(
         dexTokenIds = this?.dexTokenIds.transform(String::toDexTokenId),
         dexExchangeIds = this?.dexExchangeIds.transform(String::toDexExchangeId),
@@ -96,13 +96,13 @@ fun ArbitrageOpportunitySearchFilter?.toArbitrageOpportunityFilter(): ArbitrageO
     )
 }
 
-fun String.toDexTokenId(): DexTokenId = DexTokenId(this)
-fun String.toDexExchangeId(): DexExchangeId = DexExchangeId(this)
-fun String.toDexChainId(): DexChainId = DexChainId(this)
-fun String.toCexTokenId(): CexTokenId = CexTokenId(this)
-fun String.toCexExchangeId(): CexExchangeId = CexExchangeId(this)
+private fun String.toDexTokenId(): DexTokenId = DexTokenId(this)
+private fun String.toDexExchangeId(): DexExchangeId = DexExchangeId(this)
+private fun String.toDexChainId(): DexChainId = DexChainId(this)
+private fun String.toCexTokenId(): CexTokenId = CexTokenId(this)
+private fun String.toCexExchangeId(): CexExchangeId = CexExchangeId(this)
 
-fun <T, R> Set<T>?.transform(block: (T) -> R): Set<R> = this.orEmpty().map(block).toSet()
+private fun <T, R> Set<T>?.transform(block: (T) -> R): Set<R> = this.orEmpty().map(block).toSet()
 
-fun Double?.toArbitrageOpportunitySpread(): ArbitrageOpportunitySpread =
+private fun Double?.toArbitrageOpportunitySpread(): ArbitrageOpportunitySpread =
     this?.let(::ArbitrageOpportunitySpread) ?: ArbitrageOpportunitySpread.DEFAULT

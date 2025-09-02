@@ -7,13 +7,12 @@ sealed class ArbitrageOpportunity {
     abstract val startTimestamp: Timestamp
     abstract val endTimestamp: Timestamp?
 
-    fun type(): ArbitrageOpportunityType {
-        return when (this) {
+    val type: ArbitrageOpportunityType =
+        when (this) {
             is DexToCexSimpleArbitrageOpportunity -> ArbitrageOpportunityType.DEX_TO_CEX_SIMPLE
         }
-    }
 
-    fun isActive(): ArbitrageOpportunityStatus =
+    val isActive: ArbitrageOpportunityStatus =
         when {
             endTimestamp == null -> ArbitrageOpportunityStatus.ACTIVE
             else -> ArbitrageOpportunityStatus.EXPIRED
