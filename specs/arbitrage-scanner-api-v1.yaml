@@ -176,18 +176,6 @@ components:
           $ref: '#/components/schemas/CexPrice'
         spread:
           $ref: '#/components/schemas/ArbitrageOpportunitySpread'
-        status:
-          $ref: '#/components/schemas/ArbitrageOpportunityStatus'
-
-    ArbitrageOpportunityId:
-      type: string
-      description: Уникальный идентификатор арбитражной возможности
-      example: "1893746293640137"
-
-    ArbitrageOpportunityStatus:
-      type: object
-      description: Статус арбитражной возможности
-      properties:
         statusType:
           $ref: '#/components/schemas/ArbitrageOpportunityStatusType'
         timestampStart:
@@ -196,6 +184,11 @@ components:
         timestampEnd:
           type: integer
           format: int64
+
+    ArbitrageOpportunityId:
+      type: string
+      description: Уникальный идентификатор арбитражной возможности
+      example: "1893746293640137"
 
     ArbitrageOpportunityStatusType:
       type: string
