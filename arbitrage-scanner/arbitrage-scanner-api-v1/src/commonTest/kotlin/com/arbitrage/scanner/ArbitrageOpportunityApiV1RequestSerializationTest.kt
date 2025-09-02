@@ -7,9 +7,12 @@ import kotlin.test.assertEquals
 
 class ArbitrageOpportunityApiV1RequestSerializationTest {
 
-    val givenRequest = ArbitrageOpportunityReadRequest(id = "test-id")
+    private val givenRequest = ArbitrageOpportunityReadRequest(
+        id = "test-id",
+        debug = null
+    )
 
-    val givenJsonString = """{"requestType":"read","id":"test-id"}"""
+    private val givenJsonString = """{"requestType":"read","id":"test-id"}"""
 
     private val json = Json { ignoreUnknownKeys = true }
 

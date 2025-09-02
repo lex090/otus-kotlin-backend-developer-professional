@@ -10,9 +10,6 @@ kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
-arbitrage-scanner-api-v1 = { module = "com.arbitrage.scanner:arbitrage-scanner-api-v1" }
-arbitrage-scanner-common = { module = "com.arbitrage.scanner:arbitrage-scanner-common" }
-
 [bundles]
 
 [plugins]
