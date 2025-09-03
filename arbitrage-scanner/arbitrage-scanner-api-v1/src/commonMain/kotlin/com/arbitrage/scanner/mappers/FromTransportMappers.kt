@@ -8,12 +8,8 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.IRequest
 import com.arbitrage.scanner.base.Command
-import com.arbitrage.scanner.base.RequestId
-import com.arbitrage.scanner.base.State
-import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
-import com.arbitrage.scanner.models.ArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
@@ -32,34 +28,20 @@ fun fromTransport(request: IRequest): Context {
 }
 
 fun fromTransport(request: ArbitrageOpportunityReadRequest): Context {
-    return Context(
+    return Context.DEFAULT.copy(
         command = Command.READ,
-        state = State.NONE,
-        internalErrors = emptyList(),
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),
-        requestId = RequestId.DEFAULT,
-        startTimestamp = Timestamp.DEFAULT,
         arbitrageOpportunityReadRequest = request.id.toArbitrageOpportunityId(),
-        arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
-        arbitrageOpportunityReadResponse = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
-        arbitrageOpportunitySearchResponse = emptySet(),
     )
 }
 
 fun fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
-    return Context(
+    return Context.DEFAULT.copy(
         command = Command.SEARCH,
-        state = State.NONE,
-        internalErrors = emptyList(),
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),
-        requestId = RequestId.DEFAULT,
-        startTimestamp = Timestamp.DEFAULT,
-        arbitrageOpportunityReadRequest = ArbitrageOpportunityId.DEFAULT,
         arbitrageOpportunitySearchRequest = request.filter.toArbitrageOpportunityFilter(),
-        arbitrageOpportunityReadResponse = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
-        arbitrageOpportunitySearchResponse = emptySet(),
     )
 }
 
