@@ -26,4 +26,20 @@ data class Context(
 
     val arbitrageOpportunityReadResponse: ArbitrageOpportunity,
     val arbitrageOpportunitySearchResponse: Set<ArbitrageOpportunity>,
-)
+) {
+    companion object {
+        val DEFAULT = Context(
+            command = Command.NONE,
+            state = State.NONE,
+            internalErrors = emptyList(),
+            workMode = WorkMode.PROD,
+            stubCase = Stubs.NONE,
+            requestId = RequestId.DEFAULT,
+            startTimestamp = Timestamp.DEFAULT,
+            arbitrageOpportunityReadRequest = ArbitrageOpportunityId.DEFAULT,
+            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
+            arbitrageOpportunityReadResponse = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
+            arbitrageOpportunitySearchResponse = emptySet()
+        )
+    }
+}
