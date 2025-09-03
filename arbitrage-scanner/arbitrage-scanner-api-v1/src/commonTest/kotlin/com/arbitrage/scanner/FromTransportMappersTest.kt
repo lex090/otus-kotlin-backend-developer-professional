@@ -34,7 +34,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.TEST,
             stubCase = Stubs.NONE,
@@ -43,7 +43,7 @@ class FromTransportMappersTest {
 
         val context = fromTransport(givenTransport)
 
-        assertEquals(givenContext, context, "expected: $givenContext, found: $context")
+        assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
 
     @Test
@@ -56,7 +56,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.NOT_FOUND,
@@ -65,7 +65,7 @@ class FromTransportMappersTest {
 
         val context = fromTransport(givenTransport)
 
-        assertEquals(givenContext, context, "expected: $givenContext, found: $context")
+        assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
 
     @Test
@@ -78,7 +78,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.SUCCESS,
@@ -87,7 +87,7 @@ class FromTransportMappersTest {
 
         val context = fromTransport(givenTransport)
 
-        assertEquals(givenContext, context, "expected: $givenContext, found: $context")
+        assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
 
     @Test
@@ -100,7 +100,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.NOT_FOUND,
@@ -109,7 +109,7 @@ class FromTransportMappersTest {
 
         val context = fromTransport(givenTransport)
 
-        assertEquals(givenContext, context, "expected: $givenContext, found: $context")
+        assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
 
     @Test
@@ -122,7 +122,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.PROD,
             stubCase = Stubs.NONE,
@@ -131,7 +131,7 @@ class FromTransportMappersTest {
 
         val context = fromTransport(givenTransport)
 
-        assertEquals(givenContext, context, "expected: $givenContext, found: $context")
+        assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
 
     @Test
@@ -151,7 +151,7 @@ class FromTransportMappersTest {
             )
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             stubCase = Stubs.NONE,
@@ -161,55 +161,55 @@ class FromTransportMappersTest {
         val context = fromTransport(givenTransport)
 
         assertEquals(
-            givenContext.command,
+            expectedContext.command,
             context.command,
-            "expected: ${givenContext.command}, found: ${context.command}"
+            "expected: ${expectedContext.command}, found: ${context.command}"
         )
-        assertEquals(givenContext.state, context.state, "expected: ${givenContext.state}, found: ${context.state}")
+        assertEquals(expectedContext.state, context.state, "expected: ${expectedContext.state}, found: ${context.state}")
         assertEquals(
-            givenContext.internalErrors,
+            expectedContext.internalErrors,
             context.internalErrors,
-            "expected: ${givenContext.internalErrors}, found: ${context.internalErrors}"
+            "expected: ${expectedContext.internalErrors}, found: ${context.internalErrors}"
         )
         assertEquals(
-            givenContext.workMode,
+            expectedContext.workMode,
             context.workMode,
-            "expected: ${givenContext.workMode}, found: ${context.workMode}"
+            "expected: ${expectedContext.workMode}, found: ${context.workMode}"
         )
         assertEquals(
-            givenContext.stubCase,
+            expectedContext.stubCase,
             context.stubCase,
-            "expected: ${givenContext.stubCase}, found: ${context.stubCase}"
+            "expected: ${expectedContext.stubCase}, found: ${context.stubCase}"
         )
         assertEquals(
-            givenContext.requestId,
+            expectedContext.requestId,
             context.requestId,
-            "expected: ${givenContext.requestId}, found: ${context.requestId}"
+            "expected: ${expectedContext.requestId}, found: ${context.requestId}"
         )
         assertEquals(
-            givenContext.startTimestamp,
+            expectedContext.startTimestamp,
             context.startTimestamp,
-            "expected: ${givenContext.startTimestamp}, found: ${context.startTimestamp}"
+            "expected: ${expectedContext.startTimestamp}, found: ${context.startTimestamp}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunityReadRequest,
+            expectedContext.arbitrageOpportunityReadRequest,
             context.arbitrageOpportunityReadRequest,
-            "expected: ${givenContext.arbitrageOpportunityReadRequest}, found: ${context.arbitrageOpportunityReadRequest}"
+            "expected: ${expectedContext.arbitrageOpportunityReadRequest}, found: ${context.arbitrageOpportunityReadRequest}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunitySearchRequest,
+            expectedContext.arbitrageOpportunitySearchRequest,
             context.arbitrageOpportunitySearchRequest,
-            "expected: ${givenContext.arbitrageOpportunitySearchRequest}, found: ${context.arbitrageOpportunitySearchRequest}"
+            "expected: ${expectedContext.arbitrageOpportunitySearchRequest}, found: ${context.arbitrageOpportunitySearchRequest}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunityReadResponse,
+            expectedContext.arbitrageOpportunityReadResponse,
             context.arbitrageOpportunityReadResponse,
-            "expected: ${givenContext.arbitrageOpportunityReadResponse}, found: ${context.arbitrageOpportunityReadResponse}"
+            "expected: ${expectedContext.arbitrageOpportunityReadResponse}, found: ${context.arbitrageOpportunityReadResponse}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunitySearchResponse,
+            expectedContext.arbitrageOpportunitySearchResponse,
             context.arbitrageOpportunitySearchResponse,
-            "expected: ${givenContext.arbitrageOpportunitySearchResponse}, found: ${context.arbitrageOpportunitySearchResponse}"
+            "expected: ${expectedContext.arbitrageOpportunitySearchResponse}, found: ${context.arbitrageOpportunitySearchResponse}"
         )
     }
 
@@ -230,7 +230,7 @@ class FromTransportMappersTest {
             )
         )
 
-        val givenContext = Context.DEFAULT.copy(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.SEARCH,
             workMode = WorkMode.TEST,
             stubCase = Stubs.NONE,
@@ -247,55 +247,55 @@ class FromTransportMappersTest {
         val context = fromTransport(givenTransport)
 
         assertEquals(
-            givenContext.command,
+            expectedContext.command,
             context.command,
-            "expected: ${givenContext.command}, found: ${context.command}"
+            "expected: ${expectedContext.command}, found: ${context.command}"
         )
-        assertEquals(givenContext.state, context.state, "expected: ${givenContext.state}, found: ${context.state}")
+        assertEquals(expectedContext.state, context.state, "expected: ${expectedContext.state}, found: ${context.state}")
         assertEquals(
-            givenContext.internalErrors,
+            expectedContext.internalErrors,
             context.internalErrors,
-            "expected: ${givenContext.internalErrors}, found: ${context.internalErrors}"
+            "expected: ${expectedContext.internalErrors}, found: ${context.internalErrors}"
         )
         assertEquals(
-            givenContext.workMode,
+            expectedContext.workMode,
             context.workMode,
-            "expected: ${givenContext.workMode}, found: ${context.workMode}"
+            "expected: ${expectedContext.workMode}, found: ${context.workMode}"
         )
         assertEquals(
-            givenContext.stubCase,
+            expectedContext.stubCase,
             context.stubCase,
-            "expected: ${givenContext.stubCase}, found: ${context.stubCase}"
+            "expected: ${expectedContext.stubCase}, found: ${context.stubCase}"
         )
         assertEquals(
-            givenContext.requestId,
+            expectedContext.requestId,
             context.requestId,
-            "expected: ${givenContext.requestId}, found: ${context.requestId}"
+            "expected: ${expectedContext.requestId}, found: ${context.requestId}"
         )
         assertEquals(
-            givenContext.startTimestamp,
+            expectedContext.startTimestamp,
             context.startTimestamp,
-            "expected: ${givenContext.startTimestamp}, found: ${context.startTimestamp}"
+            "expected: ${expectedContext.startTimestamp}, found: ${context.startTimestamp}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunityReadRequest,
+            expectedContext.arbitrageOpportunityReadRequest,
             context.arbitrageOpportunityReadRequest,
-            "expected: ${givenContext.arbitrageOpportunityReadRequest}, found: ${context.arbitrageOpportunityReadRequest}"
+            "expected: ${expectedContext.arbitrageOpportunityReadRequest}, found: ${context.arbitrageOpportunityReadRequest}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunitySearchRequest,
+            expectedContext.arbitrageOpportunitySearchRequest,
             context.arbitrageOpportunitySearchRequest,
-            "expected: ${givenContext.arbitrageOpportunitySearchRequest}, found: ${context.arbitrageOpportunitySearchRequest}"
+            "expected: ${expectedContext.arbitrageOpportunitySearchRequest}, found: ${context.arbitrageOpportunitySearchRequest}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunityReadResponse,
+            expectedContext.arbitrageOpportunityReadResponse,
             context.arbitrageOpportunityReadResponse,
-            "expected: ${givenContext.arbitrageOpportunityReadResponse}, found: ${context.arbitrageOpportunityReadResponse}"
+            "expected: ${expectedContext.arbitrageOpportunityReadResponse}, found: ${context.arbitrageOpportunityReadResponse}"
         )
         assertEquals(
-            givenContext.arbitrageOpportunitySearchResponse,
+            expectedContext.arbitrageOpportunitySearchResponse,
             context.arbitrageOpportunitySearchResponse,
-            "expected: ${givenContext.arbitrageOpportunitySearchResponse}, found: ${context.arbitrageOpportunitySearchResponse}"
+            "expected: ${expectedContext.arbitrageOpportunitySearchResponse}, found: ${context.arbitrageOpportunitySearchResponse}"
         )
     }
 }

@@ -7,16 +7,18 @@ sealed class ArbitrageOpportunity {
     abstract val startTimestamp: Timestamp
     abstract val endTimestamp: Timestamp?
 
-    val type: ArbitrageOpportunityType =
+    val type: ArbitrageOpportunityType by lazy {
         when (this) {
             is DexToCexSimpleArbitrageOpportunity -> ArbitrageOpportunityType.DEX_TO_CEX_SIMPLE
         }
+    }
 
-    val status: ArbitrageOpportunityStatus =
+    val status: ArbitrageOpportunityStatus by lazy {
         when {
             endTimestamp == null -> ArbitrageOpportunityStatus.ACTIVE
             else -> ArbitrageOpportunityStatus.EXPIRED
         }
+    }
 
     class DexToCexSimpleArbitrageOpportunity private constructor(
         override val id: ArbitrageOpportunityId,
