@@ -20,7 +20,7 @@ sealed class ArbitrageOpportunity {
         }
     }
 
-    class DexToCexSimpleArbitrageOpportunity private constructor(
+    data class DexToCexSimpleArbitrageOpportunity(
         override val id: ArbitrageOpportunityId,
         override val startTimestamp: Timestamp,
         override val endTimestamp: Timestamp?,
@@ -28,32 +28,6 @@ sealed class ArbitrageOpportunity {
         val cexPrice: CexPrice,
         val spread: ArbitrageOpportunitySpread,
     ) : ArbitrageOpportunity() {
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other == null || this::class != other::class) return false
-
-            other as DexToCexSimpleArbitrageOpportunity
-
-            if (id != other.id) return false
-            if (startTimestamp != other.startTimestamp) return false
-            if (endTimestamp != other.endTimestamp) return false
-            if (dexPrice != other.dexPrice) return false
-            if (cexPrice != other.cexPrice) return false
-            if (spread != other.spread) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = id.hashCode()
-            result = 31 * result + startTimestamp.hashCode()
-            result = 31 * result + (endTimestamp?.hashCode() ?: 0)
-            result = 31 * result + dexPrice.hashCode()
-            result = 31 * result + cexPrice.hashCode()
-            result = 31 * result + spread.hashCode()
-            return result
-        }
 
         companion object {
             val DEFAULT = DexToCexSimpleArbitrageOpportunity(
@@ -64,24 +38,6 @@ sealed class ArbitrageOpportunity {
                 startTimestamp = Timestamp.DEFAULT,
                 endTimestamp = Timestamp.DEFAULT,
             )
-
-            fun create(
-                id: ArbitrageOpportunityId,
-                startTimestamp: Timestamp,
-                endTimestamp: Timestamp?,
-                dexPrice: DexPrice,
-                cexPrice: CexPrice,
-                spread: ArbitrageOpportunitySpread,
-            ): DexToCexSimpleArbitrageOpportunity {
-                return DexToCexSimpleArbitrageOpportunity(
-                    id = id,
-                    startTimestamp = startTimestamp,
-                    endTimestamp = endTimestamp,
-                    dexPrice = dexPrice,
-                    cexPrice = cexPrice,
-                    spread = spread,
-                )
-            }
         }
     }
 }

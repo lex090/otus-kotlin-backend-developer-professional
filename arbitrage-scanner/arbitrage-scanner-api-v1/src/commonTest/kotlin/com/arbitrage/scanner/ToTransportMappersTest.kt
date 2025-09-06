@@ -29,7 +29,7 @@ import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity as
 
 class ToTransportMappersTest {
 
-    private val stub = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.create(
+    private val stub = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity(
         id = ArbitrageOpportunityId("123"),
         startTimestamp = Timestamp(12),
         endTimestamp = Timestamp(13),
