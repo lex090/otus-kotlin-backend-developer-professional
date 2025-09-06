@@ -4,11 +4,13 @@ kotlin = "2.2.0"
 kotlinx-serialization = "1.9.0"
 jvm-compiler = "21"
 jvm-language = "21"
+bignum = "0.3.10"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
 
 [bundles]
 

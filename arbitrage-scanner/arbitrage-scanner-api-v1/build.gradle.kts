@@ -18,6 +18,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(project(":arbitrage-scanner-common"))
+                implementation(libs.bignum)
             }
         }
         commonTest {
