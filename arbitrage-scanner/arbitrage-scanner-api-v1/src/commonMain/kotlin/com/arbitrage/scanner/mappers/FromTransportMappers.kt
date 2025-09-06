@@ -28,7 +28,7 @@ fun fromTransport(request: IRequest): Context {
 }
 
 fun fromTransport(request: ArbitrageOpportunityReadRequest): Context {
-    return Context.DEFAULT.copy(
+    return Context(
         command = Command.READ,
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),
@@ -37,7 +37,7 @@ fun fromTransport(request: ArbitrageOpportunityReadRequest): Context {
 }
 
 fun fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
-    return Context.DEFAULT.copy(
+    return Context(
         command = Command.SEARCH,
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),

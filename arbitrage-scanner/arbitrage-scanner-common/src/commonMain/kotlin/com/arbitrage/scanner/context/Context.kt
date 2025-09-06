@@ -12,34 +12,18 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.stubs.Stubs
 
 data class Context(
-    val command: Command,
-    val state: State,
-    val internalErrors: List<InternalError>,
-    val workMode: WorkMode,
-    val stubCase: Stubs,
+    val command: Command = Command.NONE,
+    val state: State = State.NONE,
+    val internalErrors: List<InternalError> = emptyList(),
+    val workMode: WorkMode = WorkMode.PROD,
+    val stubCase: Stubs = Stubs.NONE,
 
-    val requestId: RequestId,
-    val startTimestamp: Timestamp,
+    val requestId: RequestId = RequestId.DEFAULT,
+    val startTimestamp: Timestamp = Timestamp.DEFAULT,
 
-    val arbitrageOpportunityReadRequest: ArbitrageOpportunityId,
-    val arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter,
+    val arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
+    val arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
 
-    val arbitrageOpportunityReadResponse: ArbitrageOpportunity,
-    val arbitrageOpportunitySearchResponse: Set<ArbitrageOpportunity>,
-) {
-    companion object {
-        val DEFAULT = Context(
-            command = Command.NONE,
-            state = State.NONE,
-            internalErrors = emptyList(),
-            workMode = WorkMode.PROD,
-            stubCase = Stubs.NONE,
-            requestId = RequestId.DEFAULT,
-            startTimestamp = Timestamp.DEFAULT,
-            arbitrageOpportunityReadRequest = ArbitrageOpportunityId.DEFAULT,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
-            arbitrageOpportunityReadResponse = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
-            arbitrageOpportunitySearchResponse = emptySet()
-        )
-    }
-}
+    val arbitrageOpportunityReadResponse: ArbitrageOpportunity = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
+    val arbitrageOpportunitySearchResponse: Set<ArbitrageOpportunity> = emptySet(),
+)
