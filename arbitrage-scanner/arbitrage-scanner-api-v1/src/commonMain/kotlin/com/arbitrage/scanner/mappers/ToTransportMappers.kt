@@ -116,7 +116,7 @@ fun DexExchangeId.toTransportId(): String? =
     this.takeIf(DexExchangeId::isNotDefault)?.value
 
 fun DexPriceRaw.toTransportRawPrice(): Double? =
-    this.takeIf(DexPriceRaw::isNotDefault)?.value
+    this.takeIf(DexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = true)
 
 private fun CexPrice.toTransportCexPrice(): CexPriceApi {
     return CexPriceApi(
@@ -133,7 +133,7 @@ fun CexExchangeId.toTransportId(): String? =
     this.takeIf(CexExchangeId::isNotDefault)?.value
 
 fun CexPriceRaw.toTransportRawPrice(): Double? =
-    this.takeIf(CexPriceRaw::isNotDefault)?.value
+    this.takeIf(CexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = true)
 
 fun ArbitrageOpportunitySpread.toTransport(): Double? =
     this.takeIf(ArbitrageOpportunitySpread::isNotDefault)?.value

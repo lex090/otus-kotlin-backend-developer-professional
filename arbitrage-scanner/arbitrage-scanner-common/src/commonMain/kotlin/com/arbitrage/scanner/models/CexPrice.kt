@@ -1,6 +1,7 @@
 package com.arbitrage.scanner.models
 
 import com.arbitrage.scanner.base.Timestamp
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.jvm.JvmInline
 
 data class CexPrice(
@@ -11,14 +12,14 @@ data class CexPrice(
 ) {
 
     @JvmInline
-    value class CexPriceRaw(val value: Double) { // TODO Тут надо что типа BigDecimal использовать
+    value class CexPriceRaw(val value: BigDecimal) {
 
         fun isDefault(): Boolean = this == DEFAULT
 
         fun isNotDefault(): Boolean = !isDefault()
 
         companion object {
-            val DEFAULT = CexPriceRaw(0.0)
+            val DEFAULT = CexPriceRaw(BigDecimal.ZERO)
         }
     }
 

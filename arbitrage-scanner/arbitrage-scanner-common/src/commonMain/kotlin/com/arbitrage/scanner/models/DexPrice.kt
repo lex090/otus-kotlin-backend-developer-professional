@@ -1,6 +1,7 @@
 package com.arbitrage.scanner.models
 
 import com.arbitrage.scanner.base.Timestamp
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.jvm.JvmInline
 
 data class DexPrice(
@@ -12,14 +13,14 @@ data class DexPrice(
 ) {
 
     @JvmInline
-    value class DexPriceRaw(val value: Double) { // TODO Тут надо что типа BigDecimal использовать
+    value class DexPriceRaw(val value: BigDecimal) {
 
         fun isDefault(): Boolean = this == DEFAULT
 
         fun isNotDefault(): Boolean = !isDefault()
 
         companion object {
-            val DEFAULT = DexPriceRaw(0.0)
+            val DEFAULT = DexPriceRaw(BigDecimal.ZERO)
         }
     }
 

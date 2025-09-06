@@ -4,6 +4,7 @@ kotlin = "2.2.0"
 kotlinx-serialization = "1.9.0"
 jvm-compiler = "21"
 jvm-language = "21"
+bignum = "0.3.10"
 ktor = "3.2.3"
 koin = "3.5.6"
 logback = "1.5.16"
@@ -12,6 +13,9 @@ logback = "1.5.16"
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+# BigDeciaml and etc.
+bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
 
 # Ktor
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }

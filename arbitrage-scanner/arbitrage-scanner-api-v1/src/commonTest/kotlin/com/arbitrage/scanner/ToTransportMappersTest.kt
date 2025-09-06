@@ -21,6 +21,7 @@ import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexPrice
 import com.arbitrage.scanner.models.DexTokenId
 import com.arbitrage.scanner.stubs.Stubs
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import com.arbitrage.scanner.api.v1.models.CexPrice as CexPriceApi
@@ -29,7 +30,7 @@ import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity as
 
 class ToTransportMappersTest {
 
-    private val stub = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.create(
+    private val stub = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity(
         id = ArbitrageOpportunityId("123"),
         startTimestamp = Timestamp(12),
         endTimestamp = Timestamp(13),
@@ -37,13 +38,13 @@ class ToTransportMappersTest {
             tokenId = DexTokenId("1234_1234"),
             exchangeId = DexExchangeId("12345_12345"),
             chainId = DexChainId("123456_123456"),
-            priceRaw = DexPrice.DexPriceRaw(1243.0),
+            priceRaw = DexPrice.DexPriceRaw(BigDecimal.fromDouble(1243.0)),
             timeStamp = Timestamp(12),
         ),
         cexPrice = CexPrice(
             tokenId = CexTokenId("12340_12340"),
             exchangeId = CexExchangeId("123450_123450"),
-            priceRaw = CexPrice.CexPriceRaw(1243.0),
+            priceRaw = CexPrice.CexPriceRaw(BigDecimal.fromDouble(1243.0)),
             timeStamp = Timestamp(12),
         ),
         spread = ArbitrageOpportunitySpread(12313.0)
