@@ -1,0 +1,324 @@
+openapi: 3.0.3
+info:
+  title: Arbitrage Scanner API
+  description: API сканера арбитража криптовалют
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+    description: Локальный сервер разработки
+
+paths:
+  /arbitrage-opportunities/read:
+    post:
+      tags:
+        - ArbitrageOpportunities
+      summary: Получить арбитражную возможность
+      operationId: readArbitrageOpportunities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbitrageOpportunityReadRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbitrageOpportunityReadResponse'
+
+  /arbitrage-opportunities/search:
+    post:
+      tags:
+        - ArbitrageOpportunities
+      summary: Получить список арбитражных возможностей по фильтру
+      operationId: searchArbitrageOpportunities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArbitrageOpportunitySearchRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArbitrageOpportunitySearchResponse'
+
+components:
+  schemas:
+
+    # COMMON SCHEMAS
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: read
+      discriminator:
+        propertyName: requestType
+        mapping:
+          read: '#/components/schemas/ArbitrageOpportunityReadRequest'
+          search: '#/components/schemas/ArbitrageOpportunitySearchRequest'
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          read: '#/components/schemas/ArbitrageOpportunityReadResponse'
+          search: '#/components/schemas/ArbitrageOpportunitySearchResponse'
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    DexPrice:
+      type: object
+      description: Агрегированные данные по цене с DEX
+      properties:
+        tokenId:
+          $ref: '#/components/schemas/DexTokenId'
+        chainId:
+          $ref: '#/components/schemas/DexChainId'
+        exchangeId:
+          $ref: '#/components/schemas/DexExchangeId'
+        priceRaw:
+          $ref: '#/components/schemas/DexPriceRaw'
+
+    DexTokenId:
+      type: string
+      description: Уникальный идентификатор валюты на DEX
+
+    DexChainId:
+      type: string
+      description: Уникальный идентификатор сети
+
+    DexExchangeId:
+      type: string
+      description: Уникальный идентификатор DEX крипта биржи
+
+    DexPriceRaw:
+      type: number
+      description: Цена в "сырых" единицах (без учета делимости валюты)
+      format: double
+
+    CexPrice:
+      type: object
+      description: Агрегированные данные по цене с CEX
+      properties:
+        tokenId:
+          $ref: '#/components/schemas/CexTokenId'
+        exchangeId:
+          $ref: '#/components/schemas/CexExchangeId'
+        priceRaw:
+          $ref: '#/components/schemas/CexPriceRaw'
+
+    CexTokenId:
+      type: string
+      description: Уникальный идентификатор валюты на CEX
+
+    CexExchangeId:
+      type: string
+      description: Уникальный идентификатор CEX крипта биржи
+
+    CexPriceRaw:
+      type: number
+      description: Цена в "сырых" единицах (без учета делимости валюты)
+      format: double
+
+    ArbitrageOpportunity:
+      properties:
+        opportunityType:
+          $ref: '#/components/schemas/ArbitrageOpportunityType'
+      discriminator:
+        propertyName: opportunityType
+        mapping:
+          DexToCexSimpleArbitrageOpportunity: '#/components/schemas/DexToCexSimpleArbitrageOpportunity'
+      oneOf:
+        - $ref: '#/components/schemas/DexToCexSimpleArbitrageOpportunity'
+
+    ArbitrageOpportunityType:
+      type: string
+      enum: [ DexToCexSimpleArbitrageOpportunity ]
+
+    DexToCexSimpleArbitrageOpportunity:
+      allOf:
+        - $ref: '#/components/schemas/ArbitrageOpportunity'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ArbitrageOpportunityId'
+            dexPrice:
+              $ref: '#/components/schemas/DexPrice'
+            cexPrice:
+              $ref: '#/components/schemas/CexPrice'
+            spread:
+              $ref: '#/components/schemas/ArbitrageOpportunitySpread'
+            statusType:
+              $ref: '#/components/schemas/ArbitrageOpportunityStatusType'
+            timestampStart:
+              type: integer
+              format: int64
+            timestampEnd:
+              type: integer
+              format: int64
+
+    ArbitrageOpportunityId:
+      type: string
+      description: Уникальный идентификатор арбитражной возможности
+      example: "1893746293640137"
+
+    ArbitrageOpportunityStatusType:
+      type: string
+      description: Тип статуса
+      enum: [ active, expired ]
+
+    ArbitrageOpportunitySpread:
+      type: number
+      description: Спред арбитражной возможности
+      minimum: 0
+      maximum: 100
+      format: double
+
+    ArbitrageOpportunitySearchFilter:
+      type: object
+      description: Фильтр для поиска арбитражных возможностей
+      properties:
+        dexTokenIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DexTokenId'
+        dexExchangeIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DexExchangeId'
+        dexChainIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DexChainId'
+        cexTokenIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/CexTokenId'
+        cexExchangeIds:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/CexExchangeId'
+        spread:
+          $ref: '#/components/schemas/ArbitrageOpportunitySpread'
+
+    ArbitrageOpportunityMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            arbitrageOpportunities:
+              type: array
+              items:
+                $ref: '#/components/schemas/ArbitrageOpportunity'
+
+    # RESPONSES
+
+    ArbitrageOpportunityReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            arbitrageOpportunity:
+              $ref: '#/components/schemas/ArbitrageOpportunity'
+
+    ArbitrageOpportunitySearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ArbitrageOpportunityMulti'
+
+    # REQUESTS
+    ArbitrageOpportunityReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ArbitrageOpportunityRequestDebug'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/ArbitrageOpportunityId'
+
+    ArbitrageOpportunitySearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/ArbitrageOpportunityRequestDebug'
+        - type: object
+          properties:
+            filter:
+              $ref: '#/components/schemas/ArbitrageOpportunitySearchFilter'
+
+    # STUBS ======================
+    ArbitrageOpportunityRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    ArbitrageOpportunityRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/ArbitrageOpportunityDebug'
+
+    ArbitrageOpportunityDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/ArbitrageOpportunityRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/ArbitrageOpportunityRequestDebugStubs'
+
+    ArbitrageOpportunityRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+
+tags:
+  - name: ArbitrageOpportunities
+    description: Операции, связанные с арбитражем криптовалют
