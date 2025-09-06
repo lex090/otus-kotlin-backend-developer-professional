@@ -70,7 +70,7 @@ class ToTransportMappersTest {
 
     @Test
     fun test1() {
-        val givenContext = Context(
+        val givenContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.PROD,
             state = State.FINISHING,
@@ -91,7 +91,7 @@ class ToTransportMappersTest {
 
     @Test
     fun test2() {
-        val givenContext = Context(
+        val givenContext = Context.DEFAULT.copy(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.FINISHING,

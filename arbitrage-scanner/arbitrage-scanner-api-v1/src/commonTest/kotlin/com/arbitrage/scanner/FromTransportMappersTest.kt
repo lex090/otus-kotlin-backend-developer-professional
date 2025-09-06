@@ -34,7 +34,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.TEST,
             stubCase = Stubs.NONE,
@@ -56,7 +56,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.NOT_FOUND,
@@ -78,7 +78,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.SUCCESS,
@@ -100,7 +100,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.NOT_FOUND,
@@ -122,7 +122,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.READ,
             workMode = WorkMode.PROD,
             stubCase = Stubs.NONE,
@@ -151,7 +151,7 @@ class FromTransportMappersTest {
             )
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             stubCase = Stubs.NONE,
@@ -230,7 +230,7 @@ class FromTransportMappersTest {
             )
         )
 
-        val expectedContext = Context(
+        val expectedContext = Context.DEFAULT.copy(
             command = Command.SEARCH,
             workMode = WorkMode.TEST,
             stubCase = Stubs.NONE,
