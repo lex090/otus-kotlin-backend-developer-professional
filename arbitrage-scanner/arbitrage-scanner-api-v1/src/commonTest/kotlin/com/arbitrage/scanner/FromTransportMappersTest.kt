@@ -34,6 +34,8 @@ class FromTransportMappersTest {
             ),
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.TEST,
@@ -41,7 +43,7 @@ class FromTransportMappersTest {
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId("120"),
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -56,6 +58,8 @@ class FromTransportMappersTest {
             ),
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
@@ -63,7 +67,7 @@ class FromTransportMappersTest {
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -78,6 +82,8 @@ class FromTransportMappersTest {
             ),
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
@@ -85,7 +91,7 @@ class FromTransportMappersTest {
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -100,6 +106,8 @@ class FromTransportMappersTest {
             ),
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
@@ -107,7 +115,7 @@ class FromTransportMappersTest {
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -122,6 +130,8 @@ class FromTransportMappersTest {
             ),
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.PROD,
@@ -129,7 +139,7 @@ class FromTransportMappersTest {
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -151,6 +161,8 @@ class FromTransportMappersTest {
             )
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
@@ -158,7 +170,7 @@ class FromTransportMappersTest {
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(
             expectedContext.command,
@@ -234,6 +246,8 @@ class FromTransportMappersTest {
             )
         )
 
+        val context = Context()
+
         val expectedContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.TEST,
@@ -248,7 +262,7 @@ class FromTransportMappersTest {
             ),
         )
 
-        val context = expectedContext.fromTransport(givenTransport)
+        context.fromTransport(givenTransport)
 
         assertEquals(
             expectedContext.command,
