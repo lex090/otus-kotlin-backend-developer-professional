@@ -1,0 +1,20 @@
+package com.arbitrage.opportunity.processors
+
+import com.arbitrage.opportunity.LogicProcessor
+import com.arbitrage.scanner.api.v1.models.IRequest
+import com.arbitrage.scanner.api.v1.models.IResponse
+import com.arbitrage.scanner.mappers.fromTransport
+import com.arbitrage.scanner.mappers.toTransport
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+
+suspend inline fun <reified Req : IRequest, reified Resp : IResponse> ApplicationCall.processRequest(
+    logicProcessor: LogicProcessor
+) {
+    processContext(
+        logicProcessor,
+        prepareContextFromRequest = { fromTransport(request = receive<Req>()) },
+        resolveContextToResponse = { respond(toTransport() as Resp) }
+    )
+}
