@@ -20,29 +20,25 @@ import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexTokenId
 import com.arbitrage.scanner.stubs.Stubs
 
-fun Context.fromTransport(request: IRequest): Context {
+fun Context.fromTransport(request: IRequest) {
     return when (request) {
         is ArbitrageOpportunityReadRequest -> fromTransport(request)
         is ArbitrageOpportunitySearchRequest -> fromTransport(request)
     }
 }
 
-fun Context.fromTransport(request: ArbitrageOpportunityReadRequest): Context {
-    return copy(
-        command = Command.READ,
-        workMode = request.debug.toWorkMode(),
-        stubCase = request.debug.toStubCase(),
-        arbitrageOpportunityReadRequest = request.id.toArbitrageOpportunityId(),
-    )
+fun Context.fromTransport(request: ArbitrageOpportunityReadRequest) {
+    command = Command.READ
+    workMode = request.debug.toWorkMode()
+    stubCase = request.debug.toStubCase()
+    arbitrageOpportunityReadRequest = request.id.toArbitrageOpportunityId()
 }
 
-fun Context.fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
-    return copy(
-        command = Command.SEARCH,
-        workMode = request.debug.toWorkMode(),
-        stubCase = request.debug.toStubCase(),
-        arbitrageOpportunitySearchRequest = request.filter.toArbitrageOpportunityFilter(),
-    )
+fun Context.fromTransport(request: ArbitrageOpportunitySearchRequest) {
+    command = Command.SEARCH
+    workMode = request.debug.toWorkMode()
+    stubCase = request.debug.toStubCase()
+    arbitrageOpportunitySearchRequest = request.filter.toArbitrageOpportunityFilter()
 }
 
 private fun ArbitrageOpportunityDebug?.toWorkMode(): WorkMode {
