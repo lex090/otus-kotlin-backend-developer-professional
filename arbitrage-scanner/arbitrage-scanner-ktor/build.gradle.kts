@@ -9,6 +9,10 @@ application {
 }
 
 dependencies {
+
+    implementation(project(":arbitrage-scanner-common"))
+    implementation(project(":arbitrage-scanner-api-v1"))
+
     // Ktor
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.content.negotiation)

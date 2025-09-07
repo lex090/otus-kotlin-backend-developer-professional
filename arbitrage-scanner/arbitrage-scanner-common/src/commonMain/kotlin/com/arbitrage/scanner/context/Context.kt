@@ -12,34 +12,19 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.stubs.Stubs
 
 data class Context(
-    val command: Command,
-    val state: State,
-    val internalErrors: List<InternalError>,
-    val workMode: WorkMode,
-    val stubCase: Stubs,
+    var command: Command = Command.NONE,
+    var state: State = State.NONE,
+    val internalErrors: MutableList<InternalError> = mutableListOf(),
+    var workMode: WorkMode = WorkMode.PROD,
+    var stubCase: Stubs = Stubs.NONE,
 
-    val requestId: RequestId,
-    val startTimestamp: Timestamp,
+    var requestId: RequestId = RequestId.DEFAULT,
+    var startTimestamp: Timestamp = Timestamp.DEFAULT,
 
-    val arbitrageOpportunityReadRequest: ArbitrageOpportunityId,
-    val arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter,
+    var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
+    var arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
 
-    val arbitrageOpportunityReadResponse: ArbitrageOpportunity,
-    val arbitrageOpportunitySearchResponse: Set<ArbitrageOpportunity>,
-) {
-    companion object {
-        val DEFAULT = Context(
-            command = Command.NONE,
-            state = State.NONE,
-            internalErrors = emptyList(),
-            workMode = WorkMode.PROD,
-            stubCase = Stubs.NONE,
-            requestId = RequestId.DEFAULT,
-            startTimestamp = Timestamp.DEFAULT,
-            arbitrageOpportunityReadRequest = ArbitrageOpportunityId.DEFAULT,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
-            arbitrageOpportunityReadResponse = ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
-            arbitrageOpportunitySearchResponse = emptySet()
-        )
-    }
-}
+    var arbitrageOpportunityReadResponse: ArbitrageOpportunity =
+        ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
+    val arbitrageOpportunitySearchResponse: MutableSet<ArbitrageOpportunity> = mutableSetOf(),
+)

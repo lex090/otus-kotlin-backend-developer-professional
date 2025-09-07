@@ -34,14 +34,14 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.TEST,
             stubCase = Stubs.NONE,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId("120"),
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -56,14 +56,14 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.NOT_FOUND,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -78,14 +78,14 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.SUCCESS,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -100,14 +100,14 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
             stubCase = Stubs.NOT_FOUND,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -122,14 +122,14 @@ class FromTransportMappersTest {
             ),
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.PROD,
             stubCase = Stubs.NONE,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(expectedContext, context, "expected: $expectedContext, found: $context")
     }
@@ -151,21 +151,25 @@ class FromTransportMappersTest {
             )
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             stubCase = Stubs.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(
             expectedContext.command,
             context.command,
             "expected: ${expectedContext.command}, found: ${context.command}"
         )
-        assertEquals(expectedContext.state, context.state, "expected: ${expectedContext.state}, found: ${context.state}")
+        assertEquals(
+            expectedContext.state,
+            context.state,
+            "expected: ${expectedContext.state}, found: ${context.state}"
+        )
         assertEquals(
             expectedContext.internalErrors,
             context.internalErrors,
@@ -230,7 +234,7 @@ class FromTransportMappersTest {
             )
         )
 
-        val expectedContext = Context.DEFAULT.copy(
+        val expectedContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.TEST,
             stubCase = Stubs.NONE,
@@ -244,14 +248,18 @@ class FromTransportMappersTest {
             ),
         )
 
-        val context = fromTransport(givenTransport)
+        val context = expectedContext.fromTransport(givenTransport)
 
         assertEquals(
             expectedContext.command,
             context.command,
             "expected: ${expectedContext.command}, found: ${context.command}"
         )
-        assertEquals(expectedContext.state, context.state, "expected: ${expectedContext.state}, found: ${context.state}")
+        assertEquals(
+            expectedContext.state,
+            context.state,
+            "expected: ${expectedContext.state}, found: ${context.state}"
+        )
         assertEquals(
             expectedContext.internalErrors,
             context.internalErrors,

@@ -20,15 +20,15 @@ import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexTokenId
 import com.arbitrage.scanner.stubs.Stubs
 
-fun fromTransport(request: IRequest): Context {
+fun Context.fromTransport(request: IRequest): Context {
     return when (request) {
         is ArbitrageOpportunityReadRequest -> fromTransport(request)
         is ArbitrageOpportunitySearchRequest -> fromTransport(request)
     }
 }
 
-fun fromTransport(request: ArbitrageOpportunityReadRequest): Context {
-    return Context.DEFAULT.copy(
+fun Context.fromTransport(request: ArbitrageOpportunityReadRequest): Context {
+    return copy(
         command = Command.READ,
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),
@@ -36,8 +36,8 @@ fun fromTransport(request: ArbitrageOpportunityReadRequest): Context {
     )
 }
 
-fun fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
-    return Context.DEFAULT.copy(
+fun Context.fromTransport(request: ArbitrageOpportunitySearchRequest): Context {
+    return copy(
         command = Command.SEARCH,
         workMode = request.debug.toWorkMode(),
         stubCase = request.debug.toStubCase(),

@@ -71,7 +71,7 @@ class ToTransportMappersTest {
 
     @Test
     fun test1() {
-        val givenContext = Context.DEFAULT.copy(
+        val givenContext = Context(
             command = Command.READ,
             workMode = WorkMode.PROD,
             state = State.FINISHING,
@@ -92,12 +92,12 @@ class ToTransportMappersTest {
 
     @Test
     fun test2() {
-        val givenContext = Context.DEFAULT.copy(
+        val givenContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.FINISHING,
             stubCase = Stubs.NONE,
-            arbitrageOpportunitySearchResponse = setOf(stub)
+            arbitrageOpportunitySearchResponse = mutableSetOf(stub)
         )
 
         val expectedTransport = ArbitrageOpportunitySearchResponse(
