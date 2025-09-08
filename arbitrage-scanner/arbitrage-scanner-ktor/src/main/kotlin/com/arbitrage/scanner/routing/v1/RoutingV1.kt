@@ -11,7 +11,7 @@ fun Routing.routingV1(businessLogicProcessor: BusinessLogicProcessor) {
             post("read") {
                 call.readArbitrageOpportunity(businessLogicProcessor)
             }
-            post("update") {
+            post("search") {
                 call.searchArbitrageOpportunity(businessLogicProcessor)
             }
         }

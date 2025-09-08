@@ -20,7 +20,6 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.config.yaml)
-    testImplementation(libs.ktor.server.test)
 
     // Koin
     implementation(libs.koin.ktor)
@@ -28,4 +27,9 @@ dependencies {
 
     // Logging
     implementation(libs.logback.classic)
+
+    testImplementation(libs.kotlin.test)
+
+    testImplementation(libs.ktor.server.test)
+    testImplementation(libs.ktor.client.negotiation)
 }
