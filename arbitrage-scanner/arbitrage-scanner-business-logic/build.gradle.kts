@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":arbitrage-scanner-common"))
+                implementation(project(":arbitrage-scanner-stubs"))
             }
         }
     }

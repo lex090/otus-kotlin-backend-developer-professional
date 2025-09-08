@@ -1,6 +1,5 @@
 package com.arbitrage.scanner
 
-import com.arbitrage.scanner.base.State
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import kotlinx.serialization.json.Json
@@ -30,12 +29,5 @@ val jsonModule = module {
 }
 
 val businessLogicProcessorModule = module {
-    factory<BusinessLogicProcessor> {
-        BusinessLogicProcessor { context ->
-            context.state = State.RUNNING
-            context.arbitrageOpportunityReadResponse = ArbOpStubs.arbitrageOpportunity
-            context.arbitrageOpportunitySearchResponse.add(ArbOpStubs.arbitrageOpportunity)
-            context.state = State.FINISHING
-        }
-    }
+    factory<BusinessLogicProcessor> { BusinessLogicProcessorSimpleImpl() }
 }

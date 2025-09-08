@@ -1,6 +1,6 @@
 ktor:
   application:
     modules:
-      - com.arbitrage.opportunity.ApplicationKt.module
+      - com.arbitrage.scanner.ApplicationKt.module
   deployment:
     port: 8080
