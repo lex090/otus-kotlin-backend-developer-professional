@@ -1,6 +1,6 @@
-package com.arbitrage.opportunity.processors
+package com.arbitrage.scanner.processors
 
-import com.arbitrage.opportunity.BusinessLogicProcessor
+import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.api.v1.models.IRequest
 import com.arbitrage.scanner.api.v1.models.IResponse
 import com.arbitrage.scanner.mappers.fromTransport

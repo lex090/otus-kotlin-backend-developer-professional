@@ -1,6 +1,6 @@
-package com.arbitrage.opportunity.routing.v1
+package com.arbitrage.scanner.routing.v1
 
-import com.arbitrage.opportunity.BusinessLogicProcessor
+import com.arbitrage.scanner.BusinessLogicProcessor
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route

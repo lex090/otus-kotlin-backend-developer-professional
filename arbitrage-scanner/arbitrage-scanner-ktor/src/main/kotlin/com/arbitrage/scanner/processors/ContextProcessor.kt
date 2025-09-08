@@ -1,6 +1,6 @@
-package com.arbitrage.opportunity.processors
+package com.arbitrage.scanner.processors
 
-import com.arbitrage.opportunity.BusinessLogicProcessor
+import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.asError
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.Timestamp

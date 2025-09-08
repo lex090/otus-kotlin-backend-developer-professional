@@ -1,4 +1,4 @@
-package com.arbitrage.opportunity
+package com.arbitrage.scanner
 
 import com.arbitrage.scanner.context.Context
 

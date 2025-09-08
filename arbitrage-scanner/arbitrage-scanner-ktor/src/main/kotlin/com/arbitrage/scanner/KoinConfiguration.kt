@@ -1,6 +1,5 @@
-package com.arbitrage.opportunity
+package com.arbitrage.scanner
 
-import com.arbitrage.scanner.ArbOpStubs
 import com.arbitrage.scanner.base.State
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
