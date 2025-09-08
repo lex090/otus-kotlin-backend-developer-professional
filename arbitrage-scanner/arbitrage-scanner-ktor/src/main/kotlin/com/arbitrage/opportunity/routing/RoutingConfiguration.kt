@@ -1,6 +1,6 @@
 package com.arbitrage.opportunity.routing
 
-import com.arbitrage.opportunity.LogicProcessor
+import com.arbitrage.opportunity.BusinessLogicProcessor
 import com.arbitrage.opportunity.routing.v1.routingV1
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -11,12 +11,12 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
     val json: Json by inject<Json>()
-    val logicProcessor: LogicProcessor by inject<LogicProcessor>()
+    val businessLogicProcessor: BusinessLogicProcessor by inject<BusinessLogicProcessor>()
 
     routing {
         install(ContentNegotiation) {
             json(json = json)
         }
-        routingV1(logicProcessor = logicProcessor)
+        routingV1(businessLogicProcessor = businessLogicProcessor)
     }
 }

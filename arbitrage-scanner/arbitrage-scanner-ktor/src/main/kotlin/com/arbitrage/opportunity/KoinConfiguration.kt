@@ -15,7 +15,7 @@ fun Application.configureKoin() {
         slf4jLogger(level = Level.INFO)
         modules(
             jsonModule,
-            logicProcessor,
+            businessLogicProcessorModule,
         )
     }
 }
@@ -30,9 +30,9 @@ val jsonModule = module {
     }
 }
 
-val logicProcessor = module {
-    factory<LogicProcessor> {
-        LogicProcessor { context ->
+val businessLogicProcessorModule = module {
+    factory<BusinessLogicProcessor> {
+        BusinessLogicProcessor { context ->
             context.state = State.RUNNING
             context.arbitrageOpportunityReadResponse = ArbOpStubs.arbitrageOpportunity
             context.arbitrageOpportunitySearchResponse.add(ArbOpStubs.arbitrageOpportunity)

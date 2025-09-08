@@ -1,6 +1,6 @@
 package com.arbitrage.opportunity.processors
 
-import com.arbitrage.opportunity.LogicProcessor
+import com.arbitrage.opportunity.BusinessLogicProcessor
 import com.arbitrage.scanner.asError
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.Timestamp
@@ -10,14 +10,14 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 suspend inline fun processContext(
-    logicProcessor: LogicProcessor,
+    businessLogicProcessor: BusinessLogicProcessor,
     crossinline prepareContextFromRequest: suspend Context.() -> Unit,
     crossinline resolveContextToResponse: suspend Context.() -> Unit,
 ) {
     val context = Context(startTimestamp = Timestamp(value = Clock.System.now().epochSeconds))
     try {
         context.prepareContextFromRequest()
-        logicProcessor.exec(context)
+        businessLogicProcessor.exec(context)
         context.resolveContextToResponse()
     } catch (throwable: Throwable) {
         context.state = State.FAILING
