@@ -8,6 +8,40 @@ application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
+ktor {
+    docker {
+        localImageName.set(project.name)
+        imageTag.set(project.version.toString())
+        jreVersion.set(JavaVersion.VERSION_21)
+        portMappings.set(
+            listOf(
+                io.ktor.plugin.features.DockerPortMapping(
+                    8080,
+                    8080,
+                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+                )
+            )
+        )
+    }
+}
+
+jib {
+    from {
+        image = "eclipse-temurin:21-jre"
+        platforms {
+            platform {
+                architecture = "arm64"
+                os = "linux"
+            }
+            platform {
+                architecture = "amd64"
+                os = "linux"
+            }
+        }
+    }
+    container.mainClass = application.mainClass.get()
+}
+
 dependencies {
 
     implementation(project(":arbitrage-scanner-common"))
