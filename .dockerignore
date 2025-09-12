@@ -1,36 +1,18 @@
-# Игнорируем файлы и директории, которые не нужны для сборки
-.git
-.gradle
-.idea
-.kotlin
-build
+# Только самое необходимое для исключения
+.git/
+.gradle/
+.idea/
+.kotlin/
+build/
 .DS_Store
 *.iml
 *.log
 
-# Исключаем директории уроков и документации
-lessons/
-docs/
-deploy/
-myDeploy/
+# Docker файлы
+Dockerfile
+.dockerignore
 
 # Временные файлы
-tmp/
-temp/
 *.tmp
 *.swp
 *.bak
-
-# IDE файлы
-.vscode/
-*.code-workspace
-
-# Файлы Docker
-Dockerfile
-.dockerignore
-docker-compose*.yml
-
-# README и документация (кроме CLAUDE.md который может быть нужен)
-README.md
-*.md
-!CLAUDE.md

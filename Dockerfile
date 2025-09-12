@@ -1,32 +1,18 @@
-# Multi-stage build для полной сборки проекта внутри контейнера
+# Multi-stage build с копированием всего проекта
 FROM gradle:8.5-jdk21 AS build
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем Gradle wrapper и основные конфигурационные файлы
-COPY gradle/ gradle/
-COPY gradlew gradlew.bat ./
-COPY build.gradle.kts gradle.properties ./
+# Копируем весь проект целиком
+COPY . .
 
-# Копируем файл settings.gradle.kts и исправляем его для сборки только нужных модулей
-COPY settings.gradle.kts ./
-RUN sed -i '/includeBuild("lessons")/d' settings.gradle.kts
-
-# Копируем модули
-COPY build-logic/ build-logic/
-COPY arbitrage-scanner/ arbitrage-scanner/
-COPY specs/ specs/
-
-# Даем права на выполнение gradlew (на всякий случай)
+# Даем права на выполнение gradlew
 RUN chmod +x gradlew
 
-# Собираем только JVM компоненты, избегая multiplatform сборки
+# Собираем shadow JAR для arbitrage-scanner-ktor, исключая problematic multiplatform задачи
 RUN ./gradlew :arbitrage-scanner:arbitrage-scanner-ktor:shadowJar \
     -x :arbitrage-scanner:arbitrage-scanner-common:commonizeNativeDistribution \
-    -x :arbitrage-scanner:arbitrage-scanner-common:linuxX64Test \
-    -x :arbitrage-scanner:arbitrage-scanner-common:macosArm64Test \
-    -x :arbitrage-scanner:arbitrage-scanner-common:macosX64Test \
     -x :arbitrage-scanner:arbitrage-scanner-api-v1:commonizeNativeDistribution \
     --no-daemon
 
