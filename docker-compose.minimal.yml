@@ -1,0 +1,25 @@
+services:
+  # Приложение
+  arbitrage-scanner:
+    build: .
+    container_name: arbitrage-app
+    ports:
+      - "8080:8080"
+    networks:
+      - logs
+
+  # Fluent Bit для сбора stdout логов
+  fluent-bit:
+    image: fluent/fluent-bit:3.0
+    container_name: fluent-bit
+    ports:
+      - "24224:24224"
+    volumes:
+      - ./config/fluent-bit/simple.conf:/fluent-bit/etc/fluent-bit.conf
+    networks:
+      - logs
+    command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
+
+networks:
+  logs:
+    driver: bridge
