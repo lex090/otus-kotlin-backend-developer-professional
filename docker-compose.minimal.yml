@@ -18,6 +18,7 @@ services:
     container_name: fluent-bit
     ports:
       - "24224:24224"
+      - "2020:2020"
     volumes:
-      - ./config/fluent-bit/simple.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./config/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
     command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
