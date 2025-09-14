@@ -59,11 +59,6 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
 
-    // Logging
-    implementation(libs.logback.classic)
-    implementation(libs.logback.more.appenders)
-    implementation(libs.fluent.logger)
-
     testImplementation(libs.kotlin.test)
 
     testImplementation(libs.ktor.server.test)

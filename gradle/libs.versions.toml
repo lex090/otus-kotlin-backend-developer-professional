@@ -10,6 +10,7 @@ koin = "3.5.6"
 logback = "1.5.16"
 logback-more-appenders = "1.8.8"
 fluent-logger = "0.3.4"
+logstash = "7.4"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -35,6 +36,7 @@ koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref =
 # Logback
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logback-more-appenders = { module = "com.sndyuk:logback-more-appenders", version.ref = "logback-more-appenders" }
+logback-logstash = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash" }
 
 # Fluent
 fluent-logger = { module = "org.fluentd:fluent-logger", version.ref = "fluent-logger" }
