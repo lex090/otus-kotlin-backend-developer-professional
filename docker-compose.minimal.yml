@@ -5,10 +5,12 @@ services:
     container_name: arbitrage-app
     depends_on:
       - fluent-bit
+    environment:
+      - LOGS_FB_HOSTS=fluent-bit
+      - LOGS_FB_PORT=24224
+      - SERVICE_NAME=arbitrage-scanner
     ports:
       - "8080:8080"
-    networks:
-      - logs
 
   # Fluent Bit для сбора stdout логов
   fluent-bit:
@@ -18,10 +20,4 @@ services:
       - "24224:24224"
     volumes:
       - ./config/fluent-bit/simple.conf:/fluent-bit/etc/fluent-bit.conf
-    networks:
-      - logs
     command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
-
-networks:
-  logs:
-    driver: bridge
