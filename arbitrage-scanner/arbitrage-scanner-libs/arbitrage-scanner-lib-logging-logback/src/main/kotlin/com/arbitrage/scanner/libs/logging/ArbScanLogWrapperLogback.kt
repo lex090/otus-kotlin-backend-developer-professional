@@ -6,8 +6,6 @@ import org.slf4j.Marker
 import org.slf4j.event.KeyValuePair
 import org.slf4j.event.Level
 import org.slf4j.event.LoggingEvent
-import ru.otus.otuskotlin.marketplace.logging.common.com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
-import ru.otus.otuskotlin.marketplace.logging.common.com.arbitrage.scanner.libs.logging.LogLevel
 import java.time.Instant
 
 internal class ArbScanLogWrapperLogback(

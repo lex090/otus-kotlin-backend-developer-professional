@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.marketplace.logging.common.com.arbitrage.scanner.libs.logging
+package com.arbitrage.scanner.libs.logging
 
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime

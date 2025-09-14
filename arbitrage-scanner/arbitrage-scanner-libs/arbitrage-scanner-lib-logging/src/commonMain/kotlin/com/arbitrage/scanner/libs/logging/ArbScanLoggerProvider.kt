@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.marketplace.logging.common.com.arbitrage.scanner.libs.logging
+package com.arbitrage.scanner.libs.logging
 
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
