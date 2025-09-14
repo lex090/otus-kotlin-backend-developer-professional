@@ -5,14 +5,14 @@ import org.slf4j.LoggerFactory
 import ru.otus.otuskotlin.marketplace.logging.common.com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import kotlin.reflect.KClass
 
-fun mpLoggerLogback(logger: Logger): ArbScanLogWrapper =
+fun arbScanLoggerLogback(logger: Logger): ArbScanLogWrapper =
     ArbScanLogWrapperLogback(
         logger = logger,
         loggerId = logger.name,
     )
 
-fun mpLoggerLogback(clazz: KClass<*>): ArbScanLogWrapper =
-    mpLoggerLogback(LoggerFactory.getLogger(clazz.java) as Logger)
+fun arbScanLoggerLogback(clazz: KClass<*>): ArbScanLogWrapper =
+    arbScanLoggerLogback(LoggerFactory.getLogger(clazz.java) as Logger)
 
-fun mpLoggerLogback(loggerId: String): ArbScanLogWrapper =
-    mpLoggerLogback(LoggerFactory.getLogger(loggerId) as Logger)
+fun arbScanLoggerLogback(loggerId: String): ArbScanLogWrapper =
+    arbScanLoggerLogback(LoggerFactory.getLogger(loggerId) as Logger)
