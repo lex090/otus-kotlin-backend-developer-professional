@@ -61,6 +61,8 @@ dependencies {
 
     // Logging
     implementation(libs.logback.classic)
+    implementation(libs.logback.more.appenders)
+    implementation(libs.fluent.logger)
 
     testImplementation(libs.kotlin.test)
 
