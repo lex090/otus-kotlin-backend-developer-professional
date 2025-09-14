@@ -3,6 +3,8 @@ services:
   arbitrage-scanner:
     build: .
     container_name: arbitrage-app
+    depends_on:
+      - fluent-bit
     ports:
       - "8080:8080"
     networks:
