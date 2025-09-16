@@ -26,20 +26,20 @@ suspend inline fun processContext(
         logger.info(
             msg = "Request started",
             marker = "BIZ",
-            data = context,
+            data = context.toString(),
         )
         businessLogicProcessor.exec(context)
         logger.info(
             msg = "Request processed",
             marker = "BIZ",
-            data = context,
+            data = context.toString(),
         )
         context.resolveContextToResponse()
     } catch (throwable: Throwable) {
         logger.error(
             msg = "Request failed",
             marker = "BIZ",
-            data = context,
+            data = context.toString(),
             e = throwable,
         )
         context.state = State.FAILING
