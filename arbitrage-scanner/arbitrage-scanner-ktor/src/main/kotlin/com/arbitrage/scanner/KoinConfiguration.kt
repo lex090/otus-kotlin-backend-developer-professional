@@ -1,5 +1,7 @@
 package com.arbitrage.scanner
 
+import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import com.arbitrage.scanner.libs.logging.arbScanLoggerLogback
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import kotlinx.serialization.json.Json
@@ -11,6 +13,7 @@ fun Application.configureKoin() {
         modules(
             jsonModule,
             businessLogicProcessorModule,
+            loggingModule,
         )
     }
 }
@@ -27,4 +30,8 @@ val jsonModule = module {
 
 val businessLogicProcessorModule = module {
     factory<BusinessLogicProcessor> { BusinessLogicProcessorSimpleImpl() }
+}
+
+val loggingModule = module {
+    factory<ArbScanLoggerProvider> { ArbScanLoggerProvider(::arbScanLoggerLogback) }
 }

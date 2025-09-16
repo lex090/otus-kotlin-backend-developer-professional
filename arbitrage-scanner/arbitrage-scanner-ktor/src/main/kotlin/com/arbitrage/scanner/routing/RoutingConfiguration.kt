@@ -1,6 +1,7 @@
 package com.arbitrage.scanner.routing
 
 import com.arbitrage.scanner.BusinessLogicProcessor
+import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.routing.v1.routingV1
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -14,6 +15,7 @@ import org.koin.ktor.ext.inject
 fun Application.configureRouting() {
     val json: Json by inject<Json>()
     val businessLogicProcessor: BusinessLogicProcessor by inject<BusinessLogicProcessor>()
+    val loggerProvider: ArbScanLoggerProvider by inject<ArbScanLoggerProvider>()
 
     routing {
         install(ContentNegotiation) {
@@ -22,6 +24,9 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Hello world!")
         }
-        routingV1(businessLogicProcessor = businessLogicProcessor)
+        routingV1(
+            businessLogicProcessor = businessLogicProcessor,
+            loggerProvider = loggerProvider,
+        )
     }
 }
