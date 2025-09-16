@@ -24,20 +24,20 @@ suspend inline fun processContext(
     try {
         context.prepareContextFromRequest()
         logger.info(
-            msg = "Request $logId started",
+            msg = "Request started",
             marker = "BIZ",
             data = null,//ctx.toLog(logId) // TODO
         )
         businessLogicProcessor.exec(context)
         logger.info(
-            msg = "Request $logId processed",
+            msg = "Request processed",
             marker = "BIZ",
             data = null, //ctx.toLog(logId)
         )
         context.resolveContextToResponse()
     } catch (throwable: Throwable) {
         logger.error(
-            msg = "Request $logId failed",
+            msg = "Request failed",
             marker = "BIZ",
             data = null,//ctx.toLog(logId),
             e = throwable,
