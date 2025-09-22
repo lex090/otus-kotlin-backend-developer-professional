@@ -20,9 +20,8 @@ services:
     volumes:
       - kafka-data:/var/lib/kafka/data
 
-  # Приложение
   arbitrage-scanner:
-    build: .
+    image: arbitrage-scanner:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
     container_name: arbitrage-app
     depends_on:
       - fluent-bit
