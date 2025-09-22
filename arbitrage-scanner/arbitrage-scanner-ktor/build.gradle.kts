@@ -8,23 +8,6 @@ application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
-ktor {
-    docker {
-        localImageName.set(project.name)
-        imageTag.set(project.version.toString())
-        jreVersion.set(JavaVersion.VERSION_21)
-        portMappings.set(
-            listOf(
-                io.ktor.plugin.features.DockerPortMapping(
-                    8080,
-                    8080,
-                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
-                )
-            )
-        )
-    }
-}
-
 jib {
     from {
         image = "eclipse-temurin:21-jre"
@@ -39,7 +22,38 @@ jib {
             }
         }
     }
-    container.mainClass = application.mainClass.get()
+
+    // Целевой образ - имя и теги
+    to {
+        image = "arbitrage-scanner"  // Имя образа
+        tags = setOf(
+            project.version.toString(),                  // Версия из gradle.properties
+        )
+    }
+
+    // Настройки контейнера
+    container {
+        // Главный класс приложения - автоматически берется из application блока
+        mainClass = application.mainClass.get()
+
+        // Порты, которые будет слушать приложение
+        ports = listOf("8080")
+
+        // JVM параметры для оптимизации работы в контейнере
+        jvmFlags = emptyList()
+
+        // Переменные окружения
+        environment = emptyMap()
+
+        // Метки для организации и мониторинга
+        labels = emptyMap()
+
+        // Рабочая директория в контейнере
+        workingDirectory = "/app"
+
+        // Формат времени создания образа
+        creationTime = "USE_CURRENT_TIMESTAMP"
+    }
 }
 
 dependencies {
