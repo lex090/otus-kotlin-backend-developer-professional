@@ -1,0 +1,2049 @@
+[2025-09-25T15:55:00.504Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 30769,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T15:55:00.504Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T15:55:00.505Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T15:55:00.505Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758815700505
+}
+[2025-09-25T16:02:53.411Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 31334,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:02:53.412Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:02:53.412Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:02:53.412Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816173412
+}
+[2025-09-25T16:03:13.337Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 31543,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:03:13.337Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:03:13.338Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:03:13.338Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816193338
+}
+[2025-09-25T16:08:02.492Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 32085,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:08:02.492Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:08:02.493Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:08:02.494Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816482494
+}
+[2025-09-25T16:08:12.880Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 32248,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:08:12.880Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:08:12.881Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:08:12.881Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816492881
+}
+[2025-09-25T16:09:51.777Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 32495,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:09:51.778Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:09:51.778Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:09:51.778Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816591778
+}
+[2025-09-25T16:10:21.674Z] [INFO] [MCP_REQUEST] [req_1758816621674_7a5yhyjco] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "Проанализируй структуру проекта arbitrage-scanner и покажи основные модули и их взаимосвязи"
+  }
+}
+[2025-09-25T16:12:08.171Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 32795,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:12:08.171Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:12:08.172Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:12:08.172Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816728172
+}
+[2025-09-25T16:12:43.417Z] [INFO] [MCP_REQUEST] [req_1758816763417_293iirwrp] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "Анализ архитектуры проекта arbitrage-scanner: основные модули, компоненты, взаимосвязи между классами и функциями"
+  }
+}
+[2025-09-25T16:13:45.572Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 33099,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:13:45.572Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:13:45.572Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:13:45.573Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816825573
+}
+[2025-09-25T16:15:52.757Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 33363,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:15:52.757Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:15:52.757Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:15:52.758Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758816952758
+}
+[2025-09-25T16:19:48.565Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 33634,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:19:48.566Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:19:48.566Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:19:48.566Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758817188566
+}
+[2025-09-25T16:22:12.741Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 34020,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:22:12.741Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:22:12.742Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:22:12.742Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758817332742
+}
+[2025-09-25T16:23:32.516Z] [INFO] [MCP_REQUEST] [req_1758817412516_6qbv48o1n] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "Проанализируй структуру проекта arbitrage-scanner и покажи основные компоненты, их взаимосвязи и зависимости"
+  }
+}
+[2025-09-25T16:27:47.356Z] [INFO] [MCP_REQUEST] [req_1758817667356_cdk0tiob2] Incoming MCP request: index DATA: {
+  "method": "index",
+  "params": {
+    "directory": "/Users/ilya/IdeaProjects/otus-kotlin-backend-developer-professional/arbitrage-scanner"
+  }
+}
+[2025-09-25T16:27:47.356Z] [DEBUG] [AGENT_ACTIVITY] [req_1758817667356_cdk0tiob2] Agent conductor: indexing completed DATA: {
+  "agentId": "conductor",
+  "directory": "/Users/ilya/IdeaProjects/otus-kotlin-backend-developer-professional/arbitrage-scanner",
+  "incremental": false,
+  "entitiesFound": 0
+}
+[2025-09-25T16:27:47.357Z] [INFO] [MCP_RESPONSE] [req_1758817667356_cdk0tiob2] MCP response: index DATA: {
+  "method": "index",
+  "result": {
+    "taskId": "index-1758817667356",
+    "status": "completed",
+    "complexity": 1,
+    "delegations": [
+      {
+        "agent": "dev-agent",
+        "timestamp": 1758817667356
+      }
+    ],
+    "results": [
+      {
+        "status": "queued",
+        "message": "Subtask queued for dev-agent"
+      }
+    ],
+    "synthesizedAt": 1758817667356
+  }
+} DURATION: 1ms
+[2025-09-25T16:27:52.357Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:27:57.358Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:02.359Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:07.359Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:12.359Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:17.360Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:22.361Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:27.361Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:32.362Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:37.362Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:42.364Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:47.364Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:52.366Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:28:57.366Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:02.367Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:07.366Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:12.368Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:17.368Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:22.368Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:26.068Z] [INFO] [MCP_REQUEST] [req_1758817766068_2rbeuas3f] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "Find all files in arbitrage-scanner-kafka module and show their content"
+  }
+}
+[2025-09-25T16:29:27.368Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:32.369Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:37.370Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:42.370Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:47.371Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:52.373Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:29:57.373Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:02.374Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:07.374Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:12.374Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:17.375Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:22.377Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:27.377Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:32.378Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:37.379Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:42.380Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:47.380Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:52.382Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:30:57.382Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:02.383Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:07.384Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:12.385Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:17.385Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:22.386Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:27.388Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:31:33.109Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 35128,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-09-25T16:31:33.110Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-09-25T16:31:33.110Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-09-25T16:31:33.111Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1758817893111
+}
+[2025-09-25T16:32:18.053Z] [INFO] [MCP_REQUEST] [req_1758817938053_dj2vz52ol] Incoming MCP request: index DATA: {
+  "method": "index",
+  "params": {
+    "directory": "/Users/ilya/IdeaProjects/otus-kotlin-backend-developer-professional",
+    "incremental": false,
+    "excludePatterns": [
+      "*.log",
+      "*.class",
+      "build/**",
+      ".gradle/**",
+      ".git/**"
+    ]
+  }
+}
+[2025-09-25T16:32:18.055Z] [DEBUG] [AGENT_ACTIVITY] [req_1758817938053_dj2vz52ol] Agent conductor: indexing completed DATA: {
+  "agentId": "conductor",
+  "directory": "/Users/ilya/IdeaProjects/otus-kotlin-backend-developer-professional",
+  "incremental": false,
+  "excludePatterns": [
+    "*.log",
+    "*.class",
+    "build/**",
+    ".gradle/**",
+    ".git/**"
+  ],
+  "entitiesFound": 0
+}
+[2025-09-25T16:32:18.055Z] [INFO] [MCP_RESPONSE] [req_1758817938053_dj2vz52ol] MCP response: index DATA: {
+  "method": "index",
+  "result": {
+    "taskId": "index-1758817938053",
+    "status": "completed",
+    "complexity": 1,
+    "delegations": [
+      {
+        "agent": "dev-agent",
+        "timestamp": 1758817938055
+      }
+    ],
+    "results": [
+      {
+        "status": "queued",
+        "message": "Subtask queued for dev-agent"
+      }
+    ],
+    "synthesizedAt": 1758817938055
+  }
+} DURATION: 2ms
+[2025-09-25T16:32:23.056Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 1,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:23.507Z] [INFO] [MCP_REQUEST] [req_1758817943506_bnw0onvdf] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "Проанализируй структуру модуля arbitrage-scanner-ktor: какие есть классы, интерфейсы, маршруты API, зависимости и как происходит обработка запросов",
+    "limit": 20
+  }
+}
+[2025-09-25T16:32:28.056Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:33.057Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:38.058Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:43.059Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:48.059Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:53.059Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:32:58.059Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:03.059Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:08.060Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:13.061Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:18.061Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:23.062Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:28.063Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:33.063Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:38.064Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:43.066Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:48.068Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:53.069Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:33:58.069Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:03.070Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:08.071Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:13.073Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:18.074Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:23.075Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:28.076Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:33.076Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:38.077Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:43.078Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:48.079Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:53.080Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:34:58.082Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:03.084Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:08.085Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:13.085Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:18.086Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:23.087Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:28.088Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:33.088Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:38.090Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:43.090Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:48.091Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:53.092Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:35:58.092Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:03.094Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:08.094Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:13.095Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:18.096Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:23.098Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:28.098Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:33.099Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:38.100Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:43.101Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:48.101Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:53.101Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:36:58.103Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:03.105Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:08.107Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:13.108Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:18.110Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:23.111Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:28.113Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:33.114Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:38.116Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:43.118Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:48.120Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:53.123Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:58.125Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 2,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:37:58.262Z] [INFO] [MCP_REQUEST] [req_1758818278262_obhrefs8s] Incoming MCP request: index DATA: {
+  "method": "index",
+  "params": {
+    "directory": "/Users/ilya/IdeaProjects/otus-kotlin-backend-developer-professional",
+    "incremental": false
+  }
+}
+[2025-09-25T16:37:58.263Z] [DEBUG] [AGENT_ACTIVITY] [req_1758818278262_obhrefs8s] Agent conductor: indexing completed DATA: {
+  "agentId": "conductor",
+  "directory": "/Users/ilya/IdeaProjects/otus-kotlin-backend-developer-professional",
+  "incremental": false,
+  "entitiesFound": 0
+}
+[2025-09-25T16:37:58.263Z] [INFO] [MCP_RESPONSE] [req_1758818278262_obhrefs8s] MCP response: index DATA: {
+  "method": "index",
+  "result": {
+    "taskId": "index-1758818278263",
+    "status": "completed",
+    "complexity": 1,
+    "delegations": [
+      {
+        "agent": "dev-agent",
+        "timestamp": 1758818278263
+      }
+    ],
+    "results": [
+      {
+        "status": "queued",
+        "message": "Subtask queued for dev-agent"
+      }
+    ],
+    "synthesizedAt": 1758818278263
+  }
+} DURATION: 1ms
+[2025-09-25T16:38:03.126Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:08.129Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 3,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:09.920Z] [INFO] [MCP_REQUEST] [req_1758818289920_a3j40b507] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "Покажи структуру модулей arbitrage-scanner и их основные компоненты, особенно ktor модуль",
+    "limit": 15
+  }
+}
+[2025-09-25T16:38:13.131Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:18.133Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:23.134Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:28.135Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:33.135Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:38.138Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:43.140Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:48.141Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:53.144Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:38:58.146Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:03.147Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:08.149Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:13.150Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:18.152Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:23.152Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:28.154Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:33.154Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:38.156Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:43.157Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:48.158Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:53.159Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:39:58.160Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:03.162Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:08.163Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:13.165Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:18.166Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:23.168Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:28.169Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:33.172Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:38.173Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:43.175Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:48.175Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:53.176Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:40:58.179Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:03.181Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:08.183Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:13.186Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:18.187Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:23.189Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:28.191Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:33.192Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:38.192Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:43.193Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:48.194Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:53.196Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:41:58.197Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:03.199Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:30.925Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:35.926Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:40.927Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:45.929Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:50.928Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:42:55.930Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:00.929Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:05.930Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:10.931Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:15.932Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:20.932Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:25.933Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:30.933Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:35.934Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:40.934Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:45.935Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:50.934Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:43:55.936Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:00.935Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:05.937Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:10.938Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:15.938Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:20.938Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:25.939Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:30.939Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:35.940Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:40.940Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:45.941Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:50.942Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:44:55.942Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:00.943Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:05.943Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:10.944Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:15.944Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:20.945Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:25.946Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:30.946Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:35.947Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:40.947Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:45.949Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:50.949Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:45:55.951Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:00.950Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:05.951Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:10.952Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:15.953Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:20.952Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:25.953Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:30.954Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:35.954Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:40.955Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:45.956Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:50.956Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:46:55.957Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:00.957Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:05.958Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:10.958Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:15.958Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:20.958Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:25.960Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:30.960Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:35.962Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:40.962Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:45.964Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:50.964Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:47:55.966Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:00.967Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:05.968Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:10.970Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:15.971Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:20.972Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:25.975Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:30.975Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:35.978Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:40.979Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:45.981Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:50.983Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:48:55.985Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:00.984Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:05.985Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:10.987Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:15.987Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:20.989Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:25.991Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:30.992Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:35.994Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:40.995Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:45.997Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:50.999Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:49:56.000Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:01.002Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:06.004Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:11.006Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:16.007Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:21.008Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:26.010Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:31.009Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:36.011Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:41.012Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:46.013Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:51.013Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:50:56.015Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:01.016Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:06.016Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:11.018Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:16.019Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:21.020Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:26.021Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:31.022Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:36.024Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
+[2025-09-25T16:51:41.024Z] [INFO] [SYSTEM] HEARTBEAT DATA: {
+  "agents": 0,
+  "pendingTasks": 4,
+  "taskQueueLimit": 100,
+  "maxConcurrentAgents": 5
+}
