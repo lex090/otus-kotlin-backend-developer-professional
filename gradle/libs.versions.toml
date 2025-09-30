@@ -13,6 +13,8 @@ fluent-logger = "0.3.4"
 logstash = "7.4"
 kafka = "3.8.1"
 hoplite = "2.7.5"
+testcontainers = "1.20.4"
+junit = "5.11.4"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -49,6 +51,14 @@ kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafk
 # Hoplite
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
+
+# Testcontainers
+testcontainers-kafka = { module = "org.testcontainers:kafka", version.ref = "testcontainers" }
+testcontainers-junit = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+
+# JUnit
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
 [bundles]
 

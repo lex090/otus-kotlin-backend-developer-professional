@@ -30,4 +30,8 @@ dependencies {
 
     // Тестирование
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.testcontainers.kafka)
+    testImplementation(libs.testcontainers.junit)
 }
