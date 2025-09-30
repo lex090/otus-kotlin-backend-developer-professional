@@ -68,25 +68,14 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      echo 'Ожидание готовности Kafka...'
-      sleep 10
-
-      echo 'Создание топиков...'
-
-      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists \
-        --topic arbitrage-scanner-in \
-        --partitions 3 \
-        --replication-factor 1
-
-      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists \
-        --topic arbitrage-scanner-out \
-        --partitions 3 \
-        --replication-factor 1
-
-      echo 'Топики созданы успешно:'
+    command: >
+      bash -c "
+      echo 'Ожидание готовности Kafka...' &&
+      sleep 10 &&
+      echo 'Создание топиков...' &&
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic arbitrage-scanner-in --partitions 3 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic arbitrage-scanner-out --partitions 3 --replication-factor 1 &&
+      echo 'Топики созданы успешно:' &&
       kafka-topics --bootstrap-server kafka:29092 --list
       "
     networks:

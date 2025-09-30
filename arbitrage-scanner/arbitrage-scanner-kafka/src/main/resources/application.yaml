@@ -4,7 +4,7 @@ kafka:
   consumer:
     group-id: "arbitrage-scanner-group"
     topics:
-      - "arbitrage-requests"
+      - "arbitrage-scanner-in"
     auto-offset-reset: "earliest"
     enable-auto-commit: true
     auto-commit-interval-ms: 5000
@@ -19,7 +19,7 @@ kafka:
   producer:
     client-id: "arbitrage-scanner-producer"
     topics:
-      responses: "arbitrage-responses"
+      responses: "arbitrage-scanner-out"
     acks: "all"
     retries: 3
     batch-size: 16384
