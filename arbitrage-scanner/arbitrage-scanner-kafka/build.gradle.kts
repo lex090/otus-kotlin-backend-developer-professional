@@ -35,3 +35,7 @@ dependencies {
     testImplementation(libs.testcontainers.kafka)
     testImplementation(libs.testcontainers.junit)
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
