@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.build.plugin.jvm)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.jib)
     application
 }
 
@@ -38,4 +39,28 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+jib {
+    from {
+        image = "eclipse-temurin:21-jre-alpine"
+    }
+    to {
+        image = "arbitrage-scanner-kafka"
+        tags = setOf("latest", project.version.toString())
+    }
+    container {
+        mainClass = application.mainClass.get()
+        jvmFlags = listOf(
+            "-Xms256m",
+            "-Xmx512m",
+            "-XX:+UseG1GC",
+            "-XX:MaxGCPauseMillis=100"
+        )
+        ports = listOf()
+        environment = mapOf(
+            "KAFKA_BOOTSTRAP_SERVERS" to "kafka:9092"
+        )
+        creationTime.set("USE_CURRENT_TIMESTAMP")
+    }
 }

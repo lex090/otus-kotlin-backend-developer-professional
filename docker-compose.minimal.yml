@@ -34,6 +34,19 @@ services:
     ports:
       - "8080:8080"
 
+  arbitrage-scanner-kafka:
+    image: arbitrage-scanner-kafka:latest
+    container_name: arbitrage-kafka-app
+    depends_on:
+      - fluent-bit
+      - kafka
+    environment:
+      - LOGS_FB_HOSTS=fluent-bit
+      - LOGS_FB_PORT=24224
+      - SERVICE_NAME=arbitrage-scanner-kafka
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    restart: unless-stopped
+
   # Kafka UI - веб-интерфейс для управления Kafka
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
