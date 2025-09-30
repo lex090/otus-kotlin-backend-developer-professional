@@ -36,7 +36,7 @@ class ConfigLoaderTest {
 
         // then
         assertEquals("arbitrage-scanner-group", consumer.groupId)
-        assertEquals(listOf("arbitrage-requests"), consumer.topics)
+        assertEquals(listOf("arbitrage-scanner-in"), consumer.topics)
         assertEquals("earliest", consumer.autoOffsetReset)
         assertEquals(true, consumer.enableAutoCommit)
         assertEquals(5000, consumer.autoCommitIntervalMs)
@@ -52,7 +52,7 @@ class ConfigLoaderTest {
 
         // then
         assertEquals("arbitrage-scanner-producer", producer.clientId)
-        assertEquals("arbitrage-responses", producer.topics.responses)
+        assertEquals("arbitrage-scanner-out", producer.topics.responses)
         assertEquals("all", producer.acks)
         assertEquals(3, producer.retries)
         assertEquals(16384, producer.batchSize)
