@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.bignum)
+                api(libs.bignum)
             }
         }
     }
