@@ -1,6 +1,11 @@
 plugins {
+    application
     alias(libs.plugins.build.plugin.jvm)
     alias(libs.plugins.kotlinx.serialization)
+}
+
+application {
+    mainClass.set("com.arbitrage.scanner.kafka.AppKafkaMainKt")
 }
 
 dependencies {
@@ -17,6 +22,9 @@ dependencies {
 
     // Kafka
     implementation(libs.kafka.clients)
+
+    // Koin
+    implementation(libs.koin.core)
 
     // Logging
     implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging"))
