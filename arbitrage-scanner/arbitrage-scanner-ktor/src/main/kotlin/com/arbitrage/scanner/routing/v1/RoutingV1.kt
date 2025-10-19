@@ -24,6 +24,12 @@ fun Routing.routingV1(
                     loggerProvider = loggerProvider
                 )
             }
+            post("recalculate") {
+                call.recalculateArbitrageOpportunity(
+                    businessLogicProcessor = businessLogicProcessor,
+                    loggerProvider = loggerProvider
+                )
+            }
         }
     }
 }
