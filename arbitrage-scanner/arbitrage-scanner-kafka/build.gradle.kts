@@ -15,6 +15,10 @@ dependencies {
     // Kafka
     implementation(libs.kafka.clients)
 
+    // Logging
+    implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging"))
+    implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging-logback"))
+
     // Test
     testImplementation(libs.kotlin.test)
 }

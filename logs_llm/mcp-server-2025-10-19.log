@@ -1,0 +1,7 @@
+[2025-10-19T19:46:00.043Z] [INFO] [MCP_REQUEST] [req_1760903160043_1tm2460v7] Incoming MCP request: query DATA: {
+  "method": "query",
+  "params": {
+    "query": "kafka consumer configuration modules",
+    "limit": 10
+  }
+}
