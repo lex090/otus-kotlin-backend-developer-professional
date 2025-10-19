@@ -3,6 +3,8 @@ package com.arbitrage.scanner
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadResponse
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateRequest
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
@@ -105,5 +107,32 @@ class TestApplication {
                 }
             }
         }
+    }
+
+    @Test
+    fun `recalculate request success stub test`() = testApplication {
+        application { module() }
+
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val arbitrageOpportunityRecalculateRequest = ArbitrageOpportunityRecalculateRequest(
+            debug = ArbitrageOpportunityDebug(
+                mode = ArbitrageOpportunityRequestDebugMode.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            ),
+        )
+        val response = client.post("v1/arbitrage_opportunities/recalculate") {
+            contentType(ContentType.Application.Json)
+            setBody(arbitrageOpportunityRecalculateRequest)
+        }
+
+        val arbitrageOpportunityRecalculateResponse = response.body<ArbitrageOpportunityRecalculateResponse>()
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(ResponseResult.SUCCESS, arbitrageOpportunityRecalculateResponse.result)
+        assertEquals(1, arbitrageOpportunityRecalculateResponse.opportunitiesCount)
+        assertEquals(100L, arbitrageOpportunityRecalculateResponse.processingTimeMs)
     }
 }

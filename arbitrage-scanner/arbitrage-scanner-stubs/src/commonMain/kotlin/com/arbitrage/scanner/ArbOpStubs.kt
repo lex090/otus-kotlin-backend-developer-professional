@@ -11,6 +11,7 @@ import com.arbitrage.scanner.models.DexChainId
 import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexPrice
 import com.arbitrage.scanner.models.DexTokenId
+import com.arbitrage.scanner.models.RecalculateResult
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
 object ArbOpStubs {
@@ -32,5 +33,10 @@ object ArbOpStubs {
             timeStamp = Timestamp(12),
         ),
         spread = ArbitrageOpportunitySpread(12313.0)
+    )
+
+    val recalculateResult = RecalculateResult(
+        opportunitiesCount = 1,
+        processingTimeMs = 100L,
     )
 }
