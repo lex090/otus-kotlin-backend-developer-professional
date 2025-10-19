@@ -2,6 +2,7 @@ package com.arbitrage.scanner.mappers
 
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
@@ -24,6 +25,7 @@ fun Context.fromTransport(request: IRequest) {
     return when (request) {
         is ArbitrageOpportunityReadRequest -> fromTransport(request)
         is ArbitrageOpportunitySearchRequest -> fromTransport(request)
+        is ArbitrageOpportunityRecalculateRequest -> fromTransport(request)
     }
 }
 
@@ -39,6 +41,12 @@ fun Context.fromTransport(request: ArbitrageOpportunitySearchRequest) {
     workMode = request.debug.toWorkMode()
     stubCase = request.debug.toStubCase()
     arbitrageOpportunitySearchRequest = request.filter.toArbitrageOpportunityFilter()
+}
+
+fun Context.fromTransport(request: ArbitrageOpportunityRecalculateRequest) {
+    command = Command.RECALCULATE
+    workMode = request.debug.toWorkMode()
+    stubCase = request.debug.toStubCase()
 }
 
 private fun ArbitrageOpportunityDebug?.toWorkMode(): WorkMode {

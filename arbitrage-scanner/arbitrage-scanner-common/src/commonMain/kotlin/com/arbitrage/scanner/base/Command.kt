@@ -4,4 +4,5 @@ enum class Command {
     NONE,
     READ,
     SEARCH,
+    RECALCULATE,
 }
