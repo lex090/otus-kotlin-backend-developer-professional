@@ -8,6 +8,10 @@
 
 Класс для инкапсуляции подключения к Kafka и управления считыванием сообщений.
 
+### AppKafkaProducer
+
+Класс для инкапсуляции подключения к Kafka и отправки сообщений.
+
 #### Основные возможности
 
 - ✅ Автоматическое подключение к Kafka на основе конфигурации
@@ -130,6 +134,163 @@ fun close()
 
 Закрывает соединение с Kafka и освобождает ресурсы. Реализует интерфейс AutoCloseable.
 
+---
+
+## AppKafkaProducer
+
+### Основные возможности
+
+- ✅ Автоматическое подключение к Kafka на основе конфигурации
+- ✅ Асинхронная и синхронная отправка сообщений
+- ✅ Топик по умолчанию с возможностью переопределения
+- ✅ Поддержка ключей сообщений
+- ✅ Callback для обработки результатов отправки
+- ✅ Обработка ошибок с логированием
+- ✅ Реализация AutoCloseable для безопасной работы с ресурсами
+
+### Использование
+
+```kotlin
+import com.arbitrage.scanner.kafka.AppKafkaProducer
+import com.arbitrage.scanner.kafka.config.KafkaConfigLoader
+import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import com.arbitrage.scanner.libs.logging.arbScanLoggerLogback
+
+fun main() {
+    // Загрузка конфигурации
+    val config = KafkaConfigLoader.load()
+
+    // Инициализация логирования
+    val loggerProvider = ArbScanLoggerProvider(::arbScanLoggerLogback)
+
+    // Создание producer (defaultTopic из config.outTopic)
+    val producer = AppKafkaProducer(config, loggerProvider)
+
+    try {
+        // Асинхронная отправка
+        producer.send("Мое сообщение")
+        producer.send("Сообщение с ключом", key = "my-key")
+
+        // Синхронная отправка (ожидание подтверждения)
+        val metadata = producer.sendSync("Важное сообщение")
+        println("Отправлено: offset=${metadata.offset()}")
+
+        // Принудительная отправка всех буферизованных сообщений
+        producer.flush()
+
+    } finally {
+        producer.close()
+    }
+}
+```
+
+### Кастомизация топика по умолчанию
+
+```kotlin
+fun main() {
+    val config = KafkaConfigLoader.load()
+    val loggerProvider = ArbScanLoggerProvider(::arbScanLoggerLogback)
+
+    // Producer с кастомным топиком по умолчанию
+    val producer = AppKafkaProducer(
+        config = config,
+        loggerProvider = loggerProvider,
+        defaultTopic = "my-custom-topic"
+    )
+
+    // Отправка в топик по умолчанию
+    producer.send("Сообщение в кастомный топик")
+
+    // Отправка в другой топик
+    producer.send(topic = "another-topic", message = "Сообщение в другой топик")
+
+    producer.close()
+}
+```
+
+### API
+
+#### Конструктор
+
+```kotlin
+AppKafkaProducer(
+    config: KafkaConfig,
+    loggerProvider: ArbScanLoggerProvider,
+    defaultTopic: String = config.outTopic
+)
+```
+
+Параметры:
+- `config` - конфигурация Kafka (см. KafkaConfig)
+- `loggerProvider` - провайдер системы логирования приложения
+- `defaultTopic` - топик по умолчанию для отправки (по умолчанию из `config.outTopic`)
+
+#### Методы
+
+##### send (асинхронная отправка)
+
+```kotlin
+fun send(
+    message: String,
+    key: String? = null
+): Future<RecordMetadata>
+
+fun send(
+    topic: String,
+    message: String,
+    key: String? = null
+): Future<RecordMetadata>
+```
+
+Асинхронная отправка сообщения. Возвращает Future для отслеживания результата.
+
+Параметры:
+- `topic` - топик для отправки (необязательно, используется defaultTopic)
+- `message` - сообщение для отправки
+- `key` - ключ сообщения (необязательно)
+
+##### sendSync (синхронная отправка)
+
+```kotlin
+fun sendSync(
+    message: String,
+    key: String? = null
+): RecordMetadata
+
+fun sendSync(
+    topic: String,
+    message: String,
+    key: String? = null
+): RecordMetadata
+```
+
+Синхронная отправка сообщения с ожиданием подтверждения.
+
+Параметры:
+- `topic` - топик для отправки (необязательно, используется defaultTopic)
+- `message` - сообщение для отправки
+- `key` - ключ сообщения (необязательно)
+
+Возвращает: `RecordMetadata` с информацией о отправленном сообщении
+
+##### flush
+
+```kotlin
+fun flush()
+```
+
+Принудительная отправка всех буферизованных сообщений.
+
+##### close
+
+```kotlin
+fun close()
+```
+
+Закрывает соединение с Kafka и освобождает ресурсы.
+
+---
+
 ## Конфигурация
 
 Конфигурация загружается из `application.yaml`:
@@ -157,9 +318,13 @@ data class KafkaConfig(
 
 ## Примеры
 
-Готовые примеры использования находятся в `example/ConsumerExample.kt`.
+Готовые примеры использования находятся в `example/ConsumerExample.kt`:
 
-Для запуска примера:
+- `ConsumerExample` - пример использования Consumer
+- `ProducerExample` - пример использования Producer
+- `ProducerConsumerExample` - пример совместного использования Producer и Consumer
+
+Для запуска примеров:
 
 ```bash
 cd arbitrage-scanner
@@ -196,22 +361,44 @@ val loggerProvider = ArbScanLoggerProvider(::arbScanLoggerLogback)
 
 ## Обработка ошибок
 
-`AppKafkaConsumer` обрабатывает ошибки следующим образом:
+### AppKafkaConsumer
+
+Обрабатывает ошибки следующим образом:
 
 1. **Ошибки в messageHandler**: логируются, но не прерывают работу consumer
 2. **Ошибки подключения к Kafka**: прерывают работу и пробрасываются наружу
 3. **Ошибки при закрытии**: логируются, но не пробрасываются
 
-Пример обработки ошибок:
+Пример:
 
 ```kotlin
-consumer.subscribe(topics = listOf(config.inTopic)) { record ->
+consumer.subscribe { record ->
     try {
         processMessage(record.value())
     } catch (e: Exception) {
-        logger.error("Ошибка обработки сообщения", e)
+        logger.error(msg = "Ошибка обработки сообщения", e = e)
         // Consumer продолжит работу
     }
+}
+```
+
+### AppKafkaProducer
+
+Обрабатывает ошибки следующим образом:
+
+1. **Ошибки при отправке**: логируются через callback, Future возвращается с ошибкой
+2. **Ошибки при синхронной отправке**: пробрасываются наружу
+3. **Ошибки при закрытии**: логируются, но не пробрасываются
+
+Пример обработки ошибок при асинхронной отправке:
+
+```kotlin
+val future = producer.send("Мое сообщение")
+try {
+    val metadata = future.get() // Ожидание результата
+    println("Отправлено: offset=${metadata.offset()}")
+} catch (e: Exception) {
+    logger.error(msg = "Ошибка при отправке", e = e)
 }
 ```
 
@@ -225,11 +412,26 @@ consumer.subscribe(topics = listOf(config.inTopic)) { record ->
 
 ## Лучшие практики
 
-1. **Всегда закрывайте consumer**: используйте `try-finally` или `use` блоки
+### Общие
+
+1. **Всегда закрывайте ресурсы**: используйте `try-finally` или `use` блоки
 2. **Обрабатывайте shutdown**: добавляйте shutdown hook для корректного завершения
-3. **Настройте pollTimeout**: выбирайте значение в зависимости от вашего use case
-4. **Логируйте ошибки**: используйте логирование внутри messageHandler
-5. **Не блокируйте обработку**: если обработка занимает много времени, используйте async processing
+3. **Логируйте ошибки**: используйте систему логирования приложения
+
+### AppKafkaConsumer
+
+1. **Настройте pollTimeout**: выбирайте значение в зависимости от вашего use case
+2. **Не блокируйте обработку**: если обработка занимает много времени, используйте async processing
+3. **Обрабатывайте исключения в handler**: чтобы consumer продолжил работу
+
+### AppKafkaProducer
+
+1. **Используйте flush()**: перед завершением работы для отправки всех буферизованных сообщений
+2. **Выбирайте правильный метод отправки**:
+   - `send()` - для высокой производительности (асинхронная отправка)
+   - `sendSync()` - когда важно знать результат отправки немедленно
+3. **Используйте ключи**: для партиционирования сообщений по определенной логике
+4. **Обрабатывайте Future**: при асинхронной отправке для проверки успешности
 
 ## Структура модуля
 
@@ -239,7 +441,8 @@ arbitrage-scanner-kafka/
 │   ├── main/
 │   │   ├── kotlin/
 │   │   │   └── com/arbitrage/scanner/kafka/
-│   │   │       ├── AppKafkaConsumer.kt       # Основной класс consumer
+│   │   │       ├── AppKafkaConsumer.kt       # Класс consumer для считывания
+│   │   │       ├── AppKafkaProducer.kt       # Класс producer для отправки
 │   │   │       ├── Utils.kt                  # Утилиты для создания consumer/producer
 │   │   │       ├── config/
 │   │   │       │   ├── KafkaConfig.kt        # Модель конфигурации
@@ -251,7 +454,8 @@ arbitrage-scanner-kafka/
 │   └── test/
 │       └── kotlin/
 │           └── com/arbitrage/scanner/kafka/
-│               └── AppKafkaConsumerTest.kt   # Тесты
+│               ├── AppKafkaConsumerTest.kt   # Тесты для Consumer
+│               └── AppKafkaProducerTest.kt   # Тесты для Producer
 ├── build.gradle.kts
 └── README.md
 ```
