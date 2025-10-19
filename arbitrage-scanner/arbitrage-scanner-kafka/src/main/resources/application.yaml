@@ -1,0 +1,6 @@
+kafka:
+  host: ${KAFKA_HOST:-localhost}
+  port: ${KAFKA_PORT:-9092}
+  inTopic: ${KAFKA_IN_TOPIC:-arbitrage-opportunities-in}
+  outTopic: ${KAFKA_OUT_TOPIC:-arbitrage-opportunities-out}
+  groupId: ${KAFKA_GROUP_ID:-arbitrage-scanner-group}

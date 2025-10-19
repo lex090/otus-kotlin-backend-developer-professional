@@ -12,6 +12,7 @@ logback-more-appenders = "1.8.8"
 fluent-logger = "0.3.4"
 logstash = "7.4"
 kafka = "3.9.0"
+hoplite = "2.9.0"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -44,6 +45,10 @@ fluent-logger = { module = "org.fluentd:fluent-logger", version.ref = "fluent-lo
 
 # Kafka
 kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
+
+# Hoplite - Configuration library
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
+hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
 
 [bundles]
 
