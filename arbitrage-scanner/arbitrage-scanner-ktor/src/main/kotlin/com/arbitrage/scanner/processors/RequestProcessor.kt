@@ -20,7 +20,7 @@ suspend inline fun <reified Req : IRequest, reified Resp : IResponse> Applicatio
     processContext(
         prepareContextFromRequest = { fromTransport(request = receive<Req>()) },
         resolveContextToResponse = { respond(toTransport() as Resp) },
-        businessLogicProcessor = businessLogicProcessor,
+        executeLogic = { businessLogicProcessor.exec(this) },
         loggerProvider = loggerProvider,
         kFun = kFun,
         logId = logId,
