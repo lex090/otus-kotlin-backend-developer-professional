@@ -9,6 +9,7 @@ import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.models.ArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.RecalculateResult
 import com.arbitrage.scanner.stubs.Stubs
 
 data class Context(
@@ -27,4 +28,6 @@ data class Context(
     var arbitrageOpportunityReadResponse: ArbitrageOpportunity =
         ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
     val arbitrageOpportunitySearchResponse: MutableSet<ArbitrageOpportunity> = mutableSetOf(),
+
+    var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
 )

@@ -1,6 +1,7 @@
 package com.arbitrage.scanner.mappers
 
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadResponse
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusType
 import com.arbitrage.scanner.api.v1.models.Error
@@ -34,6 +35,7 @@ fun Context.toTransport(): IResponse {
     return when (command) {
         Command.READ -> toTransportRead()
         Command.SEARCH -> toTransportSearch()
+        Command.RECALCULATE -> toTransportRecalculate()
         Command.NONE -> error("UnknownCommand command: $command, context: $this")
     }
 }
@@ -72,6 +74,15 @@ private fun Context.toTransportSearch(): ArbitrageOpportunitySearchResponse {
             .map(ArbitrageOpportunity::toTransport)
             .takeIf(List<ArbitrageOpportunityApi>::isNotEmpty)
             .orEmpty()
+    )
+}
+
+private fun Context.toTransportRecalculate(): ArbitrageOpportunityRecalculateResponse {
+    return ArbitrageOpportunityRecalculateResponse(
+        result = state.toResponseResult(),
+        errors = internalErrors.transform(InternalError::toTransportError),
+        opportunitiesCount = recalculateResponse.opportunitiesCount,
+        processingTimeMs = recalculateResponse.processingTimeMs,
     )
 }
 
