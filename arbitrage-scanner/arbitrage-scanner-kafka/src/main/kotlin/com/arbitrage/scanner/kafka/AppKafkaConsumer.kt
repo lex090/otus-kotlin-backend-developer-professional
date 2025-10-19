@@ -39,8 +39,8 @@ class AppKafkaConsumer(
      *
      * @param messageHandler функция-обработчик для каждого полученного сообщения
      */
-    fun subscribe(
-        messageHandler: (ConsumerRecord<String, String>) -> Unit
+    suspend fun subscribe(
+        messageHandler: suspend (ConsumerRecord<String, String>) -> Unit
     ) {
         try {
             consumer.subscribe(topics)
@@ -92,11 +92,6 @@ class AppKafkaConsumer(
             logger.info("Остановка Kafka Consumer")
         }
     }
-
-    /**
-     * Проверка, работает ли consumer.
-     */
-    fun isRunning(): Boolean = isRunning.get()
 
     /**
      * Закрытие соединения с Kafka.
