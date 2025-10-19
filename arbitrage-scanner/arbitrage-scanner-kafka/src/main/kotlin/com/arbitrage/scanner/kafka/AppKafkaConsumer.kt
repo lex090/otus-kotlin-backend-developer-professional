@@ -80,7 +80,7 @@ class AppKafkaConsumer(
             throw e
         } finally {
             logger.info("Остановка Kafka Consumer")
-            stop()
+            close()
         }
     }
 

@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":arbitrage-scanner-common"))
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.core)
 
     // Hoplite - Configuration library
     implementation(libs.hoplite.core)
