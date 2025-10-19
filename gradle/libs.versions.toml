@@ -11,6 +11,7 @@ logback = "1.5.16"
 logback-more-appenders = "1.8.8"
 fluent-logger = "0.3.4"
 logstash = "7.4"
+kafka = "3.9.0"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -40,6 +41,9 @@ logback-logstash = { module = "net.logstash.logback:logstash-logback-encoder", v
 
 # Fluent
 fluent-logger = { module = "org.fluentd:fluent-logger", version.ref = "fluent-logger" }
+
+# Kafka
+kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
 
 [bundles]
 
