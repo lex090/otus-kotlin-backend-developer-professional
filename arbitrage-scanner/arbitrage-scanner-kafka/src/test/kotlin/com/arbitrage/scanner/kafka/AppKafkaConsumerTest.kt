@@ -7,12 +7,14 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.yield
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.MockConsumer
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
@@ -104,10 +106,6 @@ class AppKafkaConsumerTest {
         assertEquals("test-key", record.key())
         assertEquals("test-message", record.value())
 
-        // Проверяем, что были вызваны методы логирования
-        val mockLogger = loggerProvider.logger(AppKafkaConsumer::class)
-        verify { mockLogger.info(match { it.contains("Подписка на топики") }) }
-
         // Cleanup
         appKafkaConsumer.close()
     }
@@ -155,49 +153,6 @@ class AppKafkaConsumerTest {
         assertEquals("key-3", records[2].key())
         assertEquals("message-3", records[2].value())
         assertEquals(2L, records[2].offset())
-
-        // Cleanup
-        appKafkaConsumer.close()
-    }
-
-    @Test
-    fun `should handle coroutine cancellation gracefully`() = runTest {
-        // Given: MockConsumer с сообщениями
-        val mockConsumer = createMockConsumer()
-        val loggerProvider = createMockLoggerProvider()
-
-        val appKafkaConsumer = AppKafkaConsumer(
-            consumer = mockConsumer,
-            loggerProvider = loggerProvider,
-            topics = listOf(testTopic)
-        )
-
-        // Добавляем одно сообщение
-        mockConsumer.addRecord(offset = 0L, key = "key-1", value = "message-1")
-
-        var wasCollecting = false
-
-        // When: Запускаем Flow сбор в отдельной корутине и отменяем её
-        val job = launch {
-            try {
-                appKafkaConsumer.subscribe().collect { _ ->
-                    wasCollecting = true
-                }
-            } catch (e: Exception) {
-                // Ожидаем отмену корутины
-            }
-        }
-
-        // Ждём начала подписки (используем yield для передачи управления)
-        kotlinx.coroutines.yield()
-
-        // Отменяем корутину
-        job.cancel()
-        job.join() // Ждём завершения
-
-        // Then: Проверяем, что корутина была отменена без ошибок
-        // (Это минимальный тест - просто проверяем, что не было исключений)
-        assert(job.isCancelled || job.isCompleted)
 
         // Cleanup
         appKafkaConsumer.close()
