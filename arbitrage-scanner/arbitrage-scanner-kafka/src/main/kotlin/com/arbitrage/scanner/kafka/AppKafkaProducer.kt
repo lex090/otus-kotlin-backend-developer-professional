@@ -2,9 +2,7 @@ package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.clients.producer.RecordMetadata
 import kotlin.coroutines.resume
@@ -15,12 +13,12 @@ import kotlin.coroutines.suspendCoroutine
  * Класс для работы с Kafka Producer.
  * Инкапсулирует подключение к Kafka и отправку сообщений.
  *
- * @property producer экземпляр KafkaProducer для подключения к Kafka
+ * @property producer экземпляр Producer для подключения к Kafka
  * @property loggerProvider провайдер логгера для системы логирования
  * @property defaultTopic топик по умолчанию для отправки сообщений
  */
 class AppKafkaProducer(
-    private val producer: KafkaProducer<String, String>,
+    private val producer: Producer<String, String>,
     loggerProvider: ArbScanLoggerProvider,
     private val defaultTopic: String
 ) : AutoCloseable {
@@ -39,32 +37,30 @@ class AppKafkaProducer(
      * @param message сообщение для отправки
      * @return RecordMetadata с информацией о отправленном сообщении
      */
-    suspend fun send(message: String): RecordMetadata = withContext(Dispatchers.IO) {
-        suspendCoroutine { continuation ->
-            try {
-                logger.debug("Отправка сообщения в топик '$defaultTopic'")
+    suspend fun send(message: String): RecordMetadata = suspendCoroutine { continuation ->
+        try {
+            logger.debug("Отправка сообщения в топик '$defaultTopic'")
 
-                val record = ProducerRecord<String, String>(defaultTopic, null, message)
-                producer.send(record) { metadata, exception ->
-                    if (exception != null) {
-                        logger.error(
-                            msg = "Ошибка при отправке сообщения в топик '$defaultTopic'",
-                            e = exception
-                        )
-                        continuation.resumeWithException(exception)
-                    } else {
-                        logger.debug(
-                            "Сообщение отправлено успешно: топик=${metadata.topic()}, " +
-                            "партиция=${metadata.partition()}, " +
-                            "offset=${metadata.offset()}"
-                        )
-                        continuation.resume(metadata)
-                    }
+            val record = ProducerRecord<String, String>(defaultTopic, null, message)
+            producer.send(record) { metadata, exception ->
+                if (exception != null) {
+                    logger.error(
+                        msg = "Ошибка при отправке сообщения в топик '$defaultTopic'",
+                        e = exception
+                    )
+                    continuation.resumeWithException(exception)
+                } else {
+                    logger.debug(
+                        "Сообщение отправлено успешно: топик=${metadata.topic()}, " +
+                        "партиция=${metadata.partition()}, " +
+                        "offset=${metadata.offset()}"
+                    )
+                    continuation.resume(metadata)
                 }
-            } catch (e: Exception) {
-                logger.error(msg = "Ошибка при отправке сообщения в Kafka", e = e)
-                continuation.resumeWithException(e)
             }
+        } catch (e: Exception) {
+            logger.error(msg = "Ошибка при отправке сообщения в Kafka", e = e)
+            continuation.resumeWithException(e)
         }
     }
 

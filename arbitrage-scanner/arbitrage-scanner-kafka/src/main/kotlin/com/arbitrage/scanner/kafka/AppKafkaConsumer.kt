@@ -2,8 +2,8 @@ package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -11,13 +11,13 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Класс для работы с Kafka Consumer.
  * Инкапсулирует подключение к Kafka и управление считыванием сообщений.
  *
- * @property consumer экземпляр KafkaConsumer для подключения к Kafka
+ * @property consumer экземпляр Consumer для подключения к Kafka
  * @property loggerProvider провайдер логгера для системы логирования
  * @property topics список топиков для подписки
  * @property pollTimeout таймаут опроса Kafka (по умолчанию 1 секунда)
  */
 class AppKafkaConsumer(
-    private val consumer: KafkaConsumer<String, String>,
+    private val consumer: Consumer<String, String>,
     loggerProvider: ArbScanLoggerProvider,
     private val topics: List<String>,
     private val pollTimeout: Duration = Duration.ofSeconds(1)
