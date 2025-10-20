@@ -34,6 +34,18 @@ services:
     ports:
       - "8080:8080"
 
+  arbitrage-scanner-kafka:
+    image: arbitrage-scanner-kafka:latest
+    container_name: arbitrage-scanner-kafka-app
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+      - KAFKA_IN_TOPIC=arbitrage-opportunities-in
+      - KAFKA_OUT_TOPIC=arbitrage-opportunities-out
+      - KAFKA_GROUP_ID=arbitrage-scanner-group
+
   # Kafka UI - веб-интерфейс для управления Kafka
   kafka-ui:
     image: provectuslabs/kafka-ui:latest

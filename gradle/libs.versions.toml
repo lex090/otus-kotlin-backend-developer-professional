@@ -14,6 +14,7 @@ fluent-logger = "0.3.4"
 logstash = "7.4"
 kafka = "3.9.0"
 hoplite = "2.9.0"
+jib = "3.4.4"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -62,3 +63,4 @@ build-plugin-multiplatform = { id = "build-plugin-multiplatform" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 crowdproj-generator = { id = "com.crowdproj.generator", version = "0.3.0" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
