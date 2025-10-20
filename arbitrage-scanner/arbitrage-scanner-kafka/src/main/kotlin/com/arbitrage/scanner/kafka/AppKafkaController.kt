@@ -1,7 +1,6 @@
 package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.BusinessLogicProcessor
-import com.arbitrage.scanner.kafka.config.KafkaConfig
 import com.arbitrage.scanner.kafka.processors.processMessage
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
@@ -12,21 +11,21 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
  * Контроллер для обработки сообщений из Kafka.
  * Связывает AppKafkaConsumer и AppKafkaProducer, обрабатывая сообщения через бизнес-логику.
  *
- * @property config конфигурация Kafka
+ * @property consumer экземпляр AppKafkaConsumer для считывания сообщений
+ * @property producer экземпляр AppKafkaProducer для отправки сообщений
  * @property businessLogicProcessor процессор бизнес-логики
  * @property loggerProvider провайдер логгера для системы логирования
  * @property json экземпляр Json для сериализации/десериализации
  */
 class AppKafkaController(
-    private val config: KafkaConfig,
+    private val consumer: AppKafkaConsumer,
+    private val producer: AppKafkaProducer,
     private val businessLogicProcessor: BusinessLogicProcessor,
     private val loggerProvider: ArbScanLoggerProvider,
-    private val json: Json = Json { ignoreUnknownKeys = true }
+    private val json: Json
 ) : AutoCloseable {
 
     private val logger: ArbScanLogWrapper = loggerProvider.logger(AppKafkaController::class)
-    private val consumer: AppKafkaConsumer = AppKafkaConsumer(config, loggerProvider)
-    private val producer: AppKafkaProducer = AppKafkaProducer(config, loggerProvider)
 
     init {
         logger.info("Инициализация AppKafkaController")

@@ -1,6 +1,5 @@
 package com.arbitrage.scanner.kafka
 
-import com.arbitrage.scanner.kafka.config.KafkaConfig
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -12,25 +11,24 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Класс для работы с Kafka Consumer.
  * Инкапсулирует подключение к Kafka и управление считыванием сообщений.
  *
- * @property config конфигурация Kafka
+ * @property consumer экземпляр KafkaConsumer для подключения к Kafka
  * @property loggerProvider провайдер логгера для системы логирования
- * @property topics список топиков для подписки (по умолчанию из config.inTopic)
+ * @property topics список топиков для подписки
  * @property pollTimeout таймаут опроса Kafka (по умолчанию 1 секунда)
  */
 class AppKafkaConsumer(
-    private val config: KafkaConfig,
+    private val consumer: KafkaConsumer<String, String>,
     loggerProvider: ArbScanLoggerProvider,
-    private val topics: List<String> = listOf(config.inTopic),
+    private val topics: List<String>,
     private val pollTimeout: Duration = Duration.ofSeconds(1)
 ) : AutoCloseable {
 
     private val logger: ArbScanLogWrapper = loggerProvider.logger(AppKafkaConsumer::class)
-    private val consumer: KafkaConsumer<String, String> = config.createConsumer()
     private val isRunning = AtomicBoolean(false)
 
     init {
         logger.info(
-            "Инициализация Kafka Consumer с конфигурацией: ${config.bootstrapServers}, группа: ${config.groupId}"
+            "Инициализация Kafka Consumer для топиков: $topics"
         )
     }
 

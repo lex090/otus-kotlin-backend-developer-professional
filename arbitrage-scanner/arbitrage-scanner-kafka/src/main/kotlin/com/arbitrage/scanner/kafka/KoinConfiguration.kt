@@ -4,11 +4,15 @@ import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.BusinessLogicProcessorSimpleImpl
 import com.arbitrage.scanner.kafka.config.KafkaConfig
 import com.arbitrage.scanner.kafka.config.ServiceConfig
+import com.arbitrage.scanner.kafka.factories.KafkaConsumerFactory
+import com.arbitrage.scanner.kafka.factories.KafkaProducerFactory
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.libs.logging.arbScanLoggerLogback
 import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.addResourceSource
 import kotlinx.serialization.json.Json
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.producer.KafkaProducer
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -57,26 +61,52 @@ val kafkaConfigModule: Module = module {
 }
 
 /**
+ * Модуль для фабрик Kafka клиентов.
+ */
+val kafkaFactoriesModule: Module = module {
+    single<KafkaConsumerFactory> {
+        KafkaConsumerFactory(config = get())
+    }
+
+    single<KafkaProducerFactory> {
+        KafkaProducerFactory(config = get())
+    }
+
+    single<KafkaConsumer<String, String>> {
+        get<KafkaConsumerFactory>().createConsumer()
+    }
+
+    single<KafkaProducer<String, String>> {
+        get<KafkaProducerFactory>().createProducer()
+    }
+}
+
+/**
  * Модуль для Kafka компонентов.
  */
 val kafkaModule: Module = module {
     single<AppKafkaConsumer> {
+        val config: KafkaConfig = get()
         AppKafkaConsumer(
-            config = get(),
-            loggerProvider = get()
+            consumer = get(),
+            loggerProvider = get(),
+            topics = listOf(config.inTopic)
         )
     }
 
     single<AppKafkaProducer> {
+        val config: KafkaConfig = get()
         AppKafkaProducer(
-            config = get(),
-            loggerProvider = get()
+            producer = get(),
+            loggerProvider = get(),
+            defaultTopic = config.outTopic
         )
     }
 
     single<AppKafkaController> {
         AppKafkaController(
-            config = get(),
+            consumer = get(),
+            producer = get(),
             businessLogicProcessor = get(),
             loggerProvider = get(),
             json = get()
@@ -92,5 +122,6 @@ val allModules = listOf(
     businessLogicProcessorModule,
     loggingModule,
     kafkaConfigModule,
+    kafkaFactoriesModule,
     kafkaModule
 )

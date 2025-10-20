@@ -2,7 +2,6 @@ package com.arbitrage.scanner.kafka.processors
 
 import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.api.v1.models.IRequest
-import com.arbitrage.scanner.api.v1.models.IResponse
 import com.arbitrage.scanner.fromRequestJsonString
 import com.arbitrage.scanner.kafka.AppKafkaProducer
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
@@ -24,7 +23,7 @@ import kotlin.reflect.KFunction
  * @param loggerProvider провайдер логгера
  * @param kFun функция для логирования
  * @param logId идентификатор лога
- * @param json экземпляр Json для сериализации/десериализации (по умолчанию игнорирует неизвестные ключи)
+ * @param json экземпляр Json для сериализации/десериализации
  */
 suspend inline fun processMessage(
     record: ConsumerRecord<String, String>,
@@ -33,7 +32,7 @@ suspend inline fun processMessage(
     loggerProvider: ArbScanLoggerProvider,
     kFun: KFunction<*>,
     logId: String,
-    json: Json = Json { ignoreUnknownKeys = true }
+    json: Json
 ) {
     processContext(
         prepareContextFromRequest = {

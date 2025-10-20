@@ -1,6 +1,5 @@
 package com.arbitrage.scanner.kafka
 
-import com.arbitrage.scanner.kafka.config.KafkaConfig
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import kotlinx.coroutines.Dispatchers
@@ -16,22 +15,21 @@ import kotlin.coroutines.suspendCoroutine
  * Класс для работы с Kafka Producer.
  * Инкапсулирует подключение к Kafka и отправку сообщений.
  *
- * @property config конфигурация Kafka
+ * @property producer экземпляр KafkaProducer для подключения к Kafka
  * @property loggerProvider провайдер логгера для системы логирования
- * @property defaultTopic топик по умолчанию для отправки сообщений (из config.outTopic)
+ * @property defaultTopic топик по умолчанию для отправки сообщений
  */
 class AppKafkaProducer(
-    private val config: KafkaConfig,
+    private val producer: KafkaProducer<String, String>,
     loggerProvider: ArbScanLoggerProvider,
-    private val defaultTopic: String = config.outTopic
+    private val defaultTopic: String
 ) : AutoCloseable {
 
     private val logger: ArbScanLogWrapper = loggerProvider.logger(AppKafkaProducer::class)
-    private val producer: KafkaProducer<String, String> = config.createProducer()
 
     init {
         logger.info(
-            "Инициализация Kafka Producer с конфигурацией: ${config.bootstrapServers}, топик по умолчанию: $defaultTopic"
+            "Инициализация Kafka Producer, топик по умолчанию: $defaultTopic"
         )
     }
 
