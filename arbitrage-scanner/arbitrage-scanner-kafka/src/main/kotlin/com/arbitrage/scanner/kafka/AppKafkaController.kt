@@ -4,6 +4,8 @@ import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.kafka.processors.processMessage
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.json.Json
 import org.apache.kafka.clients.consumer.ConsumerRecord
 
@@ -33,14 +35,16 @@ class AppKafkaController(
 
     /**
      * Запуск контроллера для обработки сообщений из Kafka.
-     * Подписывается на топики и начинает обрабатывать сообщения.
+     * Подписывается на топики и начинает обрабатывать сообщения из Flow.
      */
     suspend fun start() {
         logger.info("Запуск AppKafkaController")
 
-        consumer.subscribe { record ->
-            handleMessage(record)
-        }
+        consumer.subscribe()
+            .onEach { record ->
+                handleMessage(record)
+            }
+            .collect()
     }
 
     /**
