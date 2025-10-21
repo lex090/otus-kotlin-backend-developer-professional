@@ -10,7 +10,8 @@ import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.MockConsumer
@@ -22,10 +23,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * Unit тесты для AppKafkaController с использованием MockConsumer и MockProducer
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class AppKafkaControllerTest {
 
     private val testInTopic = "test-in-topic"
@@ -87,8 +90,9 @@ class AppKafkaControllerTest {
     private fun createJson(): Json = Json { ignoreUnknownKeys = true }
 
     @Test
-    fun `should successfully process read request`() = runBlocking {
+    fun `should successfully process read request`() = runTest {
         // Given: настраиваем mock компоненты
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val mockProducer = createMockProducer(autoComplete = true)
         val businessLogicProcessor = createBusinessLogicProcessor()
@@ -109,7 +113,8 @@ class AppKafkaControllerTest {
         val appConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testInTopic)
+            topics = listOf(testInTopic),
+            dispatcher = testDispatcher
         )
 
         val appProducer = AppKafkaProducer(
@@ -160,8 +165,9 @@ class AppKafkaControllerTest {
     }
 
     @Test
-    fun `should successfully process multiple messages`() = runBlocking {
+    fun `should successfully process multiple messages`() = runTest {
         // Given: настраиваем mock компоненты
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val mockProducer = createMockProducer(autoComplete = true)
         val businessLogicProcessor = createBusinessLogicProcessor()
@@ -184,7 +190,8 @@ class AppKafkaControllerTest {
         val appConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testInTopic)
+            topics = listOf(testInTopic),
+            dispatcher = testDispatcher
         )
 
         val appProducer = AppKafkaProducer(
@@ -229,8 +236,9 @@ class AppKafkaControllerTest {
     }
 
     @Test
-    fun `should handle error during message processing`() = runBlocking {
+    fun `should handle error during message processing`() = runTest {
         // Given: настраиваем mock компоненты
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val mockProducer = createMockProducer(autoComplete = true)
 
@@ -256,7 +264,8 @@ class AppKafkaControllerTest {
         val appConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testInTopic)
+            topics = listOf(testInTopic),
+            dispatcher = testDispatcher
         )
 
         val appProducer = AppKafkaProducer(
@@ -297,8 +306,9 @@ class AppKafkaControllerTest {
     }
 
     @Test
-    fun `should close resources correctly`() {
+    fun `should close resources correctly`() = runTest {
         // Given: настраиваем mock компоненты
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val mockProducer = createMockProducer(autoComplete = true)
         val businessLogicProcessor = createBusinessLogicProcessor()
@@ -309,7 +319,8 @@ class AppKafkaControllerTest {
         val appConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testInTopic)
+            topics = listOf(testInTopic),
+            dispatcher = testDispatcher
         )
 
         val appProducer = AppKafkaProducer(
@@ -336,8 +347,9 @@ class AppKafkaControllerTest {
     }
 
     @Test
-    fun `should successfully process search request`() = runBlocking {
+    fun `should successfully process search request`() = runTest {
         // Given: настраиваем mock компоненты
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val mockProducer = createMockProducer(autoComplete = true)
         val businessLogicProcessor = createBusinessLogicProcessor()
@@ -358,7 +370,8 @@ class AppKafkaControllerTest {
         val appConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testInTopic)
+            topics = listOf(testInTopic),
+            dispatcher = testDispatcher
         )
 
         val appProducer = AppKafkaProducer(
@@ -409,8 +422,9 @@ class AppKafkaControllerTest {
     }
 
     @Test
-    fun `should successfully process recalculate request`() = runBlocking {
+    fun `should successfully process recalculate request`() = runTest {
         // Given: настраиваем mock компоненты
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val mockProducer = createMockProducer(autoComplete = true)
         val businessLogicProcessor = createBusinessLogicProcessor()
@@ -431,7 +445,8 @@ class AppKafkaControllerTest {
         val appConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testInTopic)
+            topics = listOf(testInTopic),
+            dispatcher = testDispatcher
         )
 
         val appProducer = AppKafkaProducer(

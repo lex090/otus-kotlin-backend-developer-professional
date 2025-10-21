@@ -1,8 +1,10 @@
 package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.MockConsumer
@@ -14,6 +16,7 @@ import kotlin.test.assertEquals
 /**
  * Unit тесты для AppKafkaConsumer с использованием MockConsumer
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class AppKafkaConsumerTest {
 
     private val testTopic = "test-topic"
@@ -63,13 +66,15 @@ class AppKafkaConsumerTest {
     @Test
     fun `should successfully subscribe and receive single message`() = runTest {
         // Given: MockConsumer с одним сообщением
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val loggerProvider = createMockLoggerProvider()
 
         val appKafkaConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testTopic)
+            topics = listOf(testTopic),
+            dispatcher = testDispatcher
         )
 
         // Добавляем тестовое сообщение
@@ -97,13 +102,15 @@ class AppKafkaConsumerTest {
     @Test
     fun `should receive multiple messages in single poll`() = runTest {
         // Given: MockConsumer с несколькими сообщениями
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val mockConsumer = createMockConsumer()
         val loggerProvider = createMockLoggerProvider()
 
         val appKafkaConsumer = AppKafkaConsumer(
             consumer = mockConsumer,
             loggerProvider = loggerProvider,
-            topics = listOf(testTopic)
+            topics = listOf(testTopic),
+            dispatcher = testDispatcher
         )
 
         // Добавляем несколько тестовых сообщений

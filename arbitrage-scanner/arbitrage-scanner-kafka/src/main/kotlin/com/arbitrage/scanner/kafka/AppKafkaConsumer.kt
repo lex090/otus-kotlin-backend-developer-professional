@@ -2,6 +2,7 @@ package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -22,12 +23,14 @@ import java.time.Duration
  * @property loggerProvider провайдер логгера для системы логирования
  * @property topics список топиков для подписки
  * @property pollTimeout таймаут опроса Kafka (по умолчанию 1 секунда)
+ * @property dispatcher диспетчер для выполнения blocking операций (по умолчанию Dispatchers.IO)
  */
 class AppKafkaConsumer(
     private val consumer: Consumer<String, String>,
     loggerProvider: ArbScanLoggerProvider,
     private val topics: List<String>,
-    private val pollTimeout: Duration = Duration.ofSeconds(1)
+    private val pollTimeout: Duration = Duration.ofSeconds(1),
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AutoCloseable {
 
     private val logger: ArbScanLogWrapper = loggerProvider.logger(AppKafkaConsumer::class)
@@ -93,7 +96,7 @@ class AppKafkaConsumer(
         } finally {
             logger.info("Остановка Kafka Consumer")
         }
-    }.flowOn(Dispatchers.IO) // Blocking calls выполняются в IO dispatcher
+    }.flowOn(dispatcher) // Blocking calls выполняются в заданном dispatcher
 
     /**
      * Закрытие соединения с Kafka.
