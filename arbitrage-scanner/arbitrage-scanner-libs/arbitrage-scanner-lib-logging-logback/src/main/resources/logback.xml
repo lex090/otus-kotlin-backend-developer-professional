@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
 
-    <property name="LOGS_FB_HOSTS" value="${LOGS_FB_HOSTS:-127.0.0.1}"/>
+    <property name="LOGS_FB_HOSTS" value="${LOGS_FB_HOSTS:-localhost}"/>
     <property name="LOGS_FB_PORT" value="${LOGS_FB_PORT:-24224}"/>
     <property name="SERVICE_NAME" value="${SERVICE_NAME:-arbitrage-scanner}"/>
 
