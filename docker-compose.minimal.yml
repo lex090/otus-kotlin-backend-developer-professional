@@ -45,6 +45,8 @@ services:
       - KAFKA_IN_TOPIC=arbitrage-opportunities-in
       - KAFKA_OUT_TOPIC=arbitrage-opportunities-out
       - KAFKA_GROUP_ID=arbitrage-scanner-group
+      - LOGS_FB_HOSTS=fluent-bit
+      - LOGS_FB_PORT=24224
 
   # Kafka UI - веб-интерфейс для управления Kafka
   kafka-ui:

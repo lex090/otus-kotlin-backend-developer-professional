@@ -11,8 +11,8 @@ import com.arbitrage.scanner.libs.logging.arbScanLoggerLogback
 import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.addResourceSource
 import kotlinx.serialization.json.Json
-import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.producer.Producer
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -72,11 +72,11 @@ val kafkaFactoriesModule: Module = module {
         KafkaProducerFactory(config = get())
     }
 
-    single<KafkaConsumer<String, String>> {
+    single<Consumer<String, String>> {
         get<KafkaConsumerFactory>().createConsumer()
     }
 
-    single<KafkaProducer<String, String>> {
+    single<Producer<String, String>> {
         get<KafkaProducerFactory>().createProducer()
     }
 }

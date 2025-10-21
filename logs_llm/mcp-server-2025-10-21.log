@@ -42,3 +42,25 @@
   "toolsCount": 13,
   "readyTime": 1761074971156
 }
+[2025-10-21T20:03:35.525Z] [INFO] [SYSTEM] MCP Server Starting DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "nodeVersion": "v24.2.0",
+  "platform": "darwin",
+  "pid": 7573,
+  "configEnvironment": "development",
+  "embeddingEnabled": false
+}
+[2025-10-21T20:03:35.525Z] [INFO] [SYSTEM] Resource Manager Started DATA: {
+  "maxMemoryMB": 1024,
+  "maxCpuPercent": 80,
+  "embeddingFallback": true
+}
+[2025-10-21T20:03:35.525Z] [INFO] [SYSTEM] MCP Server Transport Connecting DATA: {
+  "transport": "stdio"
+}
+[2025-10-21T20:03:35.526Z] [INFO] [SYSTEM] MCP Server Ready DATA: {
+  "directory": "/absolute/path/to/your/codebase",
+  "transport": "stdio",
+  "toolsCount": 13,
+  "readyTime": 1761077015526
+}
