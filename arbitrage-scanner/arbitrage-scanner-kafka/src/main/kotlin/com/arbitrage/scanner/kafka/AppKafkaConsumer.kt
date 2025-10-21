@@ -2,6 +2,7 @@ package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -76,6 +77,8 @@ class AppKafkaConsumer(
                             currentCoroutineContext().ensureActive()
 
                             emit(record)
+                        } catch (e: CancellationException) {
+                            throw e
                         } catch (e: Exception) {
                             logger.error(
                                 msg = "Ошибка при обработке сообщения из топика ${record.topic()}",
@@ -90,6 +93,8 @@ class AppKafkaConsumer(
                 }
                 delay(10) // Небольшая задержка перед следующим опросом
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             logger.error(msg = "Ошибка при работе с Kafka Consumer", e = e)
             throw e

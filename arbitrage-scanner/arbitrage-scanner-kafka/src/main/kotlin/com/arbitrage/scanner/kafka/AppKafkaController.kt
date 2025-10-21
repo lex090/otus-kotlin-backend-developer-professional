@@ -4,6 +4,7 @@ import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.kafka.processors.processMessage
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.json.Json
@@ -65,6 +66,8 @@ class AppKafkaController(
                 logId = "kafka-read",
                 json = json
             )
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             logger.error(msg = "Ошибка при обработке сообщения", e = e)
         }

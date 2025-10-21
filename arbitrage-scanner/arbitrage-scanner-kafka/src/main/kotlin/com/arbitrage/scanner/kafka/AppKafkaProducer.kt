@@ -2,6 +2,7 @@ package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import kotlinx.coroutines.CancellationException
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.clients.producer.RecordMetadata
@@ -52,12 +53,14 @@ class AppKafkaProducer(
                 } else {
                     logger.debug(
                         "Сообщение отправлено успешно: топик=${metadata.topic()}, " +
-                        "партиция=${metadata.partition()}, " +
-                        "offset=${metadata.offset()}"
+                                "партиция=${metadata.partition()}, " +
+                                "offset=${metadata.offset()}"
                     )
                     continuation.resume(metadata)
                 }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             logger.error(msg = "Ошибка при отправке сообщения в Kafka", e = e)
             continuation.resumeWithException(e)

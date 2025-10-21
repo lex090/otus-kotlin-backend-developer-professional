@@ -1,12 +1,20 @@
 package com.arbitrage.scanner.kafka
 
 import com.arbitrage.scanner.BusinessLogicProcessorSimpleImpl
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadResponse
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
 import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity
 import com.arbitrage.scanner.fromResponseJsonString
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
+import com.arbitrage.scanner.toRequestJsonString
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -99,8 +107,15 @@ class AppKafkaControllerTest {
         val loggerProvider = createLoggerProvider()
         val json = createJson()
 
-        // Создаем тестовое JSON сообщение для read запроса
-        val testMessage = """{"requestType":"read","debug":{"mode":"stub","stub":"success"},"id":"test-id"}"""
+        // Создаем тестовое сообщение для read запроса из API модели
+        val request = ArbitrageOpportunityReadRequest(
+            debug = ArbitrageOpportunityDebug(
+                mode = ArbitrageOpportunityRequestDebugMode.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            ),
+            id = "test-id"
+        )
+        val testMessage = json.toRequestJsonString(request)
 
         // Добавляем сообщение в consumer
         mockConsumer.addRecord(
@@ -177,8 +192,14 @@ class AppKafkaControllerTest {
         // Добавляем несколько тестовых сообщений
         val messagesCount = 3
         repeat(messagesCount) { index ->
-            val testMessage =
-                """{"requestType":"read","debug":{"mode":"stub","stub":"success"},"id":"test-id-$index"}"""
+            val request = ArbitrageOpportunityReadRequest(
+                debug = ArbitrageOpportunityDebug(
+                    mode = ArbitrageOpportunityRequestDebugMode.STUB,
+                    stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+                ),
+                id = "test-id-$index"
+            )
+            val testMessage = json.toRequestJsonString(request)
             mockConsumer.addRecord(
                 offset = index.toLong(),
                 key = "test-key-$index",
@@ -250,8 +271,15 @@ class AppKafkaControllerTest {
         val loggerProvider = createLoggerProvider()
         val json = createJson()
 
-        // Создаем тестовое JSON сообщение
-        val testMessage = """{"requestType":"read","debug":{"mode":"stub","stub":"success"},"id":"test-id"}"""
+        // Создаем тестовое сообщение для read запроса из API модели
+        val request = ArbitrageOpportunityReadRequest(
+            debug = ArbitrageOpportunityDebug(
+                mode = ArbitrageOpportunityRequestDebugMode.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            ),
+            id = "test-id"
+        )
+        val testMessage = json.toRequestJsonString(request)
 
         // Добавляем сообщение в consumer
         mockConsumer.addRecord(
@@ -356,8 +384,22 @@ class AppKafkaControllerTest {
         val loggerProvider = createLoggerProvider()
         val json = createJson()
 
-        // Создаем тестовое JSON сообщение для search запроса
-        val testMessage = """{"requestType":"search","debug":{"mode":"stub","stub":"success"},"filter":{"dexTokenIds":[],"dexExchangeIds":[],"dexChainIds":[],"cexTokenIds":[],"cexExchangeIds":[],"spread":null}}"""
+        // Создаем тестовое сообщение для search запроса из API модели
+        val request = ArbitrageOpportunitySearchRequest(
+            debug = ArbitrageOpportunityDebug(
+                mode = ArbitrageOpportunityRequestDebugMode.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            ),
+            filter = ArbitrageOpportunitySearchFilter(
+                dexTokenIds = emptySet(),
+                dexExchangeIds = emptySet(),
+                dexChainIds = emptySet(),
+                cexTokenIds = emptySet(),
+                cexExchangeIds = emptySet(),
+                spread = null
+            )
+        )
+        val testMessage = json.toRequestJsonString(request)
 
         // Добавляем сообщение в consumer
         mockConsumer.addRecord(
@@ -431,8 +473,14 @@ class AppKafkaControllerTest {
         val loggerProvider = createLoggerProvider()
         val json = createJson()
 
-        // Создаем тестовое JSON сообщение для recalculate запроса
-        val testMessage = """{"requestType":"recalculate","debug":{"mode":"stub","stub":"success"}}"""
+        // Создаем тестовое сообщение для recalculate запроса из API модели
+        val request = ArbitrageOpportunityRecalculateRequest(
+            debug = ArbitrageOpportunityDebug(
+                mode = ArbitrageOpportunityRequestDebugMode.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            )
+        )
+        val testMessage = json.toRequestJsonString(request)
 
         // Добавляем сообщение в consumer
         mockConsumer.addRecord(
