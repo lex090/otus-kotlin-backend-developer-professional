@@ -1,22 +1,12 @@
 package com.arbitrage.scanner.kafka
 
-import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.MockProducer
-import org.apache.kafka.clients.producer.Producer
-import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 /**
  * Unit тесты для AppKafkaProducer с использованием MockProducer
@@ -37,14 +27,9 @@ class AppKafkaProducerTest {
     }
 
     /**
-     * Создает mock логгер провайдер
+     * Создает логгер провайдер
      */
-    private fun createMockLoggerProvider(): ArbScanLoggerProvider {
-        val mockLogger = mockk<ArbScanLogWrapper>(relaxed = true)
-        return mockk<ArbScanLoggerProvider> {
-            every { logger(any<kotlin.reflect.KClass<*>>()) } returns mockLogger
-        }
-    }
+    private fun createMockLoggerProvider(): ArbScanLoggerProvider = ArbScanLoggerProvider()
 
     @Test
     fun `should successfully send message and return metadata`() = runTest {

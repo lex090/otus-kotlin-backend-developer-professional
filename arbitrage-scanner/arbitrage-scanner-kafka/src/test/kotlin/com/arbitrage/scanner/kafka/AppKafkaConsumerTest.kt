@@ -1,20 +1,9 @@
 package com.arbitrage.scanner.kafka
 
-import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.yield
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.MockConsumer
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
@@ -51,14 +40,9 @@ class AppKafkaConsumerTest {
     }
 
     /**
-     * Создает mock логгер провайдер
+     * Создает логгер провайдер
      */
-    private fun createMockLoggerProvider(): ArbScanLoggerProvider {
-        val mockLogger = mockk<ArbScanLogWrapper>(relaxed = true)
-        return mockk<ArbScanLoggerProvider> {
-            every { logger(any<kotlin.reflect.KClass<*>>()) } returns mockLogger
-        }
-    }
+    private fun createMockLoggerProvider(): ArbScanLoggerProvider = ArbScanLoggerProvider()
 
     /**
      * Добавляет тестовое сообщение в MockConsumer
