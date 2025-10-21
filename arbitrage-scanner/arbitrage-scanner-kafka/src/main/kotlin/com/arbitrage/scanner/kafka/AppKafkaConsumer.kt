@@ -4,6 +4,7 @@ import com.arbitrage.scanner.libs.logging.ArbScanLogWrapper
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -84,6 +85,7 @@ class AppKafkaConsumer(
                     consumer.commitSync()
                     logger.debug("Обработано и закоммичено ${records.count()} сообщений")
                 }
+                delay(10) // Небольшая задержка перед следующим опросом
             }
         } catch (e: Exception) {
             logger.error(msg = "Ошибка при работе с Kafka Consumer", e = e)
