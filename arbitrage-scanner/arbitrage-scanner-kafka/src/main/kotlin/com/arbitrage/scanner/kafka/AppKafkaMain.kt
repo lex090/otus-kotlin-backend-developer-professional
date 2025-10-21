@@ -1,49 +1,40 @@
 package com.arbitrage.scanner.kafka
 
-import kotlinx.coroutines.runBlocking
+import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.logger.Level
-import org.koin.core.logger.PrintLogger
 import kotlin.system.exitProcess
 
 /**
  * Главная точка входа в Kafka приложение.
  * Инициализирует Koin DI контейнер и запускает AppKafkaController.
  */
-fun main() {
+suspend fun main() {
     // Инициализация Koin DI
     val koinApp = startKoin {
-        // Логирование Koin
-        logger(PrintLogger(Level.INFO))
-
-        // Загрузка модулей
         modules(allModules)
     }
 
+    // Получение зависимостей из Koin
+    val loggerProvider = koinApp.koin.get<ArbScanLoggerProvider>()
+    val logger = loggerProvider.logger("AppKafkaMain")
     val controller = koinApp.koin.get<AppKafkaController>()
 
     // Обработка сигнала завершения для graceful shutdown
-    Runtime.getRuntime().addShutdownHook(Thread {
-        println("Получен сигнал завершения приложения...")
-        controller.close()
-        stopKoin()
-        println("Приложение остановлено")
-    })
+    Runtime.getRuntime().addShutdownHook(
+        Thread {
+            logger.info("Получен сигнал завершения приложения...")
+            controller.close()
+            stopKoin()
+            logger.info("Приложение остановлено")
+        }
+    )
 
     try {
-        println("Запуск Kafka приложения...")
-        println("Для остановки нажмите Ctrl+C")
-
-        // Блокирующий запуск контроллера
-        runBlocking {
-            controller.start()
-        }
+        logger.info("Запуск Kafka приложения...")
+        controller.start()
     } catch (e: Exception) {
-        println("Ошибка при запуске приложения: ${e.message}")
-        e.printStackTrace()
-        controller.close()
-        stopKoin()
+        logger.error(msg = "Ошибка при запуске приложения", e = e)
         exitProcess(1)
     }
 }
