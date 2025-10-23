@@ -15,8 +15,8 @@ import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
 import com.arbitrage.scanner.workers.workModProcessor
 import com.crowdproj.kotlin.cor.rootChain
 
-class BusinessLogicProcessorStubsImpl(
-    deps: BusinessLogicProcessorStubsDeps,
+class BusinessLogicProcessorImpl(
+    deps: BusinessLogicProcessorImplDeps,
 ) : BusinessLogicProcessor {
 
     override suspend fun exec(ctx: Context) = corChain.exec(context = ctx)
