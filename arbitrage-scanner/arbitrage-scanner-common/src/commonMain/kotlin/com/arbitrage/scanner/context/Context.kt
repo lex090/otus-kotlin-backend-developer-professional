@@ -22,6 +22,8 @@ data class Context(
     var requestId: RequestId = RequestId.DEFAULT,
     var startTimestamp: Timestamp = Timestamp.DEFAULT,
 
+    val errors: MutableSet<InternalError> = mutableSetOf(),
+
     var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
     var arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
 
