@@ -2,6 +2,6 @@ package com.arbitrage.scanner
 
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 
-interface BusinessLogicProcessorSimpleDeps {
+interface BusinessLogicProcessorStubsDeps {
     val loggerProvider: ArbScanLoggerProvider
 }

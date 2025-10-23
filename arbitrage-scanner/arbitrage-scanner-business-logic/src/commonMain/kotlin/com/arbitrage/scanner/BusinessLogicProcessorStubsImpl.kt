@@ -6,55 +6,31 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.stubs.Stubs
+import com.arbitrage.scanner.workers.commandProcessor
+import com.arbitrage.scanner.workers.initStatus
+import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
+import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
+import com.arbitrage.scanner.workers.workModProcessor
 import com.crowdproj.kotlin.cor.handlers.chain
 import com.crowdproj.kotlin.cor.handlers.worker
 import com.crowdproj.kotlin.cor.rootChain
 
 class BusinessLogicProcessorStubsImpl(
-    deps: BusinessLogicProcessorSimpleDeps,
+    deps: BusinessLogicProcessorStubsDeps,
 ) : BusinessLogicProcessor {
 
     override suspend fun exec(ctx: Context) = corChain.exec(context = ctx)
 
-    private val corChain = rootChain<Context, BusinessLogicProcessorSimpleDeps>(config = deps) {
-        worker {
-            title = "Начинаем обработку запроса."
-            on { true }
-            handle { state = State.RUNNING }
-        }
+    private val corChain = rootChain(config = deps) {
+        initStatus("Инициализация статуса обработки запроса")
 
-        chain {
-            title = "Обработка события recalculate"
-            on { command == Command.RECALCULATE && state == State.RUNNING }
-            chain {
-                title = "Обработка логики стабов"
-                on { workMode == WorkMode.STUB && state == State.RUNNING }
-
-                worker {
-                    title = "Обработка стаба SUCCESS"
-                    on { stubCase == Stubs.SUCCESS && state == State.RUNNING }
-                    handle {
-                        recalculateResponse = ArbOpStubs.recalculateResult
-                        state = State.FINISHING
-                    }
-                }
-            }
-
-            worker {
-                title = "Валидируем ситуацию, когда запрошен кейс, который не поддерживается в стабах"
-                on { state == State.RUNNING }
-                handle {
-                    fail(
-                        InternalError(
-                            code = "validation",
-                            group = "validation",
-                            field = "stub",
-                            message = "Wrong stub case is requested: ${stubCase.name}. Command: ${command.name}"
-                        )
-                    )
-                }
+        commandProcessor(title = "Обработка события recalculate", command = Command.RECALCULATE) {
+            workModProcessor(title = "Обработка в режиме стабов", workMode = WorkMode.STUB) {
+                recalculateSuccessStubWorker(title = "Обработка стаба SUCCESS")
+                noStubCaseWorker(title = "Валидируем ситуацию, когда запрошен кейс, который не поддерживается в стабах")
             }
         }
+
 
         chain {
             title = "Обработка события read"
