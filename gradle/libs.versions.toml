@@ -15,6 +15,7 @@ logstash = "7.4"
 kafka = "3.9.0"
 hoplite = "2.9.0"
 jib = "3.4.4"
+kotlin-cor = "0.6.0"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -53,6 +54,9 @@ kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafk
 # Hoplite - Configuration library
 hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
+
+# Kotlin CoR
+kotlin-cor = { module = "com.crowdproj:kotlin-cor", version.ref = "kotlin-cor" }
 
 [bundles]
 
