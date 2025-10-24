@@ -24,12 +24,24 @@ data class Context(
 
     val errors: MutableSet<InternalError> = mutableSetOf(),
 
+    // START READ
     var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
-    var arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
+    var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
 
     var arbitrageOpportunityReadResponse: ArbitrageOpportunity =
         ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
-    val arbitrageOpportunitySearchResponse: MutableSet<ArbitrageOpportunity> = mutableSetOf(),
+    // END READ
 
+    // START SEARCH
+    var arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequestValidating: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequestValidated: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
+
+    val arbitrageOpportunitySearchResponse: MutableSet<ArbitrageOpportunity> = mutableSetOf(),
+    // END READ
+
+    // START RECALCULATE
     var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
+    // END RECALCULATE
 )
