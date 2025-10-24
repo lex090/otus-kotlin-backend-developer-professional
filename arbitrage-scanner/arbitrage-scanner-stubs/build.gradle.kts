@@ -6,8 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(libs.bignum)
-                implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging"))
+                implementation(project(":arbitrage-scanner-common"))
             }
         }
     }
