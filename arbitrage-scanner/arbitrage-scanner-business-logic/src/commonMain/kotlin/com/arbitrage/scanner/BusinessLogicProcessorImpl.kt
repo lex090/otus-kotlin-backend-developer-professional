@@ -14,7 +14,8 @@ import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
-import com.arbitrage.scanner.workers.validation.validateIdLengthWorker
+import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
+import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
 import com.arbitrage.scanner.workers.validationProcessor
 import com.arbitrage.scanner.workers.workModProcessor
@@ -57,8 +58,9 @@ class BusinessLogicProcessorImpl(
 
                 // Последовательность валидации
                 validateIdNotEmptyWorker("Проверка на пустой ID")
+                validateIdMinLengthWorker("Проверка минимальной длины ID")
+                validateIdMaxLengthWorker("Проверка максимальной длины ID")
                 validateIdFormatWorker("Проверка формата ID")
-                validateIdLengthWorker("Проверка длины ID")
 
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunityReadRequestValidated = arbitrageOpportunityReadRequestValidating
