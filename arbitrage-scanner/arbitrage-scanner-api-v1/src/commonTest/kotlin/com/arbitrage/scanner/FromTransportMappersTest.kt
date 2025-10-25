@@ -1,12 +1,13 @@
 package com.arbitrage.scanner
 
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebugApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugModeApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubsApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilterApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.base.Command
+import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.mappers.fromTransport
@@ -15,10 +16,6 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.DexChainId
-import com.arbitrage.scanner.models.DexExchangeId
-import com.arbitrage.scanner.models.DexTokenId
-import com.arbitrage.scanner.base.StubCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,8 +25,8 @@ class FromTransportMappersTest {
     fun test1() {
         val givenTransport = ArbitrageOpportunityReadRequest(
             id = "120",
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.TEST,
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.TEST,
                 stub = null
             ),
         )
@@ -52,9 +49,9 @@ class FromTransportMappersTest {
     fun test2() {
         val givenTransport = ArbitrageOpportunityReadRequest(
             id = "120",
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.NOT_FOUND
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.NOT_FOUND
             ),
         )
 
@@ -76,9 +73,9 @@ class FromTransportMappersTest {
     fun test3() {
         val givenTransport = ArbitrageOpportunityReadRequest(
             id = "120",
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
         )
 
@@ -100,9 +97,9 @@ class FromTransportMappersTest {
     fun test4() {
         val givenTransport = ArbitrageOpportunityReadRequest(
             id = "120",
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.NOT_FOUND
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.NOT_FOUND
             ),
         )
 
@@ -124,8 +121,8 @@ class FromTransportMappersTest {
     fun test5() {
         val givenTransport = ArbitrageOpportunityReadRequest(
             id = "120",
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.PROD,
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.PROD,
                 stub = null
             ),
         )
@@ -147,14 +144,11 @@ class FromTransportMappersTest {
     @Test
     fun test6() {
         val givenTransport = ArbitrageOpportunitySearchRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.PROD,
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.PROD,
                 stub = null
             ),
-            filter = ArbitrageOpportunitySearchFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
+            filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = emptySet(),
                 cexExchangeIds = emptySet(),
                 spread = null
@@ -232,14 +226,11 @@ class FromTransportMappersTest {
     @Test
     fun test7() {
         val givenTransport = ArbitrageOpportunitySearchRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.TEST,
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.TEST,
                 stub = null
             ),
-            filter = ArbitrageOpportunitySearchFilter(
-                dexTokenIds = setOf("1234"),
-                dexExchangeIds = setOf("12345"),
-                dexChainIds = setOf("123456"),
+            filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = setOf("1234567"),
                 cexExchangeIds = setOf("12345678"),
                 spread = 20.0,
@@ -253,9 +244,6 @@ class FromTransportMappersTest {
             workMode = WorkMode.TEST,
             stubCase = StubCase.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("1234")),
-                dexExchangeIds = setOf(DexExchangeId("12345")),
-                dexChainIds = setOf(DexChainId("123456")),
                 cexTokenIds = setOf(CexTokenId("1234567")),
                 cexExchangeIds = setOf(CexExchangeId("12345678")),
                 spread = ArbitrageOpportunitySpread(20.0)

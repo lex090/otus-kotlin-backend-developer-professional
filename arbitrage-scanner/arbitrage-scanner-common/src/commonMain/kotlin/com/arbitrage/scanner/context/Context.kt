@@ -4,13 +4,13 @@ import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.base.RequestId
 import com.arbitrage.scanner.base.State
+import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
-import com.arbitrage.scanner.models.ArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.RecalculateResult
-import com.arbitrage.scanner.base.StubCase
 
 data class Context(
     var command: Command = Command.NONE,
@@ -29,8 +29,7 @@ data class Context(
     var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
     var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
 
-    var arbitrageOpportunityReadResponse: ArbitrageOpportunity =
-        ArbitrageOpportunity.DexToCexSimpleArbitrageOpportunity.DEFAULT,
+    var arbitrageOpportunityReadResponse: CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity.DEFAULT,
     // END READ
 
     // START SEARCH
@@ -38,7 +37,7 @@ data class Context(
     var arbitrageOpportunitySearchRequestValidating: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
     var arbitrageOpportunitySearchRequestValidated: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
 
-    val arbitrageOpportunitySearchResponse: MutableSet<ArbitrageOpportunity> = mutableSetOf(),
+    val arbitrageOpportunitySearchResponse: MutableSet<CexToCexArbitrageOpportunity> = mutableSetOf(),
     // END READ
 
     // START RECALCULATE
