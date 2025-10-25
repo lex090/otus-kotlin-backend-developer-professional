@@ -20,7 +20,7 @@ import com.arbitrage.scanner.models.DexChainId
 import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexPrice
 import com.arbitrage.scanner.models.DexTokenId
-import com.arbitrage.scanner.stubs.Stubs
+import com.arbitrage.scanner.base.Stubs
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals

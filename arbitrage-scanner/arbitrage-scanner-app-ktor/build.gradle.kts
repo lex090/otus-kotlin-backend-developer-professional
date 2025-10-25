@@ -58,6 +58,7 @@ jib {
 
 dependencies {
 
+    implementation(project(":arbitrage-scanner-app-common"))
     implementation(project(":arbitrage-scanner-common"))
     implementation(project(":arbitrage-scanner-api-v1"))
     implementation(project(":arbitrage-scanner-business-logic"))

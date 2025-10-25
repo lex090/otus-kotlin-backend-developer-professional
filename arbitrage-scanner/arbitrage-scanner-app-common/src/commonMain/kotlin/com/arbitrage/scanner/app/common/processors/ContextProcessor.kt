@@ -1,5 +1,6 @@
-package com.arbitrage.scanner.processors
+package com.arbitrage.scanner.app.common.processors
 
+import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.asError
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.Timestamp
@@ -13,7 +14,7 @@ import kotlin.time.ExperimentalTime
 suspend inline fun processContext(
     crossinline prepareContextFromRequest: suspend Context.() -> Unit,
     crossinline resolveContextToResponse: suspend Context.() -> Unit,
-    crossinline executeLogic: suspend Context.() -> Unit,
+    businessLogicProcessor: BusinessLogicProcessor,
     loggerProvider: ArbScanLoggerProvider,
     kFun: KFunction<*>,
     logId: String,
@@ -27,7 +28,7 @@ suspend inline fun processContext(
             marker = "BIZ",
             data = context.toString(),
         )
-        executeLogic.invoke(context)
+        businessLogicProcessor.exec(context)
         logger.info(
             msg = "Request processed",
             marker = "BIZ",

@@ -19,7 +19,7 @@ import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.DexChainId
 import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexTokenId
-import com.arbitrage.scanner.stubs.Stubs
+import com.arbitrage.scanner.base.Stubs
 
 fun Context.fromTransport(request: IRequest) {
     return when (request) {

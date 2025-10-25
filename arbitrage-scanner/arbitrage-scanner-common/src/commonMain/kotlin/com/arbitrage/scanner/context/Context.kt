@@ -10,7 +10,7 @@ import com.arbitrage.scanner.models.ArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.RecalculateResult
-import com.arbitrage.scanner.stubs.Stubs
+import com.arbitrage.scanner.base.Stubs
 
 data class Context(
     var command: Command = Command.NONE,

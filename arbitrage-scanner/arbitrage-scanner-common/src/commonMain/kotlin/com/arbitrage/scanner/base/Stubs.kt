@@ -1,4 +1,4 @@
-package com.arbitrage.scanner.stubs
+package com.arbitrage.scanner.base
 
 enum class Stubs {
     NONE,

@@ -2,12 +2,12 @@ package com.arbitrage.scanner.app.kafka.processors
 
 import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.api.v1.models.IRequest
+import com.arbitrage.scanner.app.common.processors.processContext
 import com.arbitrage.scanner.app.kafka.AppKafkaProducer
 import com.arbitrage.scanner.fromRequestJsonString
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.mappers.fromTransport
 import com.arbitrage.scanner.mappers.toTransport
-import com.arbitrage.scanner.processors.processContext
 import com.arbitrage.scanner.toResponseJsonString
 import kotlinx.serialization.json.Json
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -44,7 +44,7 @@ suspend inline fun processMessage(
             val responseJson = json.toResponseJsonString(response)
             producer.send(responseJson)
         },
-        executeLogic = { businessLogicProcessor.exec(this) },
+        businessLogicProcessor = businessLogicProcessor,
         loggerProvider = loggerProvider,
         kFun = kFun,
         logId = logId,
