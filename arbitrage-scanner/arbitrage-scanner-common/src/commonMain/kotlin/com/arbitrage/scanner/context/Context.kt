@@ -10,14 +10,14 @@ import com.arbitrage.scanner.models.ArbitrageOpportunity
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.RecalculateResult
-import com.arbitrage.scanner.base.Stubs
+import com.arbitrage.scanner.base.StubCase
 
 data class Context(
     var command: Command = Command.NONE,
     var state: State = State.NONE,
     val internalErrors: MutableList<InternalError> = mutableListOf(),
     var workMode: WorkMode = WorkMode.PROD,
-    var stubCase: Stubs = Stubs.NONE,
+    var stubCase: StubCase = StubCase.NONE,
 
     var requestId: RequestId = RequestId.DEFAULT,
     var startTimestamp: Timestamp = Timestamp.DEFAULT,

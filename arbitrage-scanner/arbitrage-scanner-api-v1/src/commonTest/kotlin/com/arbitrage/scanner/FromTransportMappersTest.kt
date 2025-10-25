@@ -18,7 +18,7 @@ import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.DexChainId
 import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexTokenId
-import com.arbitrage.scanner.base.Stubs
+import com.arbitrage.scanner.base.StubCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -39,7 +39,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.TEST,
-            stubCase = Stubs.NONE,
+            stubCase = StubCase.NONE,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId("120"),
         )
 
@@ -63,7 +63,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
-            stubCase = Stubs.NOT_FOUND,
+            stubCase = StubCase.NOT_FOUND,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
@@ -87,7 +87,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
-            stubCase = Stubs.SUCCESS,
+            stubCase = StubCase.SUCCESS,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
@@ -111,7 +111,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.STUB,
-            stubCase = Stubs.NOT_FOUND,
+            stubCase = StubCase.NOT_FOUND,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
@@ -135,7 +135,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.READ,
             workMode = WorkMode.PROD,
-            stubCase = Stubs.NONE,
+            stubCase = StubCase.NONE,
             arbitrageOpportunityReadRequest = ArbitrageOpportunityId(value = "120"),
         )
 
@@ -166,7 +166,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
-            stubCase = Stubs.NONE,
+            stubCase = StubCase.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
         )
 
@@ -251,7 +251,7 @@ class FromTransportMappersTest {
         val expectedContext = Context(
             command = Command.SEARCH,
             workMode = WorkMode.TEST,
-            stubCase = Stubs.NONE,
+            stubCase = StubCase.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 dexTokenIds = setOf(DexTokenId("1234")),
                 dexExchangeIds = setOf(DexExchangeId("12345")),

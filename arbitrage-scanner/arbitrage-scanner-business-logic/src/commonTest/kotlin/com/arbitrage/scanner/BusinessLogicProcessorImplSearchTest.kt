@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.base.Stubs
+import com.arbitrage.scanner.base.StubCase
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -27,7 +27,7 @@ class BusinessLogicProcessorImplSearchTest {
      * Создает контекст для тестирования команды SEARCH
      */
     private fun createSearchContext(
-        stubCase: Stubs = Stubs.SUCCESS,
+        stubCase: StubCase = StubCase.SUCCESS,
         workMode: WorkMode = WorkMode.STUB,
         state: State = State.RUNNING,
     ): Context = Context(
@@ -41,7 +41,7 @@ class BusinessLogicProcessorImplSearchTest {
     fun `test search with SUCCESS stub returns list with element and FINISHING state`() = runTest {
         // Given: Контекст с командой SEARCH и стабом SUCCESS
         val context = createSearchContext(
-            stubCase = Stubs.SUCCESS,
+            stubCase = StubCase.SUCCESS,
             workMode = WorkMode.STUB,
             state = State.RUNNING,
         )
@@ -71,7 +71,7 @@ class BusinessLogicProcessorImplSearchTest {
     fun `test search with NOT_FOUND stub returns empty list and FINISHING state`() = runTest {
         // Given: Контекст с командой SEARCH и стабом NOT_FOUND
         val context = createSearchContext(
-            stubCase = Stubs.NOT_FOUND,
+            stubCase = StubCase.NOT_FOUND,
             workMode = WorkMode.STUB,
             state = State.RUNNING,
         )
@@ -102,7 +102,7 @@ class BusinessLogicProcessorImplSearchTest {
         // Given: Контекст с командой SEARCH и неподдерживаемым стабом BAD_ID
         // Стаб BAD_ID не поддерживается для команды SEARCH
         val context = createSearchContext(
-            stubCase = Stubs.BAD_ID,
+            stubCase = StubCase.BAD_ID,
             workMode = WorkMode.STUB,
             state = State.RUNNING,
         )
@@ -127,7 +127,7 @@ class BusinessLogicProcessorImplSearchTest {
             "Сообщение об ошибке должно содержать информацию о неверном стабе"
         )
         assertTrue(
-            error.message.contains(Stubs.BAD_ID.name),
+            error.message.contains(StubCase.BAD_ID.name),
             "Сообщение об ошибке должно содержать имя запрошенного стаба"
         )
     }

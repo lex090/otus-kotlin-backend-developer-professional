@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.fail
-import com.arbitrage.scanner.base.Stubs
+import com.arbitrage.scanner.base.StubCase
 import com.crowdproj.kotlin.cor.ICorAddExecDsl
 import com.crowdproj.kotlin.cor.handlers.worker
 
@@ -13,7 +13,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.readNotFoundStubWork
     title: String,
 ) = worker {
     this.title = title
-    on { this.stubCase == Stubs.NOT_FOUND && state == State.RUNNING }
+    on { this.stubCase == StubCase.NOT_FOUND && state == State.RUNNING }
     handle {
         fail(
             InternalError(

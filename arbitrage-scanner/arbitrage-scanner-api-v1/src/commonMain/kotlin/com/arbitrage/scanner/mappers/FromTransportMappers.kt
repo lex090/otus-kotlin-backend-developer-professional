@@ -19,7 +19,7 @@ import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.DexChainId
 import com.arbitrage.scanner.models.DexExchangeId
 import com.arbitrage.scanner.models.DexTokenId
-import com.arbitrage.scanner.base.Stubs
+import com.arbitrage.scanner.base.StubCase
 
 fun Context.fromTransport(request: IRequest) {
     return when (request) {
@@ -58,12 +58,12 @@ private fun ArbitrageOpportunityDebug?.toWorkMode(): WorkMode {
     }
 }
 
-private fun ArbitrageOpportunityDebug?.toStubCase(): Stubs {
+private fun ArbitrageOpportunityDebug?.toStubCase(): StubCase {
     return when (this?.stub) {
-        ArbitrageOpportunityRequestDebugStubs.SUCCESS -> Stubs.SUCCESS
-        ArbitrageOpportunityRequestDebugStubs.NOT_FOUND -> Stubs.NOT_FOUND
-        ArbitrageOpportunityRequestDebugStubs.BAD_ID -> Stubs.BAD_ID
-        null -> Stubs.NONE
+        ArbitrageOpportunityRequestDebugStubs.SUCCESS -> StubCase.SUCCESS
+        ArbitrageOpportunityRequestDebugStubs.NOT_FOUND -> StubCase.NOT_FOUND
+        ArbitrageOpportunityRequestDebugStubs.BAD_ID -> StubCase.BAD_ID
+        null -> StubCase.NONE
     }
 }
 
