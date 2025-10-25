@@ -1,4 +1,4 @@
-package com.arbitrage.scanner
+package com.arbitrage.scanner.app.ktor
 
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
@@ -12,6 +12,7 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
 import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity
 import com.arbitrage.scanner.api.v1.models.ResponseResult
+
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
@@ -24,7 +25,6 @@ import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.assertInstanceOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
 
 class TestApplication {
 
@@ -50,7 +50,7 @@ class TestApplication {
         }
 
         val arbitrageOpportunityReadResponse = response.body<ArbitrageOpportunityReadResponse>()
-        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(HttpStatusCode.Companion.OK, response.status)
         assertEquals(ResponseResult.SUCCESS, arbitrageOpportunityReadResponse.result)
         assertInstanceOf<DexToCexSimpleArbitrageOpportunity>(arbitrageOpportunityReadResponse.arbitrageOpportunity)
         when (val arbitrageOpportunity = arbitrageOpportunityReadResponse.arbitrageOpportunity) {
@@ -94,7 +94,7 @@ class TestApplication {
         }
 
         val arbitrageOpportunitySearchResponse = response.body<ArbitrageOpportunitySearchResponse>()
-        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(HttpStatusCode.Companion.OK, response.status)
         assertEquals(ResponseResult.SUCCESS, arbitrageOpportunitySearchResponse.result)
         assertEquals(1, arbitrageOpportunitySearchResponse.arbitrageOpportunities?.size)
         arbitrageOpportunitySearchResponse.arbitrageOpportunities?.forEach { arbitrageOpportunity ->
@@ -130,7 +130,7 @@ class TestApplication {
         }
 
         val arbitrageOpportunityRecalculateResponse = response.body<ArbitrageOpportunityRecalculateResponse>()
-        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(HttpStatusCode.Companion.OK, response.status)
         assertEquals(ResponseResult.SUCCESS, arbitrageOpportunityRecalculateResponse.result)
         assertEquals(1, arbitrageOpportunityRecalculateResponse.opportunitiesCount)
         assertEquals(100L, arbitrageOpportunityRecalculateResponse.processingTimeMs)

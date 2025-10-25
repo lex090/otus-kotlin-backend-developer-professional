@@ -1,4 +1,4 @@
-package com.arbitrage.scanner.routing.v1
+package com.arbitrage.scanner.app.ktor.routing.v1
 
 import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider

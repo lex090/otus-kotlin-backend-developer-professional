@@ -1,8 +1,8 @@
-package com.arbitrage.scanner.routing
+package com.arbitrage.scanner.app.ktor.routing
 
 import com.arbitrage.scanner.BusinessLogicProcessor
+import com.arbitrage.scanner.app.ktor.routing.v1.routingV1
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.routing.v1.routingV1
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation

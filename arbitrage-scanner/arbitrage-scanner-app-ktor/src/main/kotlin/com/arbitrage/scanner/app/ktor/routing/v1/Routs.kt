@@ -1,4 +1,4 @@
-package com.arbitrage.scanner.routing.v1
+package com.arbitrage.scanner.app.ktor.routing.v1
 
 import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
@@ -7,8 +7,8 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateReques
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
+import com.arbitrage.scanner.app.ktor.processors.processRequest
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.processors.processRequest
 import io.ktor.server.application.ApplicationCall
 import kotlin.reflect.KFunction
 

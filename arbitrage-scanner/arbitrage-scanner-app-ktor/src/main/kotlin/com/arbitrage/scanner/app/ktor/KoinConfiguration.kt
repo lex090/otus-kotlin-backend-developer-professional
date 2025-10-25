@@ -1,5 +1,8 @@
-package com.arbitrage.scanner
+package com.arbitrage.scanner.app.ktor
 
+import com.arbitrage.scanner.BusinessLogicProcessor
+import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
+import com.arbitrage.scanner.BusinessLogicProcessorSimpleImpl
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.libs.logging.arbScanLoggerLogback
 import io.ktor.server.application.Application

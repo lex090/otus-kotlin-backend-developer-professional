@@ -25,7 +25,7 @@ jib {
 
     // Целевой образ - имя и теги
     to {
-        image = "arbitrage-scanner"  // Имя образа
+        image = "arbitrage-scanner-app-ktor"  // Имя образа
         tags = setOf(
             project.version.toString(),                  // Версия из gradle.properties
         )

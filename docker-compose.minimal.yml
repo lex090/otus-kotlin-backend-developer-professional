@@ -21,8 +21,8 @@ services:
       - kafka-data:/var/lib/kafka/data
 
   arbitrage-scanner:
-    image: arbitrage-scanner:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
-    container_name: arbitrage-app
+    image: arbitrage-scanner-app-ktor:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
+    container_name: arbitrage-scanner-app-ktor
     depends_on:
       - fluent-bit
       - kafka
