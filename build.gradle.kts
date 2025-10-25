@@ -44,3 +44,10 @@ tasks.register("checkAll") {
 
     dependsOn(gradle.includedBuild("arbitrage-scanner").task(":checkAll"))
 }
+
+tasks.register("jibDockerBuildAll") {
+    description = "Build Docker images using Jib for all modules that support it. ./gradlew jibDockerBuildAll --no-daemon"
+    group = "Custom project tasks"
+
+    dependsOn(gradle.includedBuild("arbitrage-scanner").task(":jibDockerBuildAll"))
+}

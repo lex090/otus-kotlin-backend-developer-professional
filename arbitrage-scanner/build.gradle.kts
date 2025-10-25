@@ -47,3 +47,12 @@ tasks.register("testAll") {
         testTask?.let { this@register.dependsOn(it) }
     }
 }
+
+tasks.register("jibDockerBuildAll") {
+    description = "Build Docker images using Jib for all modules that support it. ./gradlew jibDockerBuildAll --no-daemon"
+    group = "Custom project tasks"
+
+    subprojects {
+        tasks.findByName("jibDockerBuild")?.let { this@register.dependsOn(it) }
+    }
+}
