@@ -1,16 +1,16 @@
 package com.arbitrage.scanner.app.ktor
 
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebugApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateResponse
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugModeApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubsApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilterApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
-import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity
+import com.arbitrage.scanner.api.v1.models.CexToCexArbitrageOpportunityApi
 import com.arbitrage.scanner.api.v1.models.ResponseResult
 
 import io.ktor.client.call.body
@@ -38,9 +38,9 @@ class TestApplication {
             }
         }
         val arbitrageOpportunityReadRequest = ArbitrageOpportunityReadRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
             id = "123"
         )
@@ -52,9 +52,9 @@ class TestApplication {
         val arbitrageOpportunityReadResponse = response.body<ArbitrageOpportunityReadResponse>()
         assertEquals(HttpStatusCode.Companion.OK, response.status)
         assertEquals(ResponseResult.SUCCESS, arbitrageOpportunityReadResponse.result)
-        assertInstanceOf<DexToCexSimpleArbitrageOpportunity>(arbitrageOpportunityReadResponse.arbitrageOpportunity)
+        assertInstanceOf<CexToCexArbitrageOpportunityApi>(arbitrageOpportunityReadResponse.arbitrageOpportunity)
         when (val arbitrageOpportunity = arbitrageOpportunityReadResponse.arbitrageOpportunity) {
-            is DexToCexSimpleArbitrageOpportunity -> {
+            is CexToCexArbitrageOpportunityApi -> {
                 assertEquals(
                     "123",
                     arbitrageOpportunity.id
@@ -75,14 +75,11 @@ class TestApplication {
             }
         }
         val arbitrageOpportunitySearchRequest = ArbitrageOpportunitySearchRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
-            filter = ArbitrageOpportunitySearchFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
+            filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = emptySet(),
                 cexExchangeIds = emptySet(),
                 spread = 1.0,
@@ -99,7 +96,7 @@ class TestApplication {
         assertEquals(1, arbitrageOpportunitySearchResponse.arbitrageOpportunities?.size)
         arbitrageOpportunitySearchResponse.arbitrageOpportunities?.forEach { arbitrageOpportunity ->
             when (arbitrageOpportunity) {
-                is DexToCexSimpleArbitrageOpportunity -> {
+                is CexToCexArbitrageOpportunityApi -> {
                     assertEquals(
                         "123",
                         arbitrageOpportunity.id
@@ -119,9 +116,9 @@ class TestApplication {
             }
         }
         val arbitrageOpportunityRecalculateRequest = ArbitrageOpportunityRecalculateRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
         )
         val response = client.post("v1/arbitrage_opportunities/recalculate") {

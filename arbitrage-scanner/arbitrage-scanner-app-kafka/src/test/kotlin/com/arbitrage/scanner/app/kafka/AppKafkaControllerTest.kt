@@ -2,17 +2,17 @@ package com.arbitrage.scanner.app.kafka
 
 import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.BusinessLogicProcessorSimpleImpl
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebugApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadResponse
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRecalculateResponse
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilter
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugModeApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubsApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilterApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
-import com.arbitrage.scanner.api.v1.models.DexToCexSimpleArbitrageOpportunity
+import com.arbitrage.scanner.api.v1.models.CexToCexArbitrageOpportunityApi
 import com.arbitrage.scanner.fromResponseJsonString
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.toRequestJsonString
@@ -110,9 +110,9 @@ class AppKafkaControllerTest {
 
         // Создаем тестовое сообщение для read запроса из API модели
         val request = ArbitrageOpportunityReadRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
             id = "test-id"
         )
@@ -171,10 +171,10 @@ class AppKafkaControllerTest {
         val response = json.fromResponseJsonString<ArbitrageOpportunityReadResponse>(responseJson)
         assertNotNull(response.arbitrageOpportunity, "Арбитражная возможность не должна быть null")
 
-        val opportunity = response.arbitrageOpportunity as? DexToCexSimpleArbitrageOpportunity
-        assertNotNull(opportunity, "Арбитражная возможность должна быть типа DexToCexSimpleArbitrageOpportunity")
+        val opportunity = response.arbitrageOpportunity as? CexToCexArbitrageOpportunityApi
+        assertNotNull(opportunity, "Арбитражная возможность должна быть типа CexToCexArbitrageOpportunityApi")
         assertEquals("123", opportunity.id, "ID арбитражной возможности должен совпадать со stub")
-        assertEquals(12313.0, opportunity.spread, "Spread должен совпадать со stub")
+        assertEquals(2.0, opportunity.spread, "Spread должен совпадать со stub")
 
         // Cleanup
         controller.close()
@@ -194,9 +194,9 @@ class AppKafkaControllerTest {
         val messagesCount = 3
         repeat(messagesCount) { index ->
             val request = ArbitrageOpportunityReadRequest(
-                debug = ArbitrageOpportunityDebug(
-                    mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                    stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+                debug = ArbitrageOpportunityDebugApi(
+                    mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                    stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
                 ),
                 id = "test-id-$index"
             )
@@ -274,9 +274,9 @@ class AppKafkaControllerTest {
 
         // Создаем тестовое сообщение для read запроса из API модели
         val request = ArbitrageOpportunityReadRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
             id = "test-id"
         )
@@ -387,14 +387,11 @@ class AppKafkaControllerTest {
 
         // Создаем тестовое сообщение для search запроса из API модели
         val request = ArbitrageOpportunitySearchRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             ),
-            filter = ArbitrageOpportunitySearchFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
+            filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = emptySet(),
                 cexExchangeIds = emptySet(),
                 spread = null
@@ -456,8 +453,8 @@ class AppKafkaControllerTest {
         assertNotNull(response.arbitrageOpportunities, "Список арбитражных возможностей не должен быть null")
         assertTrue(response.arbitrageOpportunities!!.isNotEmpty(), "Список должен содержать хотя бы одну возможность")
 
-        val opportunity = response.arbitrageOpportunities!![0] as? DexToCexSimpleArbitrageOpportunity
-        assertNotNull(opportunity, "Арбитражная возможность должна быть типа DexToCexSimpleArbitrageOpportunity")
+        val opportunity = response.arbitrageOpportunities!![0] as? CexToCexArbitrageOpportunityApi
+        assertNotNull(opportunity, "Арбитражная возможность должна быть типа CexToCexArbitrageOpportunityApi")
         assertEquals("123", opportunity.id, "ID арбитражной возможности должен совпадать со stub")
 
         // Cleanup
@@ -476,9 +473,9 @@ class AppKafkaControllerTest {
 
         // Создаем тестовое сообщение для recalculate запроса из API модели
         val request = ArbitrageOpportunityRecalculateRequest(
-            debug = ArbitrageOpportunityDebug(
-                mode = ArbitrageOpportunityRequestDebugMode.STUB,
-                stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+            debug = ArbitrageOpportunityDebugApi(
+                mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+                stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
             )
         )
         val testMessage = json.toRequestJsonString(request)
