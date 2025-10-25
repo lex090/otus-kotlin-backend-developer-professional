@@ -2,15 +2,57 @@
 kotlin-language = "2.2"
 kotlin = "2.2.0"
 kotlinx-serialization = "1.9.0"
+kotlinx-coroutines = "1.10.1"
 jvm-compiler = "21"
 jvm-language = "21"
 bignum = "0.3.10"
+ktor = "3.2.3"
+koin = "3.5.6"
+logback = "1.5.16"
+logback-more-appenders = "1.8.8"
+fluent-logger = "0.3.4"
+logstash = "7.4"
+kafka = "3.9.0"
+hoplite = "2.9.0"
+jib = "3.4.4"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+
+# BigDeciaml and etc.
 bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
+
+# Ktor
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
+ktor-server-test = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+
+# Koin
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+
+# Logback
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+logback-more-appenders = { module = "com.sndyuk:logback-more-appenders", version.ref = "logback-more-appenders" }
+logback-logstash = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash" }
+
+# Fluent
+fluent-logger = { module = "org.fluentd:fluent-logger", version.ref = "fluent-logger" }
+
+# Kafka
+kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
+
+# Hoplite - Configuration library
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
+hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
 
 [bundles]
 
@@ -21,3 +63,5 @@ build-plugin-jvm = { id = "build-plugin-jvm" }
 build-plugin-multiplatform = { id = "build-plugin-multiplatform" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 crowdproj-generator = { id = "com.crowdproj.generator", version = "0.3.0" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
