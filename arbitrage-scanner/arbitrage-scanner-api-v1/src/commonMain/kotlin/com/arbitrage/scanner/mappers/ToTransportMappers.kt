@@ -20,10 +20,6 @@ import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexPrice.CexPriceRaw
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.DexChainId
-import com.arbitrage.scanner.models.DexExchangeId
-import com.arbitrage.scanner.models.DexPrice.DexPriceRaw
-import com.arbitrage.scanner.models.DexTokenId
 
 fun Context.toTransport(): IResponse {
     return when (command) {
@@ -97,18 +93,6 @@ private fun InternalError.toTransportError() = Error(
 
 private fun ArbitrageOpportunityId.toTransportId(): String? =
     this.takeIf(ArbitrageOpportunityId::isNotDefault)?.value
-
-fun DexTokenId.toTransportId(): String? =
-    this.takeIf(DexTokenId::isNotDefault)?.value
-
-fun DexChainId.toTransportId(): String? =
-    this.takeIf(DexChainId::isNotDefault)?.value
-
-fun DexExchangeId.toTransportId(): String? =
-    this.takeIf(DexExchangeId::isNotDefault)?.value
-
-fun DexPriceRaw.toTransportRawPrice(): Double? =
-    this.takeIf(DexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = true)
 
 private fun CexPrice.toTransportCexPrice(): CexPriceApi {
     return CexPriceApi(

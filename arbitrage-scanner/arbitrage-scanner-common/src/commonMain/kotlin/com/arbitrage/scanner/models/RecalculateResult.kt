@@ -1,13 +1,10 @@
 package com.arbitrage.scanner.models
 
 data class RecalculateResult(
-    val opportunitiesCount: Int,
-    val processingTimeMs: Long,
+    val opportunitiesCount: Int = 0,
+    val processingTimeMs: Long = 0L,
 ) {
     companion object {
-        val DEFAULT = RecalculateResult(
-            opportunitiesCount = 0,
-            processingTimeMs = 0L,
-        )
+        val DEFAULT = RecalculateResult()
     }
 }

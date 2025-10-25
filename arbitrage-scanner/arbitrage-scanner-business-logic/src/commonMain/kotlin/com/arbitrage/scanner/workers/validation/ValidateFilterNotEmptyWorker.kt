@@ -20,9 +20,6 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.validateFilterNotEmp
     this.title = title
     on {
         val filter = arbitrageOpportunitySearchRequestValidating
-        filter.dexTokenIds.isEmpty() &&
-        filter.dexExchangeIds.isEmpty() &&
-        filter.dexChainIds.isEmpty() &&
         filter.cexTokenIds.isEmpty() &&
         filter.cexExchangeIds.isEmpty() &&
         filter.spread.value == 0.0
@@ -34,7 +31,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.validateFilterNotEmp
                 group = "validation",
                 field = "filter",
                 message = "Фильтр поиска не должен быть пустым. " +
-                        "Укажите хотя бы один критерий поиска: токены, биржи, сети или минимальный спред"
+                        "Укажите хотя бы один критерий поиска: токены, биржи или минимальный спред"
             )
         )
     }
