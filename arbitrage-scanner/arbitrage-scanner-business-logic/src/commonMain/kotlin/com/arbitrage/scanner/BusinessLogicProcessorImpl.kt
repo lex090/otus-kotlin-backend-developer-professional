@@ -6,9 +6,6 @@ import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.DexChainId
-import com.arbitrage.scanner.models.DexExchangeId
-import com.arbitrage.scanner.models.DexTokenId
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
 import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
@@ -19,15 +16,12 @@ import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
 import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
-import com.arbitrage.scanner.workers.validation.validateChainIdsWorker
-import com.arbitrage.scanner.workers.validation.validateDexExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateFilterNotEmptyWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
 import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
 import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
-import com.arbitrage.scanner.workers.validation.validateDexTokenIdsWorker
 import com.arbitrage.scanner.workers.validation.validateSpreadMaxWorker
 import com.arbitrage.scanner.workers.validation.validateSpreadMinWorker
 import com.arbitrage.scanner.workers.validationProcessor
@@ -96,12 +90,6 @@ class BusinessLogicProcessorImpl(
                 worker("Нормализация ID в фильтрах") {
                     // Нормализуем все ID - удаляем лишние пробелы
                     val normalizedFilter = arbitrageOpportunitySearchRequestValidating.copy(
-                        dexTokenIds = arbitrageOpportunitySearchRequestValidating.dexTokenIds
-                            .map { DexTokenId(it.value.trim()) }.toSet(),
-                        dexExchangeIds = arbitrageOpportunitySearchRequestValidating.dexExchangeIds
-                            .map { DexExchangeId(it.value.trim()) }.toSet(),
-                        dexChainIds = arbitrageOpportunitySearchRequestValidating.dexChainIds
-                            .map { DexChainId(it.value.trim()) }.toSet(),
                         cexTokenIds = arbitrageOpportunitySearchRequestValidating.cexTokenIds
                             .map { CexTokenId(it.value.trim()) }.toSet(),
                         cexExchangeIds = arbitrageOpportunitySearchRequestValidating.cexExchangeIds
@@ -112,11 +100,8 @@ class BusinessLogicProcessorImpl(
 
                 // Последовательность валидации фильтров
                 validateFilterNotEmptyWorker("Проверка, что фильтр не пустой")
-                validateDexTokenIdsWorker("Проверка ID DEX токенов")
                 validateCexTokenIdsWorker("Проверка ID CEX токенов")
-                validateDexExchangeIdsWorker("Проверка ID DEX бирж")
                 validateCexExchangeIdsWorker("Проверка ID CEX бирж")
-                validateChainIdsWorker("Проверка ID блокчейнов")
                 validateSpreadMinWorker("Проверка минимального значения спреда")
                 validateSpreadMaxWorker("Проверка максимального значения спреда")
 

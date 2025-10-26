@@ -11,9 +11,6 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.DexChainId
-import com.arbitrage.scanner.models.DexExchangeId
-import com.arbitrage.scanner.models.DexTokenId
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -70,10 +67,7 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("B"), DexTokenId("test@token"), DexTokenId("valid-token")),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
-                cexTokenIds = setOf(CexTokenId("-invalid")),
+                cexTokenIds = setOf(CexTokenId("B"), CexTokenId("test@token"), CexTokenId("-invalid"), CexTokenId("valid-token")),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread.DEFAULT
             )
@@ -86,8 +80,8 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректных ID токенов")
         assertTrue(
-            context.errors.any { it.code == "validation-format" && (it.field == "dexTokenIds" || it.field == "cexTokenIds") },
-            "Должна быть ошибка формата для dexTokenIds или cexTokenIds"
+            context.errors.any { it.code == "validation-format" && it.field == "cexTokenIds" },
+            "Должна быть ошибка формата для cexTokenIds"
         )
     }
 
@@ -99,11 +93,8 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = setOf(DexExchangeId("ok"), DexExchangeId("binance-"), DexExchangeId("valid")),
-                dexChainIds = emptySet(),
                 cexTokenIds = emptySet(),
-                cexExchangeIds = setOf(CexExchangeId("_bybit")),
+                cexExchangeIds = setOf(CexExchangeId("ok"), CexExchangeId("_bybit"), CexExchangeId("binance-"), CexExchangeId("valid")),
                 spread = ArbitrageOpportunitySpread(1.0)
             )
         )
@@ -115,37 +106,8 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректных ID бирж")
         assertTrue(
-            context.errors.any { it.code == "validation-format" && (it.field == "dexExchangeIds" || it.field == "cexExchangeIds") },
-            "Должна быть ошибка формата для dexExchangeIds или cexExchangeIds"
-        )
-    }
-
-    @Test
-    fun `test validation fails with invalid chain ID format`() = runTest {
-        // Given: Контекст с некорректным ID блокчейна
-        val context = Context(
-            command = Command.SEARCH,
-            workMode = WorkMode.PROD,
-            state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = emptySet(),
-                dexChainIds = setOf(DexChainId("b"), DexChainId("eth@mainnet"), DexChainId("-polygon")),
-                cexTokenIds = emptySet(),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(1.0)
-            )
-        )
-        val processor = BusinessLogicProcessorImpl(createTestDeps())
-
-        // When: Выполняем бизнес-логику
-        processor.exec(context)
-
-        // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректных ID блокчейнов")
-        assertTrue(
-            context.errors.any { it.code == "validation-format" && it.field == "chainIds" },
-            "Должна быть ошибка формата для chainIds"
+            context.errors.any { it.code == "validation-format" && it.field == "cexExchangeIds" },
+            "Должна быть ошибка формата для cexExchangeIds"
         )
     }
 
@@ -157,10 +119,7 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("BTC")),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
-                cexTokenIds = emptySet(),
+                cexTokenIds = setOf(CexTokenId("BTC")),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread(-5.0)
             )
@@ -191,10 +150,7 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("BTC")),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
-                cexTokenIds = emptySet(),
+                cexTokenIds = setOf(CexTokenId("BTC")),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread(150.0)
             )
@@ -225,9 +181,6 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
                 cexTokenIds = emptySet(),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread(5.0)
@@ -258,11 +211,8 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("BTC"), DexTokenId("ETH"), DexTokenId("BNB-USDT")),
-                dexExchangeIds = setOf(DexExchangeId("pancakeswap"), DexExchangeId("uniswap-v3")),
-                dexChainIds = setOf(DexChainId("bsc"), DexChainId("ethereum")),
-                cexTokenIds = setOf(CexTokenId("BTC"), CexTokenId("USDT")),
-                cexExchangeIds = setOf(CexExchangeId("binance"), CexExchangeId("okx")),
+                cexTokenIds = setOf(CexTokenId("BTC"), CexTokenId("ETH"), CexTokenId("USDT")),
+                cexExchangeIds = setOf(CexExchangeId("binance"), CexExchangeId("okx"), CexExchangeId("bybit")),
                 spread = ArbitrageOpportunitySpread(2.5)
             )
         )
@@ -278,13 +228,13 @@ class SearchRequestValidationTest {
         )
         assertEquals(
             3,
-            context.arbitrageOpportunitySearchRequestValidated.dexTokenIds.size,
-            "Все DEX токены должны быть скопированы в validated"
+            context.arbitrageOpportunitySearchRequestValidated.cexTokenIds.size,
+            "Все CEX токены должны быть скопированы в validated"
         )
         assertEquals(
-            2,
-            context.arbitrageOpportunitySearchRequestValidated.dexExchangeIds.size,
-            "Все DEX биржи должны быть скопированы в validated"
+            3,
+            context.arbitrageOpportunitySearchRequestValidated.cexExchangeIds.size,
+            "Все CEX биржи должны быть скопированы в validated"
         )
     }
 
@@ -296,11 +246,8 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("  BTC  "), DexTokenId(" ETH")),
-                dexExchangeIds = setOf(DexExchangeId(" pancakeswap ")),
-                dexChainIds = setOf(DexChainId("  bsc  ")),
-                cexTokenIds = setOf(CexTokenId("USDT  ")),
-                cexExchangeIds = setOf(CexExchangeId("  binance")),
+                cexTokenIds = setOf(CexTokenId("  BTC  "), CexTokenId(" ETH"), CexTokenId("USDT  ")),
+                cexExchangeIds = setOf(CexExchangeId(" binance "), CexExchangeId("  okx")),
                 spread = ArbitrageOpportunitySpread(1.0)
             )
         )
@@ -312,20 +259,12 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что пробелы были удалены
         val validated = context.arbitrageOpportunitySearchRequestValidated
         assertTrue(
-            validated.dexTokenIds.contains(DexTokenId("BTC")),
-            "Пробелы должны быть удалены из DEX token IDs"
+            validated.cexTokenIds.contains(CexTokenId("BTC")),
+            "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
-            validated.dexTokenIds.contains(DexTokenId("ETH")),
-            "Пробелы должны быть удалены из DEX token IDs"
-        )
-        assertTrue(
-            validated.dexExchangeIds.contains(DexExchangeId("pancakeswap")),
-            "Пробелы должны быть удалены из DEX exchange IDs"
-        )
-        assertTrue(
-            validated.dexChainIds.contains(DexChainId("bsc")),
-            "Пробелы должны быть удалены из DEX chain IDs"
+            validated.cexTokenIds.contains(CexTokenId("ETH")),
+            "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
             validated.cexTokenIds.contains(CexTokenId("USDT")),
@@ -333,6 +272,10 @@ class SearchRequestValidationTest {
         )
         assertTrue(
             validated.cexExchangeIds.contains(CexExchangeId("binance")),
+            "Пробелы должны быть удалены из CEX exchange IDs"
+        )
+        assertTrue(
+            validated.cexExchangeIds.contains(CexExchangeId("okx")),
             "Пробелы должны быть удалены из CEX exchange IDs"
         )
     }
@@ -345,11 +288,8 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("B")), // Слишком короткий
-                dexExchangeIds = setOf(DexExchangeId("ok")), // Слишком короткий
-                dexChainIds = setOf(DexChainId("-invalid")), // Некорректный формат
-                cexTokenIds = emptySet(),
-                cexExchangeIds = emptySet(),
+                cexTokenIds = setOf(CexTokenId("B")), // Слишком короткий
+                cexExchangeIds = setOf(CexExchangeId("ok")), // Слишком короткий
                 spread = ArbitrageOpportunitySpread(-10.0) // Отрицательный
             )
         )
@@ -365,16 +305,12 @@ class SearchRequestValidationTest {
             "Должно быть минимум 3 ошибки валидации"
         )
         assertTrue(
-            context.errors.any { it.field == "dexTokenIds" || it.field == "cexTokenIds" },
-            "Должна быть ошибка для dexTokenIds или cexTokenIds"
+            context.errors.any { it.field == "cexTokenIds" },
+            "Должна быть ошибка для cexTokenIds"
         )
         assertTrue(
-            context.errors.any { it.field == "dexExchangeIds" || it.field == "cexExchangeIds" },
-            "Должна быть ошибка для dexExchangeIds или cexExchangeIds"
-        )
-        assertTrue(
-            context.errors.any { it.field == "chainIds" },
-            "Должна быть ошибка для chainIds"
+            context.errors.any { it.field == "cexExchangeIds" },
+            "Должна быть ошибка для cexExchangeIds"
         )
         assertTrue(
             context.errors.any { it.field == "spread" },
@@ -390,10 +326,7 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("BTC")),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
-                cexTokenIds = emptySet(),
+                cexTokenIds = setOf(CexTokenId("BTC")),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread(0.0)
             )
@@ -418,10 +351,7 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = setOf(DexTokenId("BTC")),
-                dexExchangeIds = emptySet(),
-                dexChainIds = emptySet(),
-                cexTokenIds = emptySet(),
+                cexTokenIds = setOf(CexTokenId("BTC")),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread(100.0)
             )
@@ -439,17 +369,19 @@ class SearchRequestValidationTest {
     }
 
     @Test
-    fun `test validation with numeric exchange ID like 1inch`() = runTest {
-        // Given: Контекст с биржей, начинающейся с цифры (валидно для бирж)
+    fun `test validation with mixed valid and invalid token IDs`() = runTest {
+        // Given: Контекст со смешанными валидными и невалидными ID токенов
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                dexTokenIds = emptySet(),
-                dexExchangeIds = setOf(DexExchangeId("1inch")),
-                dexChainIds = emptySet(),
-                cexTokenIds = emptySet(),
+                cexTokenIds = setOf(
+                    CexTokenId("BTC"),      // Валидный
+                    CexTokenId("B"),         // Слишком короткий
+                    CexTokenId("ETH-USDT"), // Валидный с дефисом
+                    CexTokenId("@INVALID")   // Начинается со спецсимвола
+                ),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread(1.0)
             )
@@ -459,10 +391,42 @@ class SearchRequestValidationTest {
         // When: Выполняем бизнес-логику
         processor.exec(context)
 
-        // Then: Проверяем, что валидация прошла успешно
+        // Then: Проверяем, что валидация провалилась
+        assertEquals(State.FAILING, context.state, "State должен быть FAILING при наличии невалидных токенов")
         assertTrue(
-            context.errors.none { it.field == "dexExchangeIds" || it.field == "cexExchangeIds" },
-            "Не должно быть ошибок для биржи '1inch'"
+            context.errors.any { it.field == "cexTokenIds" },
+            "Должна быть ошибка для cexTokenIds"
+        )
+    }
+
+    @Test
+    fun `test validation with mixed valid and invalid exchange IDs`() = runTest {
+        // Given: Контекст со смешанными валидными и невалидными ID бирж
+        val context = Context(
+            command = Command.SEARCH,
+            workMode = WorkMode.PROD,
+            state = State.NONE,
+            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
+                cexTokenIds = emptySet(),
+                cexExchangeIds = setOf(
+                    CexExchangeId("binance"),    // Валидный
+                    CexExchangeId("ok"),          // Слишком короткий
+                    CexExchangeId("okx-futures"), // Валидный с дефисом
+                    CexExchangeId("-bybit")       // Начинается с дефиса
+                ),
+                spread = ArbitrageOpportunitySpread(1.0)
+            )
+        )
+        val processor = BusinessLogicProcessorImpl(createTestDeps())
+
+        // When: Выполняем бизнес-логику
+        processor.exec(context)
+
+        // Then: Проверяем, что валидация провалилась
+        assertEquals(State.FAILING, context.state, "State должен быть FAILING при наличии невалидных бирж")
+        assertTrue(
+            context.errors.any { it.field == "cexExchangeIds" },
+            "Должна быть ошибка для cexExchangeIds"
         )
     }
 }

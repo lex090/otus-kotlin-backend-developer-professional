@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.stubs.Stubs
+import com.arbitrage.scanner.base.StubCase
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -27,7 +27,7 @@ class BusinessLogicProcessorImplReadTest {
      * Создает контекст для тестирования команды READ
      */
     private fun createReadContext(
-        stubCase: Stubs = Stubs.SUCCESS,
+        stubCase: StubCase = StubCase.SUCCESS,
         workMode: WorkMode = WorkMode.STUB,
         state: State = State.NONE,
     ): Context = Context(
@@ -41,7 +41,7 @@ class BusinessLogicProcessorImplReadTest {
     fun `test read with SUCCESS stub returns correct response and FINISHING state`() = runTest {
         // Given: Контекст с командой READ и стабом SUCCESS
         val context = createReadContext(
-            stubCase = Stubs.SUCCESS,
+            stubCase = StubCase.SUCCESS,
             workMode = WorkMode.STUB,
             state = State.NONE,
         )
@@ -72,7 +72,7 @@ class BusinessLogicProcessorImplReadTest {
     fun `test read with NOT_FOUND stub returns error and FAILING state`() = runTest {
         // Given: Контекст с командой READ и стабом NOT_FOUND
         val context = createReadContext(
-            stubCase = Stubs.NOT_FOUND,
+            stubCase = StubCase.NOT_FOUND,
             workMode = WorkMode.STUB,
             state = State.NONE,
         )
@@ -102,7 +102,7 @@ class BusinessLogicProcessorImplReadTest {
     fun `test read with BAD_ID stub returns error and FAILING state`() = runTest {
         // Given: Контекст с командой READ и стабом BAD_ID
         val context = createReadContext(
-            stubCase = Stubs.BAD_ID,
+            stubCase = StubCase.BAD_ID,
             workMode = WorkMode.STUB,
             state = State.NONE,
         )

@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.stubs.Stubs
+import com.arbitrage.scanner.base.StubCase
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,7 +28,7 @@ class BusinessLogicProcessorImplRecalculateTest {
      * Создает контекст для тестирования команды RECALCULATE
      */
     private fun createRecalculateContext(
-        stubCase: Stubs = Stubs.SUCCESS,
+        stubCase: StubCase = StubCase.SUCCESS,
         workMode: WorkMode = WorkMode.STUB,
         state: State = State.NONE,
     ): Context = Context(
@@ -42,7 +42,7 @@ class BusinessLogicProcessorImplRecalculateTest {
     fun `test recalculate with SUCCESS stub returns correct response and FINISHING state`() = runTest {
         // Given: Контекст с командой RECALCULATE и стабом SUCCESS
         val context = createRecalculateContext(
-            stubCase = Stubs.SUCCESS,
+            stubCase = StubCase.SUCCESS,
             workMode = WorkMode.STUB,
             state = State.NONE,
         )
@@ -78,7 +78,7 @@ class BusinessLogicProcessorImplRecalculateTest {
     fun `test recalculate with NOT_FOUND stub returns validation error`() = runTest {
         // Given: Контекст с командой RECALCULATE и неподдерживаемым стабом NOT_FOUND
         val context = createRecalculateContext(
-            stubCase = Stubs.NOT_FOUND,
+            stubCase = StubCase.NOT_FOUND,
             workMode = WorkMode.STUB,
             state = State.NONE,
         )
@@ -103,7 +103,7 @@ class BusinessLogicProcessorImplRecalculateTest {
             "Сообщение об ошибке должно содержать информацию о неверном стабе"
         )
         assertTrue(
-            error.message.contains(Stubs.NOT_FOUND.name),
+            error.message.contains(StubCase.NOT_FOUND.name),
             "Сообщение об ошибке должно содержать имя запрошенного стаба"
         )
     }
@@ -112,7 +112,7 @@ class BusinessLogicProcessorImplRecalculateTest {
     fun `test recalculate with BAD_ID stub returns validation error`() = runTest {
         // Given: Контекст с командой RECALCULATE и неподдерживаемым стабом BAD_ID
         val context = createRecalculateContext(
-            stubCase = Stubs.BAD_ID,
+            stubCase = StubCase.BAD_ID,
             workMode = WorkMode.STUB,
             state = State.NONE,
         )
