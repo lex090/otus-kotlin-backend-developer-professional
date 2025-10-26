@@ -11,6 +11,12 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.repository.ArbitrageOpportunityRepository
+import com.arbitrage.scanner.repository.ArbitrageOpportunityRepositoryNOP
+import com.arbitrage.scanner.repository.CexPriceRepository
+import com.arbitrage.scanner.repository.CexPriceRepositoryNOP
+import com.arbitrage.scanner.services.ArbitrageFinder
+import com.arbitrage.scanner.services.ArbitrageFinderNOP
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,6 +32,10 @@ class SearchRequestValidationTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
+        override val cexPriceRepository: CexPriceRepository = CexPriceRepositoryNOP()
+        override val arbitrageOpportunityRepository: ArbitrageOpportunityRepository =
+            ArbitrageOpportunityRepositoryNOP()
+        override val arbitrageFinder: ArbitrageFinder = ArbitrageFinderNOP()
     }
 
     @Test
@@ -67,7 +77,12 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = setOf(CexTokenId("B"), CexTokenId("test@token"), CexTokenId("-invalid"), CexTokenId("valid-token")),
+                cexTokenIds = setOf(
+                    CexTokenId("B"),
+                    CexTokenId("test@token"),
+                    CexTokenId("-invalid"),
+                    CexTokenId("valid-token")
+                ),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread.DEFAULT
             )
@@ -94,7 +109,12 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = setOf(CexExchangeId("ok"), CexExchangeId("_bybit"), CexExchangeId("binance-"), CexExchangeId("valid")),
+                cexExchangeIds = setOf(
+                    CexExchangeId("ok"),
+                    CexExchangeId("_bybit"),
+                    CexExchangeId("binance-"),
+                    CexExchangeId("valid")
+                ),
                 spread = ArbitrageOpportunitySpread(1.0)
             )
         )
