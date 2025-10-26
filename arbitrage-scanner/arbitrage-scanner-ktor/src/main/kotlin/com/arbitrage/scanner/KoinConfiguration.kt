@@ -29,6 +29,11 @@ val jsonModule = module {
 }
 
 val businessLogicProcessorModule = module {
+    factory<BusinessLogicProcessorImplDeps> {
+        object : BusinessLogicProcessorImplDeps {
+            override val loggerProvider: ArbScanLoggerProvider = get()
+        }
+    }
     factory<BusinessLogicProcessor> { BusinessLogicProcessorSimpleImpl() }
 }
 
