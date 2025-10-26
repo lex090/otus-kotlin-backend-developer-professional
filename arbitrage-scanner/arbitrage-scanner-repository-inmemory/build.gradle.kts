@@ -7,17 +7,15 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":arbitrage-scanner-common"))
-                implementation(project(":arbitrage-scanner-stubs"))
-                implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging"))
+                implementation(libs.bignum)
                 implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kotlin.cor)
+                implementation(libs.kotlinx.atomicfu)
             }
         }
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(project(":arbitrage-scanner-repository-inmemory"))
                 implementation(project(":arbitrage-scanner-stubs"))
             }
         }

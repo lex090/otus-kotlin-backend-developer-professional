@@ -9,6 +9,7 @@ import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.RecalculateResult
 
@@ -41,6 +42,9 @@ data class Context(
     // END READ
 
     // START RECALCULATE
+    // Временные данные для цепочки обработки
+    var loadedPrices: List<CexPrice> = emptyList(),
+    var foundOpportunities: List<CexToCexArbitrageOpportunity> = emptyList(),
     var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
     // END RECALCULATE
 )

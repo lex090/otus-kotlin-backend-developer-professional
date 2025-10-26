@@ -15,6 +15,10 @@ import com.arbitrage.scanner.workers.stubs.readSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
+import com.arbitrage.scanner.workers.recalculate.loadCexPricesWorker
+import com.arbitrage.scanner.workers.recalculate.findArbitrageOpportunitiesWorker
+import com.arbitrage.scanner.workers.recalculate.saveOpportunitiesWorker
+import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorker
 import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateFilterNotEmptyWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
@@ -42,6 +46,13 @@ class BusinessLogicProcessorImpl(
             workModProcessor(title = "Обработка в режиме стабов", workMode = WorkMode.STUB) {
                 recalculateSuccessStubWorker(title = "Обработка стаба SUCCESS")
                 noStubCaseWorker(title = "Валидируем ситуацию, когда запрошен кейс, который не поддерживается в стабах")
+            }
+
+            workModProcessor(title = "Обработка в production режиме", workMode = WorkMode.PROD) {
+                loadCexPricesWorker(title = "Загрузка ценовых данных из репозитория")
+                findArbitrageOpportunitiesWorker(title = "Поиск арбитражных возможностей")
+                saveOpportunitiesWorker(title = "Сохранение найденных возможностей")
+                prepareRecalculateResponseWorker(title = "Формирование ответа")
             }
         }
 

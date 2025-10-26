@@ -29,12 +29,12 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 
 **Purpose**: Create new module and basic project structure
 
-- [ ] T001 Create arbitrage-scanner-repository-inmemory module with build.gradle.kts using BuildPluginMultiplatform
-- [ ] T002 Add arbitrage-scanner-repository-inmemory to settings.gradle.kts in arbitrage-scanner/
-- [ ] T003 Configure dependencies in arbitrage-scanner-repository-inmemory/build.gradle.kts (common, bignum, coroutines, kotlin-test)
-- [ ] T004 Create package structure: arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/
-- [ ] T005 Create test package structure: arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/
-- [ ] T006 Create mocks package: arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/mocks/
+- [X] T001 Create arbitrage-scanner-repository-inmemory module with build.gradle.kts using BuildPluginMultiplatform
+- [X] T002 Add arbitrage-scanner-repository-inmemory to settings.gradle.kts in arbitrage-scanner/
+- [X] T003 Configure dependencies in arbitrage-scanner-repository-inmemory/build.gradle.kts (common, bignum, coroutines, kotlin-test)
+- [X] T004 Create package structure: arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/
+- [X] T005 Create test package structure: arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/
+- [X] T006 Create mocks package: arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/mocks/
 
 ---
 
@@ -44,10 +44,10 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T007 [P] Create CexPriceRepository interface in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/repository/CexPriceRepository.kt
-- [ ] T008 [P] Create ArbitrageOpportunityRepository interface in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/repository/ArbitrageOpportunityRepository.kt
-- [ ] T009 [P] Create ArbitrageFinder interface in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/services/ArbitrageFinder.kt
-- [ ] T010 Extend Context with loadedPrices and foundOpportunities fields in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/context/Context.kt
+- [X] T007 [P] Create CexPriceRepository interface in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/repository/CexPriceRepository.kt
+- [X] T008 [P] Create ArbitrageOpportunityRepository interface in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/repository/ArbitrageOpportunityRepository.kt
+- [X] T009 [P] Create ArbitrageFinder interface in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/services/ArbitrageFinder.kt
+- [X] T010 Extend Context with loadedPrices and foundOpportunities fields in arbitrage-scanner-common/src/commonMain/kotlin/com/arbitrage/scanner/context/Context.kt
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -61,27 +61,27 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 
 ### Implementation for User Story 1
 
-- [ ] T011 [P] [US1] Implement InMemoryCexPriceRepository in arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryCexPriceRepository.kt
-- [ ] T012 [P] [US1] Implement InMemoryArbitrageOpportunityRepository in arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryArbitrageOpportunityRepository.kt
-- [ ] T013 [P] [US1] Create MockCexPriceGenerator with Config data class in arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/mocks/MockCexPriceGenerator.kt
-- [ ] T014 [US1] Implement ArbitrageFinderImpl service in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/services/ArbitrageFinderImpl.kt
-- [ ] T015 [US1] Create LoadCexPricesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/LoadCexPricesWorker.kt
-- [ ] T016 [US1] Create FindArbitrageOpportunitiesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/FindArbitrageOpportunitiesWorker.kt
-- [ ] T017 [US1] Create SaveOpportunitiesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/SaveOpportunitiesWorker.kt
-- [ ] T017a [US1] Add timestamp generation for startTimestamp in SaveOpportunitiesWorker.kt
-- [ ] T018 [US1] Create PrepareRecalculateResponseWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/PrepareRecalculateResponseWorker.kt
-- [ ] T019 [US1] Integrate RECALCULATE workers chain into BusinessLogicProcessorImpl in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/BusinessLogicProcessorImpl.kt
-- [ ] T020 [US1] Update ArbOpStubs with mock CexPrice data in arbitrage-scanner-stubs/src/commonMain/kotlin/com/arbitrage/scanner/ArbOpStubs.kt
-- [ ] T021 [US1] Add logging for recalculate operations using arbitrage-scanner-lib-logging in workers
+- [X] T011 [P] [US1] Implement InMemoryCexPriceRepository in arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryCexPriceRepository.kt
+- [X] T012 [P] [US1] Implement InMemoryArbitrageOpportunityRepository in arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryArbitrageOpportunityRepository.kt
+- [X] T013 [P] [US1] Create MockCexPriceGenerator with Config data class in arbitrage-scanner-repository-inmemory/src/commonMain/kotlin/com/arbitrage/scanner/repository/inmemory/mocks/MockCexPriceGenerator.kt
+- [X] T014 [US1] Implement ArbitrageFinderParallelImpl service in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/services/ArbitrageFinderParallelImpl.kt
+- [X] T015 [US1] Create LoadCexPricesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/LoadCexPricesWorker.kt
+- [X] T016 [US1] Create FindArbitrageOpportunitiesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/FindArbitrageOpportunitiesWorker.kt
+- [X] T017 [US1] Create SaveOpportunitiesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/SaveOpportunitiesWorker.kt
+- [X] T017a [US1] Add timestamp generation for startTimestamp in SaveOpportunitiesWorker.kt
+- [X] T018 [US1] Create PrepareRecalculateResponseWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/PrepareRecalculateResponseWorker.kt
+- [X] T019 [US1] Integrate RECALCULATE workers chain into BusinessLogicProcessorImpl in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/BusinessLogicProcessorImpl.kt
+- [X] T020 [US1] Update ArbOpStubs with mock CexPrice data in arbitrage-scanner-stubs/src/commonMain/kotlin/com/arbitrage/scanner/ArbOpStubs.kt
+- [X] T021 [US1] Add logging for recalculate operations using arbitrage-scanner-lib-logging in workers
 
 ### Tests for User Story 1
 
-- [ ] T022 [P] [US1] Unit test for InMemoryCexPriceRepository CRUD operations in arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryCexPriceRepositoryTest.kt
-- [ ] T023 [P] [US1] Unit test for InMemoryArbitrageOpportunityRepository CRUD operations in arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryArbitrageOpportunityRepositoryTest.kt
-- [ ] T024 [P] [US1] Unit test for MockCexPriceGenerator determinism and data characteristics in arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/mocks/MockCexPriceGeneratorTest.kt
-- [ ] T025 [P] [US1] Unit test for ArbitrageFinderImpl algorithm correctness in arbitrage-scanner-business-logic/src/commonTest/kotlin/com/arbitrage/scanner/services/ArbitrageFinderImplTest.kt
-- [ ] T026 [US1] Integration test for full RECALCULATE flow in arbitrage-scanner-business-logic/src/commonTest/kotlin/com/arbitrage/scanner/BusinessLogicProcessorImplRecalculateTest.kt
-- [ ] T027 [US1] Test edge cases: empty prices, single exchange, zero spread in BusinessLogicProcessorImplRecalculateTest.kt
+- [X] T022 [P] [US1] Unit test for InMemoryCexPriceRepository CRUD operations in arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryCexPriceRepositoryTest.kt
+- [X] T023 [P] [US1] Unit test for InMemoryArbitrageOpportunityRepository CRUD operations in arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/InMemoryArbitrageOpportunityRepositoryTest.kt
+- [X] T024 [P] [US1] Unit test for MockCexPriceGenerator determinism and data characteristics in arbitrage-scanner-repository-inmemory/src/commonTest/kotlin/com/arbitrage/scanner/repository/inmemory/mocks/MockCexPriceGeneratorTest.kt
+- [X] T025 [P] [US1] Unit test for ArbitrageFinderParallelImpl algorithm correctness in arbitrage-scanner-business-logic/src/commonTest/kotlin/com/arbitrage/scanner/services/ArbitrageFinderParallelImplTest.kt
+- [X] T026 [US1] Integration test for full RECALCULATE flow in arbitrage-scanner-business-logic/src/commonTest/kotlin/com/arbitrage/scanner/BusinessLogicProcessorImplRecalculateTest.kt
+- [X] T027 [US1] Test edge cases: empty prices, single exchange, zero spread in BusinessLogicProcessorImplRecalculateTest.kt
 
 **Checkpoint**: User Story 1 is fully functional and independently testable. System can trigger recalculation and find arbitrage opportunities.
 
@@ -95,16 +95,16 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Optimize ArbitrageFinderImpl: use sequences instead of lists where applicable in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/services/ArbitrageFinderImpl.kt
-- [ ] T029 [US2] Add sorting by spread (descending) to findOpportunities result in ArbitrageFinderImpl.kt
-- [ ] T030 [US2] Optimize MockCexPriceGenerator for large datasets (minimize allocations) in MockCexPriceGenerator.kt
-- [ ] T031 [US2] Add configuration support for large dataset generation (100 tokens, 10 exchanges) in MockCexPriceGenerator.kt
+- [X] T028 [US2] Optimize ArbitrageFinderParallelImpl: use sequences instead of lists where applicable in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/services/ArbitrageFinderParallelImpl.kt
+- [X] T029 [US2] Add sorting by spread (descending) to findOpportunities result in ArbitrageFinderParallelImpl.kt
+- [X] T030 [US2] Optimize MockCexPriceGenerator for large datasets (minimize allocations) in MockCexPriceGenerator.kt
+- [X] T031 [US2] Add configuration support for large dataset generation (100 tokens, 10 exchanges) in MockCexPriceGenerator.kt
 
 ### Tests for User Story 2
 
-- [ ] T032 [P] [US2] Performance test: 1000 records < 1 second in arbitrage-scanner-business-logic/src/commonTest/kotlin/com/arbitrage/scanner/services/ArbitrageFinderPerformanceTest.kt
-- [ ] T033 [P] [US2] Test sorting: opportunities sorted by spread descending in ArbitrageFinderImplTest.kt
-- [ ] T034 [US2] Integration test: large dataset recalculate performance in BusinessLogicProcessorImplRecalculateTest.kt
+- [X] T032 [P] [US2] Performance test: 1000 records < 1 second in arbitrage-scanner-business-logic/src/commonTest/kotlin/com/arbitrage/scanner/services/ArbitrageFinderPerformanceTest.kt
+- [X] T033 [P] [US2] Test sorting: opportunities sorted by spread descending in ArbitrageFinderParallelImplTest.kt
+- [X] T034 [US2] Integration test: large dataset recalculate performance in BusinessLogicProcessorImplRecalculateTest.kt
 
 **Checkpoint**: User Story 2 is functional. System efficiently processes large datasets with target performance met.
 
@@ -118,18 +118,18 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 
 ### Implementation for User Story 3
 
-- [ ] T035 [US3] Implement markAsEnded logic in SaveOpportunitiesWorker: mark old opportunities as ended before saving new in SaveOpportunitiesWorker.kt
-- [ ] T037 [US3] Implement auto-ID generation in InMemoryArbitrageOpportunityRepository.kt using AtomicLong
-- [ ] T038 [US3] Add thread-safety validation for concurrent access to repositories
+- [X] T035 [US3] Implement markAsEnded logic in SaveOpportunitiesWorker: mark old opportunities as ended before saving new in SaveOpportunitiesWorker.kt
+- [X] T037 [US3] Implement auto-ID generation in InMemoryArbitrageOpportunityRepository.kt using AtomicLong
+- [X] T038 [US3] Add thread-safety validation for concurrent access to repositories
 
 ### Tests for User Story 3
 
-- [ ] T039 [P] [US3] Test markAsEnded: old opportunities get endTimestamp set in InMemoryArbitrageOpportunityRepositoryTest.kt
-- [ ] T040 [P] [US3] Test auto-ID generation: sequential IDs for new opportunities in InMemoryArbitrageOpportunityRepositoryTest.kt
-- [ ] T041 [P] [US3] Test findActive: returns only opportunities with endTimestamp == null in InMemoryArbitrageOpportunityRepositoryTest.kt
-- [ ] T042 [US3] Integration test: recalculate → READ → verify data correctness in BusinessLogicProcessorImplRecalculateTest.kt
-- [ ] T043 [US3] Integration test: recalculate → SEARCH with filter → verify results in BusinessLogicProcessorImplRecalculateTest.kt
-- [ ] T044 [US3] Test thread safety: concurrent recalculate and read operations in BusinessLogicProcessorImplRecalculateTest.kt
+- [X] T039 [P] [US3] Test markAsEnded: old opportunities get endTimestamp set in InMemoryArbitrageOpportunityRepositoryTest.kt
+- [X] T040 [P] [US3] Test auto-ID generation: sequential IDs for new opportunities in InMemoryArbitrageOpportunityRepositoryTest.kt
+- [X] T041 [P] [US3] Test findActive: returns only opportunities with endTimestamp == null in InMemoryArbitrageOpportunityRepositoryTest.kt
+- [X] T042 [US3] Integration test: recalculate → READ → verify data correctness in BusinessLogicProcessorImplRecalculateTest.kt
+- [X] T043 [US3] Integration test: recalculate → SEARCH with filter → verify results in BusinessLogicProcessorImplRecalculateTest.kt
+- [X] T044 [US3] Test second RECALCULATE marks previous opportunities as ended in BusinessLogicProcessorImplRecalculateTest.kt
 
 **Checkpoint**: All user stories are independently functional. Complete end-to-end flow working with persistence.
 
@@ -139,14 +139,16 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T045 [P] Add KDoc documentation to ArbitrageFinderImpl algorithm explanation
-- [ ] T046 [P] Add KDoc documentation to repository implementations
-- [ ] T047 [P] Verify all logging statements include requestId context
-- [ ] T048 Run multiplatform tests on all targets: jvmTest, linuxX64Test, macosArm64Test
-- [ ] T049 Run performance benchmarks and document results in quickstart.md
-- [ ] T050 Code review: verify compliance with Constitution principles (simplicity, testability, performance)
-- [ ] T051 Update CLAUDE.md with new modules and patterns if needed
-- [ ] T052 Run ./gradlew :arbitrage-scanner:checkAll and fix any issues
+- [X] T045 [P] Add KDoc documentation to ArbitrageFinderParallelImpl algorithm explanation
+- [X] T046 [P] Add KDoc documentation to repository implementations
+- [X] T047 [P] Verify all logging statements include requestId context
+- [X] T048 Run multiplatform tests on all targets: jvmTest, linuxX64Test, macosArm64Test
+- [X] T049 Run performance benchmarks and document results in quickstart.md
+- [X] T050 Code review: verify compliance with Constitution principles (simplicity, testability, performance)
+- [X] T051 Update CLAUDE.md with new modules and patterns if needed
+- [X] T052 Run ./gradlew :arbitrage-scanner:checkAll and fix any issues
+
+**Checkpoint**: Phase 6 complete. All 52 tasks (T001-T052) successfully finished. Feature 001-recalculate-arbitrage is production-ready.
 
 ---
 
@@ -212,7 +214,7 @@ Task: "T013 [P] [US1] Create MockCexPriceGenerator..."
 Task: "T022 [P] [US1] Unit test for InMemoryCexPriceRepository..."
 Task: "T023 [P] [US1] Unit test for InMemoryArbitrageOpportunityRepository..."
 Task: "T024 [P] [US1] Unit test for MockCexPriceGenerator..."
-Task: "T025 [P] [US1] Unit test for ArbitrageFinderImpl..."
+Task: "T025 [P] [US1] Unit test for ArbitrageFinderParallelImpl..."
 ```
 
 ---
