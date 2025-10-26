@@ -49,7 +49,7 @@ tasks.register("testAll") {
 }
 
 tasks.register("jibDockerBuildAll") {
-    description = "Build Docker images using Jib for all modules that support it. ./gradlew jibDockerBuildAll --no-daemon"
+    description = "Build Docker images using Jib for all modules that support it."
     group = "Custom project tasks"
 
     subprojects {
