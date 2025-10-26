@@ -68,6 +68,7 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 - [ ] T015 [US1] Create LoadCexPricesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/LoadCexPricesWorker.kt
 - [ ] T016 [US1] Create FindArbitrageOpportunitiesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/FindArbitrageOpportunitiesWorker.kt
 - [ ] T017 [US1] Create SaveOpportunitiesWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/SaveOpportunitiesWorker.kt
+- [ ] T017a [US1] Add timestamp generation for startTimestamp in SaveOpportunitiesWorker.kt
 - [ ] T018 [US1] Create PrepareRecalculateResponseWorker in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/workers/recalculate/PrepareRecalculateResponseWorker.kt
 - [ ] T019 [US1] Integrate RECALCULATE workers chain into BusinessLogicProcessorImpl in arbitrage-scanner-business-logic/src/commonMain/kotlin/com/arbitrage/scanner/BusinessLogicProcessorImpl.kt
 - [ ] T020 [US1] Update ArbOpStubs with mock CexPrice data in arbitrage-scanner-stubs/src/commonMain/kotlin/com/arbitrage/scanner/ArbOpStubs.kt
@@ -118,7 +119,6 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 ### Implementation for User Story 3
 
 - [ ] T035 [US3] Implement markAsEnded logic in SaveOpportunitiesWorker: mark old opportunities as ended before saving new in SaveOpportunitiesWorker.kt
-- [ ] T036 [US3] Add timestamp generation for startTimestamp in SaveOpportunitiesWorker.kt
 - [ ] T037 [US3] Implement auto-ID generation in InMemoryArbitrageOpportunityRepository.kt using AtomicLong
 - [ ] T038 [US3] Add thread-safety validation for concurrent access to repositories
 
@@ -172,7 +172,7 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 **User Story 1** task flow:
 1. T011, T012, T013 (repositories & mock generator) - can run in parallel [P]
 2. T014 (ArbitrageFinder) - depends on having mockable data structure
-3. T015, T016, T017, T018 (workers) - sequential, T015 → T016 → T017 → T018
+3. T015, T016, T017, T017a, T018 (workers) - sequential, T015 → T016 → T017 → T017a → T018
 4. T019 (integration into processor) - depends on all workers
 5. T020, T021 (stubs & logging) - can run in parallel [P] after integration
 6. T022-T027 (tests) - T022-T025 can run in parallel [P], T026-T027 sequential
@@ -184,7 +184,7 @@ Paths shown assume multi-module Kotlin project structure with composite builds:
 4. T034 (integration test) - after all implementation
 
 **User Story 3** task flow:
-1. T035, T036, T037, T038 (implementation) - sequential (builds on each other)
+1. T035, T037, T038 (implementation) - sequential (builds on each other)
 2. T039, T040, T041 (repository tests) - can run in parallel [P]
 3. T042, T043, T044 (integration tests) - sequential
 
@@ -223,7 +223,7 @@ Task: "T025 [P] [US1] Unit test for ArbitrageFinderImpl..."
 
 1. Complete Phase 1: Setup (T001-T006)
 2. Complete Phase 2: Foundational (T007-T010) - CRITICAL blocking phase
-3. Complete Phase 3: User Story 1 (T011-T027)
+3. Complete Phase 3: User Story 1 (T011-T021, T022-T027 tests)
 4. **STOP and VALIDATE**: Test User Story 1 independently
    - Trigger RECALCULATE with mock data
    - Verify opportunities are found
@@ -244,9 +244,9 @@ With multiple developers:
 
 1. Team completes Setup + Foundational together (blocking work)
 2. Once Foundational is done:
-   - **Developer A**: User Story 1 (T011-T027) - MVP implementation
+   - **Developer A**: User Story 1 (T011-T021 + T022-T027 tests) - MVP implementation
    - **Developer B**: User Story 2 (T028-T034) - Performance optimization (can start in parallel after foundation)
-   - **Developer C**: User Story 3 (T035-T044) - Persistence enhancement (can start in parallel after foundation)
+   - **Developer C**: User Story 3 (T035, T037-T044) - Persistence enhancement (can start in parallel after foundation)
 3. Stories complete and integrate independently
 4. Each developer validates their story independently before integration
 
@@ -270,14 +270,14 @@ With multiple developers:
 - **Total Tasks**: 52
 - **Setup Phase**: 6 tasks
 - **Foundational Phase**: 4 tasks (BLOCKING)
-- **User Story 1 (P1)**: 17 tasks (11 implementation + 6 tests)
+- **User Story 1 (P1)**: 18 tasks (12 implementation + 6 tests)
 - **User Story 2 (P2)**: 7 tasks (4 implementation + 3 tests)
-- **User Story 3 (P3)**: 10 tasks (4 implementation + 6 tests)
+- **User Story 3 (P3)**: 9 tasks (3 implementation + 6 tests)
 - **Polish Phase**: 8 tasks
 
 **Parallel Opportunities**: 15+ tasks can run in parallel across phases
 
-**MVP Scope**: Phase 1 + Phase 2 + Phase 3 (User Story 1) = 27 tasks
+**MVP Scope**: Phase 1 + Phase 2 + Phase 3 (User Story 1) = 28 tasks
 
 **Estimated Delivery**:
 - MVP (US1): ~2-3 days for single developer

@@ -23,7 +23,7 @@
 - Kotlinx Serialization 1.9.0 (сериализация моделей)
 - Kotlin Test с JUnit Platform (тестирование)
 
-**Storage**: In-memory репозитории (Map/MutableList) для CexPrice и ArbitrageOpportunity, без персистентного хранилища на данном этапе
+**Storage**: in-memory репозитории (Map/MutableList) для CexPrice и ArbitrageOpportunity в рамках MVP; персистентное хранилище планируется в будущих итерациях
 
 **Testing**:
 - Kotlin Test для unit тестов
@@ -36,15 +36,15 @@
 
 **Performance Goals**:
 - Обработка 1000 ценовых записей < 1 секунда
-- Алгоритм поиска оптимизирован (группировка по токенам, не O(n²))
-- Минимальные аллокации памяти при пересчёте
+- Алгоритм поиска оптимизирован: группировка по токенам через groupBy (O(n) вместо O(n²))
+- Использование Kotlin sequences для lazy evaluation, избегание промежуточных toList() вызовов
 
 **Constraints**:
 - Используется существующая структура Context для передачи данных
 - Command.RECALCULATE уже определён
 - Модели CexPrice, CexToCexArbitrageOpportunity, RecalculateResult уже существуют
 - Минимальный порог спреда: 0.1%
-- In-memory хранилище без внешних зависимостей
+- in-memory хранилище без внешних зависимостей
 
 **Scale/Scope**:
 - Моковый набор: минимум 100 ценовых записей
