@@ -21,8 +21,8 @@ services:
       - kafka-data:/var/lib/kafka/data
 
   arbitrage-scanner:
-    image: arbitrage-scanner:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
-    container_name: arbitrage-app
+    image: arbitrage-scanner-app-ktor:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
+    container_name: arbitrage-scanner-app-ktor
     depends_on:
       - fluent-bit
       - kafka
@@ -33,6 +33,20 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     ports:
       - "8080:8080"
+
+  arbitrage-scanner-app-kafka:
+    image: arbitrage-scanner-app-kafka:latest
+    container_name: arbitrage-scanner-app-kafka
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+      - KAFKA_IN_TOPIC=arbitrage-opportunities-in
+      - KAFKA_OUT_TOPIC=arbitrage-opportunities-out
+      - KAFKA_GROUP_ID=arbitrage-scanner-group
+      - LOGS_FB_HOSTS=fluent-bit
+      - LOGS_FB_PORT=24224
 
   # Kafka UI - веб-интерфейс для управления Kafka
   kafka-ui:

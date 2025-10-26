@@ -1,9 +1,9 @@
 package com.arbitrage.scanner
 
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebug
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityDebugApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityReadRequest
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugMode
-import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubs
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugModeApi
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugStubsApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,9 +12,9 @@ class ArbitrageOpportunityApiV1RequestSerializationTest {
 
     private val givenRequest = ArbitrageOpportunityReadRequest(
         id = "test-id",
-        debug = ArbitrageOpportunityDebug(
-            mode = ArbitrageOpportunityRequestDebugMode.STUB,
-            stub = ArbitrageOpportunityRequestDebugStubs.SUCCESS
+        debug = ArbitrageOpportunityDebugApi(
+            mode = ArbitrageOpportunityRequestDebugModeApi.STUB,
+            stub = ArbitrageOpportunityRequestDebugStubsApi.SUCCESS
         )
     )
 

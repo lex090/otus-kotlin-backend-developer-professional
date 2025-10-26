@@ -8,6 +8,7 @@ class BusinessLogicProcessorSimpleImpl : BusinessLogicProcessor {
         ctx.state = State.RUNNING
         ctx.arbitrageOpportunityReadResponse = ArbOpStubs.arbitrageOpportunity
         ctx.arbitrageOpportunitySearchResponse.add(ArbOpStubs.arbitrageOpportunity)
+        ctx.recalculateResponse = ArbOpStubs.recalculateResult
         ctx.state = State.FINISHING
     }
 }
