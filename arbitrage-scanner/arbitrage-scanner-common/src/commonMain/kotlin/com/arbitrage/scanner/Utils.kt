@@ -22,3 +22,8 @@ fun Context.fail(error: InternalError) {
     addError(error)
     state = State.FAILING
 }
+
+fun Context.fail(errors: Collection<InternalError>) {
+    addError(error = errors.toTypedArray())
+    state = State.FAILING
+}
