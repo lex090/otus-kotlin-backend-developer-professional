@@ -16,6 +16,8 @@ kafka = "3.9.0"
 hoplite = "2.9.0"
 jib = "3.4.4"
 kotlin-cor = "0.6.0"
+uuid = "0.8.4"
+cache4k = "0.14.0"
 
 [libraries]
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -57,6 +59,12 @@ hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "ho
 
 # Kotlin CoR
 kotlin-cor = { module = "com.crowdproj:kotlin-cor", version.ref = "kotlin-cor" }
+
+# UUID
+uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
+
+# Cache4k
+cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "cache4k" }
 
 [bundles]
 

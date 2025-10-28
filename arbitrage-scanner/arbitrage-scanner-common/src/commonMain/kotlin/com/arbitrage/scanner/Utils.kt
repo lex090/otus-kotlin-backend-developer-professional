@@ -27,3 +27,14 @@ fun Context.fail(errors: Collection<InternalError>) {
     addError(error = errors.toTypedArray())
     state = State.FAILING
 }
+
+fun errorSystem(
+    violationCode: String,
+    e: Throwable,
+) = InternalError(
+    code = "system-$violationCode",
+    group = "system",
+    message = "System error occurred.",
+    exception = e,
+)
+
