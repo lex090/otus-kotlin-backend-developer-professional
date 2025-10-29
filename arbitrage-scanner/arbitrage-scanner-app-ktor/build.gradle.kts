@@ -63,6 +63,7 @@ dependencies {
     implementation(project(":arbitrage-scanner-api-v1"))
     implementation(project(":arbitrage-scanner-business-logic"))
     implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging-logback"))
+    implementation(project(":arbitrage-scanner-service-stub"))
 
     // Ktor
     implementation(libs.ktor.server.core)

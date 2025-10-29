@@ -115,6 +115,50 @@ object StubsDataFactory {
     }
 
     /**
+     * Создает стандартный набор CEX цен для тестирования
+     *
+     * Возвращает предопределенный набор цен для основных токенов на разных биржах:
+     * - BTC на Binance и OKX
+     * - ETH на Binance и Bybit
+     * - USDT на Binance
+     *
+     * @param timestamp Временная метка (по умолчанию 1640995200000)
+     * @return Набор объектов CexPrice
+     */
+    fun getDefaultCexPrices(timestamp: Long = 1640995200000): Set<CexPrice> = setOf(
+        createCexPrice(
+            token = "BTC",
+            exchange = "binance",
+            price = 50000.0,
+            timestamp = timestamp
+        ),
+        createCexPrice(
+            token = "BTC",
+            exchange = "okx",
+            price = 51000.0,
+            timestamp = timestamp
+        ),
+        createCexPrice(
+            token = "ETH",
+            exchange = "binance",
+            price = 4000.0,
+            timestamp = timestamp
+        ),
+        createCexPrice(
+            token = "ETH",
+            exchange = "bybit",
+            price = 4050.0,
+            timestamp = timestamp
+        ),
+        createCexPrice(
+            token = "USDT",
+            exchange = "binance",
+            price = 1.0,
+            timestamp = timestamp
+        )
+    )
+
+    /**
      * Предопределенные биржи для тестов
      */
     val EXCHANGES = listOf(

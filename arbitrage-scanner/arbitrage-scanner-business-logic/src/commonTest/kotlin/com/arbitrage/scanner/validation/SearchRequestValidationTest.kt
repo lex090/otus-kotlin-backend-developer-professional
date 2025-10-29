@@ -11,6 +11,7 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.service.CexPriceClientService
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,6 +27,7 @@ class SearchRequestValidationTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
+        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
     }
 
     @Test

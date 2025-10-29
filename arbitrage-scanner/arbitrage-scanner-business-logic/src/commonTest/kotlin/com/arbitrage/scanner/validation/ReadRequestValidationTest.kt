@@ -8,6 +8,7 @@ import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.service.CexPriceClientService
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,6 +24,7 @@ class ReadRequestValidationTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
+        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
     }
 
     @Test
