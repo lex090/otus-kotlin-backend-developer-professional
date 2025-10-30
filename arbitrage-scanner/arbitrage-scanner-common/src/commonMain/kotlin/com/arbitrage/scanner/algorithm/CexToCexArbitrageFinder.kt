@@ -56,4 +56,15 @@ abstract class CexToCexArbitrageFinder {
         // Конвертируем в Double для ArbitrageOpportunitySpread
         return ArbitrageOpportunitySpread(spread.doubleValue(exactRequired = false))
     }
+
+    companion object {
+        val NONE = object : CexToCexArbitrageFinder() {
+            override suspend fun findOpportunities(
+                prices: List<CexPrice>,
+                minSpreadPercent: Double
+            ): List<CexToCexArbitrageOpportunity> {
+                throw NotImplementedError("CexToCexArbitrageFinder.NONE must not be used")
+            }
+        }
+    }
 }

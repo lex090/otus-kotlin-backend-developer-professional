@@ -2,6 +2,7 @@ package com.arbitrage.scanner.validation
 
 import com.arbitrage.scanner.BusinessLogicProcessorImpl
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
+import com.arbitrage.scanner.algorithm.CexToCexArbitrageFinder
 import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
@@ -28,6 +29,7 @@ class SearchRequestValidationTest {
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
         override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = CexToCexArbitrageFinder.NONE
     }
 
     @Test

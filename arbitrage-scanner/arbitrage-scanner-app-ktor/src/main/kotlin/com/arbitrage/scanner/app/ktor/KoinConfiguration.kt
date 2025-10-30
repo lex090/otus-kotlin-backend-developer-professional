@@ -3,6 +3,8 @@ package com.arbitrage.scanner.app.ktor
 import com.arbitrage.scanner.BusinessLogicProcessor
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
 import com.arbitrage.scanner.BusinessLogicProcessorSimpleImpl
+import com.arbitrage.scanner.algorithm.CexToCexArbitrageFinder
+import com.arbitrage.scanner.algorithm.CexToCexArbitrageFinderParallelImpl
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.libs.logging.arbScanLoggerLogback
 import com.arbitrage.scanner.service.CexPriceClientService
@@ -38,10 +40,12 @@ val businessLogicProcessorModule = module {
         object : BusinessLogicProcessorImplDeps {
             override val loggerProvider: ArbScanLoggerProvider = get()
             override val stubCexPriceClientService: CexPriceClientService = get()
+            override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = get()
         }
     }
     factory<BusinessLogicProcessor> { BusinessLogicProcessorSimpleImpl() }
     factory<CexPriceClientService> { CexPriceClientServiceStub() }
+    factory<CexToCexArbitrageFinder> { CexToCexArbitrageFinderParallelImpl() }
 }
 
 val loggingModule = module {
