@@ -18,6 +18,8 @@ import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorke
 import com.arbitrage.scanner.workers.recalculate.updateExistingArbOpsWorker
 import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
 import com.arbitrage.scanner.workers.read.readArbOpWorker
+import com.arbitrage.scanner.workers.search.prepareSearchResponseWorker
+import com.arbitrage.scanner.workers.search.searchArbOpWorker
 import com.arbitrage.scanner.workers.setupArbOpRepoWorker
 import com.arbitrage.scanner.workers.setupCexPriceClientServiceWorker
 import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
@@ -141,6 +143,12 @@ class BusinessLogicProcessorImpl(
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunitySearchRequestValidated = arbitrageOpportunitySearchRequestValidating
                 }
+            }
+
+            chain {
+                title = "Основная логика обработки search"
+                searchArbOpWorker("Поиск арбитражных возможностей в БД")
+                prepareSearchResponseWorker("Подготовка ответа")
             }
         }
     }.build()
