@@ -31,7 +31,11 @@ class SearchRequestValidationTest {
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
         override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = CexToCexArbitrageFinder.NONE
+        override val prodCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
         override val testCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val prodArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val stubArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
         override val testArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
     }
 
