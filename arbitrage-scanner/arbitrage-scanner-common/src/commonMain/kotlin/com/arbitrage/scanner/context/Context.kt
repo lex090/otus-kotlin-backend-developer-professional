@@ -50,6 +50,10 @@ data class Context(
     // START RECALCULATE
     val cexPrices: MutableList<CexPrice> = mutableListOf(),
     val arbOps: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
+    val existingActiveArbOps: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
+    val arbOpsToCreate: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
+    val arbOpsToUpdate: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
+    val arbOpsToClose: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
     var executionTimeOfFindArbOps: Duration = Duration.ZERO,
     var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
     // END RECALCULATE
