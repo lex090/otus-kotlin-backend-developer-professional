@@ -12,6 +12,9 @@ import com.arbitrage.scanner.models.CexPrice
 class CexPriceClientServiceTest : CexPriceClientService {
 
     override suspend fun getAllCexPrice(): Set<CexPrice> {
-        return StubsDataFactory.getDefaultCexPrices()
+        return StubsDataFactory.generateCexPrices(
+            tokenCount = 10,
+            exchangeCount = 5,
+        ).toSet()
     }
 }

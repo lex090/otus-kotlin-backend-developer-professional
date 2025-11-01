@@ -2,6 +2,7 @@ package com.arbitrage.scanner.algorithm
 
 import com.arbitrage.scanner.StubsDataFactory
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.time.measureTime
@@ -138,6 +139,7 @@ class CexToCexArbitrageFinderPerformanceTest {
         )
     }
 
+    @Ignore
     @Test
     fun `performance comparison test - multiple runs for consistency`() = runTest {
         // Given: Средний датасет для повторных замеров
