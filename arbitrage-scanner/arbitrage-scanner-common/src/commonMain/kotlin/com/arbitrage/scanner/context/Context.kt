@@ -9,8 +9,12 @@ import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.RecalculateResult
+import com.arbitrage.scanner.repository.IArbOpRepository
+import com.arbitrage.scanner.service.CexPriceClientService
+import kotlin.time.Duration
 
 data class Context(
     var command: Command = Command.NONE,
@@ -23,6 +27,9 @@ data class Context(
     var startTimestamp: Timestamp = Timestamp.DEFAULT,
 
     val errors: MutableSet<InternalError> = mutableSetOf(),
+
+    var cexPriceClientService: CexPriceClientService = CexPriceClientService.NONE,
+    var arbOpRepo: IArbOpRepository = IArbOpRepository.NONE,
 
     // START READ
     var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
@@ -41,6 +48,9 @@ data class Context(
     // END READ
 
     // START RECALCULATE
+    val cexPrices: MutableList<CexPrice> = mutableListOf(),
+    val arbOps: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
+    var executionTimeOfFindArbOps: Duration = Duration.ZERO,
     var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
     // END RECALCULATE
 )
