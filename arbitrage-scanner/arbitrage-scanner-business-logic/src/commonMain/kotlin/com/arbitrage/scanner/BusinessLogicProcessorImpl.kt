@@ -8,6 +8,12 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
+import com.arbitrage.scanner.workers.recalculate.findArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.getCexPricesWorker
+import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorker
+import com.arbitrage.scanner.workers.recalculate.updateArbOpsWorker
+import com.arbitrage.scanner.workers.setupArbOpRepoWorker
+import com.arbitrage.scanner.workers.setupCexPriceClientServiceWorker
 import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
 import com.arbitrage.scanner.workers.stubs.readBadIdStubWorker
 import com.arbitrage.scanner.workers.stubs.readNotFoundStubWorker
@@ -16,16 +22,17 @@ import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
 import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
+import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
 import com.arbitrage.scanner.workers.validation.validateFilterNotEmptyWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
 import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
-import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
 import com.arbitrage.scanner.workers.validation.validateSpreadMaxWorker
 import com.arbitrage.scanner.workers.validation.validateSpreadMinWorker
 import com.arbitrage.scanner.workers.validationProcessor
 import com.arbitrage.scanner.workers.workModProcessor
+import com.crowdproj.kotlin.cor.handlers.chain
 import com.crowdproj.kotlin.cor.handlers.worker
 import com.crowdproj.kotlin.cor.rootChain
 
@@ -37,11 +44,21 @@ class BusinessLogicProcessorImpl(
 
     private val corChain = rootChain(config = deps) {
         initStatus("Инициализация статуса обработки запроса")
+        setupCexPriceClientServiceWorker("Установка сервиса получения цен с CEX криптобирж")
+        setupArbOpRepoWorker("Установка репозитория арбитражных ситуаций")
 
         commandProcessor(title = "Обработка события recalculate", command = Command.RECALCULATE) {
             workModProcessor(title = "Обработка в режиме стабов", workMode = WorkMode.STUB) {
                 recalculateSuccessStubWorker(title = "Обработка стаба SUCCESS")
                 noStubCaseWorker(title = "Валидируем ситуацию, когда запрошен кейс, который не поддерживается в стабах")
+            }
+
+            chain {
+                title = "Основная логика обработки recalculate"
+                getCexPricesWorker("Получение цен с CEX бирж и поиск арбитражных возможностей")
+                findArbOpsWorker("Ищем новые арбитражные возможности")
+                updateArbOpsWorker("Сохраняем найденные арбитражные возможности")
+                prepareRecalculateResponseWorker("Подготавливаем получившийся ответ")
             }
         }
 
