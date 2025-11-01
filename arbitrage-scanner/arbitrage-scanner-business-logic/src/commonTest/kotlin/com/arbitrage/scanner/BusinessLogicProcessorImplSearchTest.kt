@@ -73,7 +73,7 @@ class BusinessLogicProcessorImplSearchTest {
             "arbitrageOpportunitySearchResponse должен содержать элемент из ArbOpStubs.arbitrageOpportunity"
         )
         assertTrue(
-            context.errors.isEmpty(),
+            context.internalErrors.isEmpty(),
             "Не должно быть ошибок при успешном выполнении"
         )
     }
@@ -103,7 +103,7 @@ class BusinessLogicProcessorImplSearchTest {
             "Размер arbitrageOpportunitySearchResponse должен быть 0"
         )
         assertTrue(
-            context.errors.isEmpty(),
+            context.internalErrors.isEmpty(),
             "Не должно быть ошибок при NOT_FOUND стабе"
         )
     }
@@ -125,11 +125,11 @@ class BusinessLogicProcessorImplSearchTest {
         // Then: Проверяем, что возвращается ошибка валидации
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при ошибке")
         assertTrue(
-            context.errors.isNotEmpty(),
+            context.internalErrors.isNotEmpty(),
             "Должна быть хотя бы одна ошибка"
         )
 
-        val error = context.errors.first()
+        val error = context.internalErrors.first()
         assertEquals("validation", error.code, "Код ошибки должен быть 'validation'")
         assertEquals("validation", error.group, "Группа ошибки должна быть 'validation'")
         assertEquals("stub", error.field, "Поле ошибки должно быть 'stub'")

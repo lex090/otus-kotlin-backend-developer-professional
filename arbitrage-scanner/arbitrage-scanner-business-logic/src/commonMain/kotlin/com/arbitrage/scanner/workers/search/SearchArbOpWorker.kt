@@ -42,7 +42,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.searchArbOpWorker(
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка поиска арбитражных возможностей: ${searchResult.errors}")
-                    errors.addAll(searchResult.errors)
+                    internalErrors.addAll(searchResult.errors)
                 }
             }
         }

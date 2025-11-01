@@ -19,14 +19,13 @@ import kotlin.time.Duration
 data class Context(
     var command: Command = Command.NONE,
     var state: State = State.NONE,
-    val internalErrors: MutableList<InternalError> = mutableListOf(),
     var workMode: WorkMode = WorkMode.PROD,
     var stubCase: StubCase = StubCase.NONE,
 
     var requestId: RequestId = RequestId.DEFAULT,
     var startTimestamp: Timestamp = Timestamp.DEFAULT,
 
-    val errors: MutableSet<InternalError> = mutableSetOf(),
+    val internalErrors: MutableList<InternalError> = mutableListOf(),
 
     var cexPriceClientService: CexPriceClientService = CexPriceClientService.NONE,
     var arbOpRepo: IArbOpRepository = IArbOpRepository.NONE,

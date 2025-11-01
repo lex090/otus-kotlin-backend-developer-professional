@@ -44,7 +44,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.closeInactiveArbOpsW
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка закрытия неактуальных возможностей: ${closeResult.errors}")
-                    errors.addAll(closeResult.errors)
+                    internalErrors.addAll(closeResult.errors)
                 }
             }
         }

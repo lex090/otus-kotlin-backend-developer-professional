@@ -16,7 +16,7 @@ fun Throwable.asError(
     exception = this,
 )
 
-fun Context.addError(vararg error: InternalError) = errors.addAll(error)
+fun Context.addError(vararg error: InternalError) = internalErrors.addAll(error)
 
 fun Context.fail(error: InternalError) {
     addError(error)

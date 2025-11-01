@@ -37,7 +37,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка загрузки существующих возможностей: ${searchResult.errors}")
-                    errors.addAll(searchResult.errors)
+                    internalErrors.addAll(searchResult.errors)
                 }
 
                 is ArbOpRepoResponse.Single -> {

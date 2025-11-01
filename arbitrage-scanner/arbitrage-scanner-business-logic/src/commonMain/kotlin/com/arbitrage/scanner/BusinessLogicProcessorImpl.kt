@@ -8,6 +8,8 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
+import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
+import com.arbitrage.scanner.workers.read.readArbOpWorker
 import com.arbitrage.scanner.workers.recalculate.analyzeArbOpChangesWorker
 import com.arbitrage.scanner.workers.recalculate.closeInactiveArbOpsWorker
 import com.arbitrage.scanner.workers.recalculate.createNewArbOpsWorker
@@ -16,8 +18,6 @@ import com.arbitrage.scanner.workers.recalculate.getCexPricesWorker
 import com.arbitrage.scanner.workers.recalculate.loadActiveArbOpsWorker
 import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorker
 import com.arbitrage.scanner.workers.recalculate.updateExistingArbOpsWorker
-import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
-import com.arbitrage.scanner.workers.read.readArbOpWorker
 import com.arbitrage.scanner.workers.search.prepareSearchResponseWorker
 import com.arbitrage.scanner.workers.search.searchArbOpWorker
 import com.arbitrage.scanner.workers.setupArbOpRepoWorker
@@ -31,12 +31,10 @@ import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
 import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
-import com.arbitrage.scanner.workers.validation.validateFilterNotEmptyWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
 import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
-import com.arbitrage.scanner.workers.validation.validateSpreadMaxWorker
 import com.arbitrage.scanner.workers.validation.validateSpreadMinWorker
 import com.arbitrage.scanner.workers.validationProcessor
 import com.arbitrage.scanner.workers.workModProcessor
@@ -101,12 +99,12 @@ class BusinessLogicProcessorImpl(
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunityReadRequestValidated = arbitrageOpportunityReadRequestValidating
                 }
-            }
 
-            chain {
-                title = "Основная логика обработки read"
-                readArbOpWorker("Чтение арбитражной возможности из БД")
-                prepareReadResponseWorker("Подготовка ответа")
+                chain {
+                    title = "Основная логика обработки read"
+                    readArbOpWorker("Чтение арбитражной возможности из БД")
+                    prepareReadResponseWorker("Подготовка ответа")
+                }
             }
         }
 
@@ -134,21 +132,19 @@ class BusinessLogicProcessorImpl(
                 }
 
                 // Последовательность валидации фильтров
-                validateFilterNotEmptyWorker("Проверка, что фильтр не пустой")
                 validateCexTokenIdsWorker("Проверка ID CEX токенов")
                 validateCexExchangeIdsWorker("Проверка ID CEX бирж")
                 validateSpreadMinWorker("Проверка минимального значения спреда")
-                validateSpreadMaxWorker("Проверка максимального значения спреда")
 
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunitySearchRequestValidated = arbitrageOpportunitySearchRequestValidating
                 }
-            }
 
-            chain {
-                title = "Основная логика обработки search"
-                searchArbOpWorker("Поиск арбитражных возможностей в БД")
-                prepareSearchResponseWorker("Подготовка ответа")
+                chain {
+                    title = "Основная логика обработки search"
+                    searchArbOpWorker("Поиск арбитражных возможностей в БД")
+                    prepareSearchResponseWorker("Подготовка ответа")
+                }
             }
         }
     }.build()

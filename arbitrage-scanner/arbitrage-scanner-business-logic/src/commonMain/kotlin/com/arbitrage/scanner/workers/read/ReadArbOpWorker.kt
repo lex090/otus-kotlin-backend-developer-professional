@@ -43,7 +43,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.readArbOpWorker(
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка чтения арбитражной возможности: ${readResult.errors}")
-                    errors.addAll(readResult.errors)
+                    internalErrors.addAll(readResult.errors)
                 }
             }
         }

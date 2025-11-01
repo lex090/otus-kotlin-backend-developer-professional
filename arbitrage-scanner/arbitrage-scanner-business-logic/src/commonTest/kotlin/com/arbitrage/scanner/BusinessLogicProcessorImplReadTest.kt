@@ -74,7 +74,7 @@ class BusinessLogicProcessorImplReadTest {
             "ID арбитражной возможности должен совпадать со стабом"
         )
         assertTrue(
-            context.errors.isEmpty(),
+            context.internalErrors.isEmpty(),
             "Не должно быть ошибок при успешном выполнении"
         )
     }
@@ -95,11 +95,11 @@ class BusinessLogicProcessorImplReadTest {
         // Then: Проверяем, что возвращается ошибка not-found
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при ошибке")
         assertTrue(
-            context.errors.isNotEmpty(),
+            context.internalErrors.isNotEmpty(),
             "Должна быть хотя бы одна ошибка"
         )
 
-        val error = context.errors.first()
+        val error = context.internalErrors.first()
         assertEquals("not-found", error.code, "Код ошибки должен быть 'not-found'")
         assertEquals("stub", error.group, "Группа ошибки должна быть 'stub'")
         assertEquals("id", error.field, "Поле ошибки должно быть 'id'")
@@ -125,11 +125,11 @@ class BusinessLogicProcessorImplReadTest {
         // Then: Проверяем, что возвращается ошибка bad-id
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при ошибке")
         assertTrue(
-            context.errors.isNotEmpty(),
+            context.internalErrors.isNotEmpty(),
             "Должна быть хотя бы одна ошибка"
         )
 
-        val error = context.errors.first()
+        val error = context.internalErrors.first()
         assertEquals("bad-id", error.code, "Код ошибки должен быть 'bad-id'")
         assertEquals("stub", error.group, "Группа ошибки должна быть 'stub'")
         assertEquals("id", error.field, "Поле ошибки должно быть 'id'")

@@ -44,7 +44,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.updateExistingArbOps
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка обновления существующих возможностей: ${updateResult.errors}")
-                    errors.addAll(updateResult.errors)
+                    internalErrors.addAll(updateResult.errors)
                 }
             }
         }
