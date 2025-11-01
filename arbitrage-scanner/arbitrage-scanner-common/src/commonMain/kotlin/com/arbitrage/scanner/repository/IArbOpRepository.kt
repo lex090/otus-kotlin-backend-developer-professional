@@ -43,4 +43,28 @@ interface IArbOpRepository {
         data class Multiple(val arbOps: List<CexToCexArbitrageOpportunity>) : ArbOpRepoResponse
         data class Error(val errors: List<InternalError>) : ArbOpRepoResponse
     }
+
+    companion object {
+        val NONE = object : IArbOpRepository {
+            override suspend fun create(request: CreateArbOpRepoRequest): ArbOpRepoResponse {
+                throw NotImplementedError("IArbOpRepository.NONE must not be used")
+            }
+
+            override suspend fun read(request: ReadArbOpRepoRequest): ArbOpRepoResponse {
+                throw NotImplementedError("IArbOpRepository.NONE must not be used")
+            }
+
+            override suspend fun update(request: UpdateArbOpRepoRequest): ArbOpRepoResponse {
+                throw NotImplementedError("IArbOpRepository.NONE must not be used")
+            }
+
+            override suspend fun delete(request: DeleteArbOpRepoRequest): ArbOpRepoResponse {
+                throw NotImplementedError("IArbOpRepository.NONE must not be used")
+            }
+
+            override suspend fun search(request: SearchArbOpRepoRequest): ArbOpRepoResponse {
+                throw NotImplementedError("IArbOpRepository.NONE must not be used")
+            }
+        }
+    }
 }
