@@ -20,7 +20,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
         Загрузка активных арбитражных возможностей из БД.
         Фильтрует только те, у которых endTimestamp == null.
     """.trimIndent()
-    on { state == State.RUNNING && arbOps.isNotEmpty() }
+    on { state == State.RUNNING }
     val logger = config.loggerProvider.logger(kFun)
     handle {
         logger.doWithLogging(id = requestId.toString(), level = LogLevel.INFO) {
