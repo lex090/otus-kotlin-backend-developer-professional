@@ -16,6 +16,8 @@ import com.arbitrage.scanner.workers.recalculate.getCexPricesWorker
 import com.arbitrage.scanner.workers.recalculate.loadActiveArbOpsWorker
 import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorker
 import com.arbitrage.scanner.workers.recalculate.updateExistingArbOpsWorker
+import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
+import com.arbitrage.scanner.workers.read.readArbOpWorker
 import com.arbitrage.scanner.workers.setupArbOpRepoWorker
 import com.arbitrage.scanner.workers.setupCexPriceClientServiceWorker
 import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
@@ -97,6 +99,12 @@ class BusinessLogicProcessorImpl(
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunityReadRequestValidated = arbitrageOpportunityReadRequestValidating
                 }
+            }
+
+            chain {
+                title = "Основная логика обработки read"
+                readArbOpWorker("Чтение арбитражной возможности из БД")
+                prepareReadResponseWorker("Подготовка ответа")
             }
         }
 
