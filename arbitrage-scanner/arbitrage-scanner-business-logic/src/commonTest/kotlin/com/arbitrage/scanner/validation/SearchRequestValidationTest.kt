@@ -12,6 +12,8 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.repository.IArbOpRepository
+import com.arbitrage.scanner.repository.inmemory.InMemoryArbOpRepository
 import com.arbitrage.scanner.service.CexPriceClientService
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -28,8 +30,9 @@ class SearchRequestValidationTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
-        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
         override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = CexToCexArbitrageFinder.NONE
+        override val testCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val testArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
     }
 
     @Test
@@ -71,7 +74,12 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = setOf(CexTokenId("B"), CexTokenId("test@token"), CexTokenId("-invalid"), CexTokenId("valid-token")),
+                cexTokenIds = setOf(
+                    CexTokenId("B"),
+                    CexTokenId("test@token"),
+                    CexTokenId("-invalid"),
+                    CexTokenId("valid-token")
+                ),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread.DEFAULT
             )
@@ -98,7 +106,12 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = setOf(CexExchangeId("ok"), CexExchangeId("_bybit"), CexExchangeId("binance-"), CexExchangeId("valid")),
+                cexExchangeIds = setOf(
+                    CexExchangeId("ok"),
+                    CexExchangeId("_bybit"),
+                    CexExchangeId("binance-"),
+                    CexExchangeId("valid")
+                ),
                 spread = ArbitrageOpportunitySpread(1.0)
             )
         )
