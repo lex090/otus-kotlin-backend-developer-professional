@@ -14,6 +14,18 @@ data class CexToCexArbitrageOpportunity(
     val startTimestamp: Timestamp = Timestamp.DEFAULT,
     val endTimestamp: Timestamp? = null,
 ) {
+    val fastKey: ArbOpFastKey = ArbOpFastKey(
+        cexTokenId = cexTokenId,
+        buyCexExchangeId = buyCexExchangeId,
+        sellCexExchangeId = sellCexExchangeId,
+    )
+
+    data class ArbOpFastKey(
+        val cexTokenId: CexTokenId,
+        val buyCexExchangeId: CexExchangeId,
+        val sellCexExchangeId: CexExchangeId
+    )
+
     companion object {
         val DEFAULT = CexToCexArbitrageOpportunity()
     }
