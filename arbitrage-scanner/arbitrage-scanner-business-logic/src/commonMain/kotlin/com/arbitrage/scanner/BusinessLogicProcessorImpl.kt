@@ -8,10 +8,14 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
+import com.arbitrage.scanner.workers.recalculate.analyzeArbOpChangesWorker
+import com.arbitrage.scanner.workers.recalculate.closeInactiveArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.createNewArbOpsWorker
 import com.arbitrage.scanner.workers.recalculate.findArbOpsWorker
 import com.arbitrage.scanner.workers.recalculate.getCexPricesWorker
+import com.arbitrage.scanner.workers.recalculate.loadActiveArbOpsWorker
 import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorker
-import com.arbitrage.scanner.workers.recalculate.updateArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.updateExistingArbOpsWorker
 import com.arbitrage.scanner.workers.setupArbOpRepoWorker
 import com.arbitrage.scanner.workers.setupCexPriceClientServiceWorker
 import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
@@ -55,10 +59,14 @@ class BusinessLogicProcessorImpl(
 
             chain {
                 title = "Основная логика обработки recalculate"
-                getCexPricesWorker("Получение цен с CEX бирж и поиск арбитражных возможностей")
-                findArbOpsWorker("Ищем новые арбитражные возможности")
-                updateArbOpsWorker("Сохраняем найденные арбитражные возможности")
-                prepareRecalculateResponseWorker("Подготавливаем получившийся ответ")
+                getCexPricesWorker("Получение цен с CEX бирж")
+                findArbOpsWorker("Поиск новых арбитражных возможностей")
+                loadActiveArbOpsWorker("Загрузка активных возможностей из БД")
+                analyzeArbOpChangesWorker("Анализ изменений (создать/обновить/закрыть)")
+                createNewArbOpsWorker("Создание новых возможностей")
+                updateExistingArbOpsWorker("Обновление существующих возможностей")
+                closeInactiveArbOpsWorker("Закрытие неактуальных возможностей")
+                prepareRecalculateResponseWorker("Подготовка ответа")
             }
         }
 
