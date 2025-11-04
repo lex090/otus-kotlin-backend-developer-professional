@@ -6,6 +6,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 
@@ -29,13 +30,23 @@ abstract class RepositoryArbOpUpdateTest {
         val updateResponse = repository.update(updateRequest)
 
         // Assert
-        assertTrue(
-            updateResponse is IArbOpRepository.ArbOpRepoResponse.Single,
-            "Expected Single response, got ${updateResponse::class.simpleName}. updateResponse -> $updateResponse"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(updateResponse)
         val result = updateResponse.arbOp
+
+        // Проверяем что ID не изменился
         assertEquals(existing.id, result.id, "ID should remain the same")
+
+        // Проверяем обновленное поле
         assertEquals(ArbitrageOpportunitySpread(5.0), result.spread, "Spread should be updated")
+
+        // Проверяем что другие поля НЕ изменились
+        assertEquals(existing.cexTokenId, result.cexTokenId, "Token ID should not change")
+        assertEquals(existing.buyCexExchangeId, result.buyCexExchangeId, "Buy exchange ID should not change")
+        assertEquals(existing.sellCexExchangeId, result.sellCexExchangeId, "Sell exchange ID should not change")
+        assertEquals(existing.buyCexPriceRaw, result.buyCexPriceRaw, "Buy price should not change")
+        assertEquals(existing.sellCexPriceRaw, result.sellCexPriceRaw, "Sell price should not change")
+        assertEquals(existing.startTimestamp, result.startTimestamp, "Start timestamp should not change")
+        assertEquals(existing.endTimestamp, result.endTimestamp, "End timestamp should not change")
     }
 
     @Test
@@ -50,13 +61,9 @@ abstract class RepositoryArbOpUpdateTest {
         val response = repository.update(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Error,
-            "Expected Error response for non-existing item, got ${response::class.simpleName}"
-        )
-        val errors = response.errors
-        assertTrue(errors.isNotEmpty(), "Should return error")
-        assertEquals("repo-not-found", errors.first().code, "Error code should be repo-not-found")
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(response)
+        assertTrue(response.errors.isNotEmpty(), "Should return error")
+        assertEquals("repo-not-found", response.errors.first().code, "Error code should be repo-not-found")
     }
 
     @Test
@@ -73,12 +80,9 @@ abstract class RepositoryArbOpUpdateTest {
         val updateResponse = repository.update(updateRequest)
 
         // Assert
-        assertTrue(
-            updateResponse is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${updateResponse::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(updateResponse)
         val results = updateResponse.arbOps
-        assertEquals(2, results.size, "Should update all items")
+        assertEquals(initObject.size, results.size, "Should update all items")
         assertTrue(
             results.all { it.spread.value == 10.0 },
             "All items should have updated spread"
@@ -95,12 +99,8 @@ abstract class RepositoryArbOpUpdateTest {
         val response = repository.update(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response for empty list, got ${response::class.simpleName}"
-        )
-        val results = response.arbOps
-        assertTrue(results.isEmpty(), "Should return empty list")
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
+        assertTrue(response.arbOps.isEmpty(), "Should return empty list")
     }
 
     companion object : InitialObject<CexToCexArbitrageOpportunity> {

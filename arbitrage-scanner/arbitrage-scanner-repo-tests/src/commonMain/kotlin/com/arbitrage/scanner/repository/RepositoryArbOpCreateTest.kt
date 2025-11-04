@@ -152,12 +152,8 @@ abstract class RepositoryArbOpCreateTest {
         val response = repository.create(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response for empty list, got ${response::class.simpleName}"
-        )
-        val results = response.arbOps
-        assertTrue(results.isEmpty(), "Should return empty list when creating empty list")
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
+        assertTrue(response.arbOps.isEmpty(), "Should return empty list when creating empty list")
     }
 
     @Test
@@ -172,10 +168,7 @@ abstract class RepositoryArbOpCreateTest {
         val response = repository.create(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Single,
-            "Expected Single response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(response)
         val result = response.arbOp
 
         // Проверяем что ID сохранился

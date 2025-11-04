@@ -6,6 +6,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
@@ -27,14 +28,19 @@ abstract class RepositoryArbOpReadTest {
         val readResponse = repository.read(readRequest)
 
         // Assert
-        assertTrue(
-            readResponse is IArbOpRepository.ArbOpRepoResponse.Single,
-            "Expected Single response, got ${readResponse::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(readResponse)
         val result = readResponse.arbOp
+
+        // Проверяем все поля прочитанного объекта
         assertEquals(existing.id, result.id, "ID should match")
         assertEquals(existing.cexTokenId, result.cexTokenId, "Token ID should match")
+        assertEquals(existing.buyCexExchangeId, result.buyCexExchangeId, "Buy exchange ID should match")
+        assertEquals(existing.sellCexExchangeId, result.sellCexExchangeId, "Sell exchange ID should match")
+        assertEquals(existing.buyCexPriceRaw, result.buyCexPriceRaw, "Buy price should match")
+        assertEquals(existing.sellCexPriceRaw, result.sellCexPriceRaw, "Sell price should match")
         assertEquals(existing.spread, result.spread, "Spread should match")
+        assertEquals(existing.startTimestamp, result.startTimestamp, "Start timestamp should match")
+        assertEquals(existing.endTimestamp, result.endTimestamp, "End timestamp should match")
     }
 
     @Test
@@ -48,13 +54,9 @@ abstract class RepositoryArbOpReadTest {
         val response = repository.read(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Error,
-            "Expected Error response for non-existing item, got ${response::class.simpleName}"
-        )
-        val errors = response.errors
-        assertTrue(errors.isNotEmpty(), "Should return error for non-existing item")
-        assertEquals("repo-not-found", errors.first().code, "Error code should be repo-not-found")
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(response)
+        assertTrue(response.errors.isNotEmpty(), "Should return error for non-existing item")
+        assertEquals("repo-not-found", response.errors.first().code, "Error code should be repo-not-found")
     }
 
     companion object : InitialObject<CexToCexArbitrageOpportunity> {

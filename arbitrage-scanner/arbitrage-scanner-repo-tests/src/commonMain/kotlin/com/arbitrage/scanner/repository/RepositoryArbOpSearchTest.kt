@@ -9,6 +9,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
@@ -29,10 +30,7 @@ abstract class RepositoryArbOpSearchTest {
         val response = repository.search(searchRequest)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         assertEquals(initObject.size, response.arbOps.size, "Should find all items")
     }
 
@@ -49,12 +47,9 @@ abstract class RepositoryArbOpSearchTest {
         val response = repository.search(searchRequest)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         val results = response.arbOps
-        assertTrue(results.isNotEmpty(), "Should find items")
+        assertEquals(1, results.size, "Should find exactly 1 BTC item")
         assertTrue(
             results.all { it.cexTokenId in filter.cexTokenIds },
             "All results should match filter"
@@ -74,11 +69,9 @@ abstract class RepositoryArbOpSearchTest {
         val response = repository.search(searchRequest)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         val results = response.arbOps
+        assertEquals(2, results.size, "Should find exactly 2 items with binance exchange")
         assertTrue(
             results.all { it.buyCexExchangeId in filter.cexExchangeIds || it.sellCexExchangeId in filter.cexExchangeIds },
             "Results should match exchange filter"
@@ -98,11 +91,9 @@ abstract class RepositoryArbOpSearchTest {
         val response = repository.search(searchRequest)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         val results = response.arbOps
+        assertEquals(2, results.size, "Should find exactly 2 items with spread >= 2.5")
         assertTrue(
             results.all { it.spread.value >= 2.5 },
             "All results should have spread >= 2.5"
@@ -124,11 +115,9 @@ abstract class RepositoryArbOpSearchTest {
         val response = repository.search(searchRequest)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         val results = response.arbOps
+        assertEquals(1, results.size, "Should find exactly 1 item matching all filters")
         assertTrue(
             results.all { it.cexTokenId in filter.cexTokenIds },
             "All results should match token filter"
@@ -158,10 +147,7 @@ abstract class RepositoryArbOpSearchTest {
         val response = repository.search(searchRequest)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         assertTrue(response.arbOps.isEmpty(), "Should return empty list for empty repository")
     }
 

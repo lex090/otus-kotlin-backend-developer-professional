@@ -6,6 +6,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
@@ -27,10 +28,7 @@ abstract class RepositoryArbOpDeleteTest {
         val deleteResponse = repository.delete(deleteRequest)
 
         // Assert
-        assertTrue(
-            deleteResponse is IArbOpRepository.ArbOpRepoResponse.Single,
-            "Expected Single response, got ${deleteResponse::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(deleteResponse)
         assertEquals(existing.id, deleteResponse.arbOp.id, "Deleted item ID should match")
     }
 
@@ -45,13 +43,9 @@ abstract class RepositoryArbOpDeleteTest {
         val response = repository.delete(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Error,
-            "Expected Error response for non-existing item, got ${response::class.simpleName}"
-        )
-        val errors = response.errors
-        assertTrue(errors.isNotEmpty(), "Should return error")
-        assertEquals("repo-not-found", errors.first().code, "Error code should be repo-not-found")
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(response)
+        assertTrue(response.errors.isNotEmpty(), "Should return error")
+        assertEquals("repo-not-found", response.errors.first().code, "Error code should be repo-not-found")
     }
 
     @Test
@@ -65,10 +59,7 @@ abstract class RepositoryArbOpDeleteTest {
         val deleteResponse = repository.delete(deleteRequest)
 
         // Assert
-        assertTrue(
-            deleteResponse is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${deleteResponse::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(deleteResponse)
         assertEquals(initObject.size, deleteResponse.arbOps.size, "Should delete all items")
     }
 
@@ -81,10 +72,7 @@ abstract class RepositoryArbOpDeleteTest {
         val deleteResponse = repository.delete(IArbOpRepository.DeleteArbOpRepoRequest.All)
 
         // Assert
-        assertTrue(
-            deleteResponse is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${deleteResponse::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(deleteResponse)
         assertEquals(initObject.size, deleteResponse.arbOps.size, "Should delete all items from init")
     }
 
@@ -99,10 +87,7 @@ abstract class RepositoryArbOpDeleteTest {
         val response = repository.delete(IArbOpRepository.DeleteArbOpRepoRequest.All)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         assertTrue(response.arbOps.isEmpty(), "Should return empty list when deleting from empty repository")
     }
 
@@ -116,10 +101,7 @@ abstract class RepositoryArbOpDeleteTest {
         val response = repository.delete(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response for empty list, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         assertTrue(response.arbOps.isEmpty(), "Should return empty list")
     }
 
