@@ -3,7 +3,9 @@ package com.arbitrage.scanner.repository
 import com.arbitrage.scanner.StubsDataFactory
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
@@ -76,10 +78,7 @@ abstract class RepositoryArbOpCreateTest {
         val response = repository.create(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Single,
-            "Expected Single response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(response)
         val result = response.arbOp
 
         // Проверяем все поля созданного объекта
@@ -109,10 +108,7 @@ abstract class RepositoryArbOpCreateTest {
         val response = repository.create(request)
 
         // Assert
-        assertTrue(
-            response is IArbOpRepository.ArbOpRepoResponse.Multiple,
-            "Expected Multiple response, got ${response::class.simpleName}"
-        )
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Multiple>(response)
         val results = response.arbOps
         assertEquals(3, results.size, "Should create all 3 items")
 
