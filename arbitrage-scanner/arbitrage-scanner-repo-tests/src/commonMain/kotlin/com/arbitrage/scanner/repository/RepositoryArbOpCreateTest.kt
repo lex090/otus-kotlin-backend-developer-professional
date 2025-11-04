@@ -11,53 +11,6 @@ import kotlin.test.assertTrue
 /**
  * Абстрактный класс тестов для проверки операций создания арбитражных возможностей
  * в репозитории IArbOpRepository.
- *
- * Реализация паттерна "Contract Testing" - тестирует контракт интерфейса независимо
- * от конкретной реализации.
- *
- * ## Использование
- *
- * 1. Добавить зависимость на модуль `arbitrage-scanner-repo-tests` в testImplementation
- * 2. Создать класс-наследник в тестах конкретной реализации репозитория
- * 3. Реализовать метод `createRepository()`, возвращающий экземпляр тестируемого репозитория
- * 4. В каждом @Test методе вызывать соответствующий метод из базового класса
- *
- * ## Пример использования
- *
- * ```kotlin
- * // В build.gradle.kts модуля с реализацией репозитория
- * commonTest {
- *     dependencies {
- *         implementation(project(":arbitrage-scanner-repo-tests"))
- *     }
- * }
- *
- * // В тестовом классе
- * class InMemoryArbOpRepositoryCreateTest : RepositoryArbOpCreateTest() {
- *     override fun createRepository(): IArbOpRepository {
- *         return InMemoryArbOpRepository()
- *     }
- *
- *     @Test
- *     override fun testCreateSingleItem() = super.testCreateSingleItem()
- *
- *     @Test
- *     override fun testCreateMultipleItems() = super.testCreateMultipleItems()
- *
- *     @Test
- *     override fun testCreateEmptyList() = super.testCreateEmptyList()
- *
- *     @Test
- *     override fun testCreateSingleItemWithExistingId() = super.testCreateSingleItemWithExistingId()
- * }
- * ```
- *
- * ## Доступные тесты
- *
- * - `testCreateSingleItem()` - создание одного элемента с проверкой всех полей
- * - `testCreateMultipleItems()` - создание нескольких элементов с проверкой всех полей
- * - `testCreateEmptyList()` - создание пустого списка
- * - `testCreateSingleItemWithExistingId()` - создание с явно заданным ID
  */
 abstract class RepositoryArbOpCreateTest {
 
