@@ -50,7 +50,7 @@ class TestApplication {
         }
 
         val arbitrageOpportunityReadResponse = response.body<ArbitrageOpportunityReadResponse>()
-        assertEquals(HttpStatusCode.Companion.OK, response.status)
+        assertEquals(HttpStatusCode.OK, response.status)
         assertEquals(ResponseResult.SUCCESS, arbitrageOpportunityReadResponse.result)
         assertInstanceOf<CexToCexArbitrageOpportunityApi>(arbitrageOpportunityReadResponse.arbitrageOpportunity)
         when (val arbitrageOpportunity = arbitrageOpportunityReadResponse.arbitrageOpportunity) {
@@ -60,8 +60,6 @@ class TestApplication {
                     arbitrageOpportunity.id
                 )
             }
-
-            null -> error("Error")
         }
     }
 
@@ -127,7 +125,7 @@ class TestApplication {
         }
 
         val arbitrageOpportunityRecalculateResponse = response.body<ArbitrageOpportunityRecalculateResponse>()
-        assertEquals(HttpStatusCode.Companion.OK, response.status)
+        assertEquals(HttpStatusCode.OK, response.status)
         assertEquals(ResponseResult.SUCCESS, arbitrageOpportunityRecalculateResponse.result)
         assertEquals(1, arbitrageOpportunityRecalculateResponse.opportunitiesCount)
         assertEquals(100L, arbitrageOpportunityRecalculateResponse.processingTimeMs)
