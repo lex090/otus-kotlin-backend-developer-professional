@@ -21,7 +21,7 @@ abstract class RepositoryArbOpSearchTest {
     protected abstract fun createRepository(): IArbOpRepository
 
     @Test
-    open fun testSearchAll() = runTest {
+    fun testSearchAll() = runTest {
         // Arrange
         val repository = createRepository()
 
@@ -35,7 +35,7 @@ abstract class RepositoryArbOpSearchTest {
     }
 
     @Test
-    open fun testSearchByTokenId() = runTest {
+    fun testSearchByTokenId() = runTest {
         // Arrange
         val repository = createRepository()
 
@@ -57,7 +57,7 @@ abstract class RepositoryArbOpSearchTest {
     }
 
     @Test
-    open fun testSearchByExchangeId() = runTest {
+    fun testSearchByExchangeId() = runTest {
         // Arrange
         val repository = createRepository()
 
@@ -79,7 +79,7 @@ abstract class RepositoryArbOpSearchTest {
     }
 
     @Test
-    open fun testSearchByMinSpread() = runTest {
+    fun testSearchByMinSpread() = runTest {
         // Arrange
         val repository = createRepository()
 
@@ -101,7 +101,7 @@ abstract class RepositoryArbOpSearchTest {
     }
 
     @Test
-    open fun testSearchWithCombinedFilters() = runTest {
+    fun testSearchWithCombinedFilters() = runTest {
         // Arrange
         val repository = createRepository()
 
@@ -133,7 +133,7 @@ abstract class RepositoryArbOpSearchTest {
     }
 
     @Test
-    open fun testSearchInEmptyRepository() = runTest {
+    fun testSearchInEmptyRepository() = runTest {
         // Arrange
         val repository = createRepository()
         // Сначала очищаем репозиторий

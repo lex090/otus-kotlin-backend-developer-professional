@@ -18,7 +18,7 @@ abstract class RepositoryArbOpDeleteTest {
     protected abstract fun createRepository(): IArbOpRepository
 
     @Test
-    open fun testDeleteExistingItem() = runTest {
+    fun testDeleteExistingItem() = runTest {
         // Arrange
         val repository = createRepository()
         val existing = initObject.first()
@@ -33,7 +33,7 @@ abstract class RepositoryArbOpDeleteTest {
     }
 
     @Test
-    open fun testDeleteNonExistingItem() = runTest {
+    fun testDeleteNonExistingItem() = runTest {
         // Arrange
         val repository = createRepository()
         val nonExistingId = ArbitrageOpportunityId("non-existing-id")
@@ -49,7 +49,7 @@ abstract class RepositoryArbOpDeleteTest {
     }
 
     @Test
-    open fun testDeleteMultipleItems() = runTest {
+    fun testDeleteMultipleItems() = runTest {
         // Arrange
         val repository = createRepository()
         val itemsToDelete = initObject.map { it.id }
@@ -64,7 +64,7 @@ abstract class RepositoryArbOpDeleteTest {
     }
 
     @Test
-    open fun testDeleteAll() = runTest {
+    fun testDeleteAll() = runTest {
         // Arrange
         val repository = createRepository()
 
@@ -77,7 +77,7 @@ abstract class RepositoryArbOpDeleteTest {
     }
 
     @Test
-    open fun testDeleteAllFromEmptyRepository() = runTest {
+    fun testDeleteAllFromEmptyRepository() = runTest {
         // Arrange
         val repository = createRepository()
         // Сначала очищаем репозиторий
@@ -92,7 +92,7 @@ abstract class RepositoryArbOpDeleteTest {
     }
 
     @Test
-    open fun testDeleteEmptyList() = runTest {
+    fun testDeleteEmptyList() = runTest {
         // Arrange
         val repository = createRepository()
 

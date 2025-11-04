@@ -18,7 +18,7 @@ abstract class RepositoryArbOpReadTest {
     protected abstract fun createRepository(): IArbOpRepository
 
     @Test
-    open fun testReadExistingItem() = runTest {
+    fun testReadExistingItem() = runTest {
         // Arrange
         val repository = createRepository()
         val existing = initObject.first()
@@ -44,7 +44,7 @@ abstract class RepositoryArbOpReadTest {
     }
 
     @Test
-    open fun testReadNonExistingItem() = runTest {
+    fun testReadNonExistingItem() = runTest {
         // Arrange
         val repository = createRepository()
         val nonExistingId = ArbitrageOpportunityId("non-existing-id")
