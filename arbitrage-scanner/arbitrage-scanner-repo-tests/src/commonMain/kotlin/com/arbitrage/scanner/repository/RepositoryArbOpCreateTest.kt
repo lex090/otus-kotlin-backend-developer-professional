@@ -121,8 +121,8 @@ abstract class RepositoryArbOpCreateTest {
         val result = response.arbOp
 
         // Проверяем что ID сохранился
-        assertEquals(arbOp.id, result.id, "ID should be preserved when explicitly provided")
         assertTrue(result.id.isNotDefault(), "Created item should have non-default ID")
+        assertEquals(arbOp.id, result.id, "ID should be preserved when explicitly provided")
 
         // Проверяем остальные поля
         assertEquals(arbOp.cexTokenId, result.cexTokenId, "Token ID should match")
