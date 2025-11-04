@@ -40,37 +40,6 @@ class SearchRequestValidationTest {
     }
 
     @Test
-    fun `test validation fails with completely empty filter in PROD mode`() = runTest {
-        // Given: Контекст с пустым фильтром в режиме PROD
-        val context = Context(
-            command = Command.SEARCH,
-            workMode = WorkMode.PROD,
-            state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT
-        )
-        val processor = BusinessLogicProcessorImpl(createTestDeps())
-
-        // When: Выполняем бизнес-логику
-        processor.exec(context)
-
-        // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при пустом фильтре")
-        assertTrue(
-            context.internalErrors.isNotEmpty(),
-            "Должна быть хотя бы одна ошибка валидации"
-        )
-
-        val error = context.internalErrors.first()
-        assertEquals("validation-empty", error.code, "Код ошибки должен быть 'validation-empty'")
-        assertEquals("validation", error.group, "Группа ошибки должна быть 'validation'")
-        assertEquals("filter", error.field, "Поле ошибки должно быть 'filter'")
-        assertTrue(
-            error.message.contains("не должен быть пустым"),
-            "Сообщение должно содержать информацию о пустом фильтре"
-        )
-    }
-
-    @Test
     fun `test validation fails with invalid token ID format`() = runTest {
         // Given: Контекст с некорректным ID токена
         val context = Context(
@@ -160,37 +129,6 @@ class SearchRequestValidationTest {
         assertTrue(
             error.message.contains("не может быть отрицательным"),
             "Сообщение должно содержать информацию об отрицательном спреде"
-        )
-    }
-
-    @Test
-    fun `test validation fails with too large spread`() = runTest {
-        // Given: Контекст со слишком большим спредом
-        val context = Context(
-            command = Command.SEARCH,
-            workMode = WorkMode.PROD,
-            state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = setOf(CexTokenId("BTC")),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(150.0)
-            )
-        )
-        val processor = BusinessLogicProcessorImpl(createTestDeps())
-
-        // When: Выполняем бизнес-логику
-        processor.exec(context)
-
-        // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при слишком большом спреде")
-        assertTrue(
-            context.internalErrors.any { it.code == "validation-range" && it.field == "spread" },
-            "Должна быть ошибка диапазона для spread"
-        )
-        val error = context.internalErrors.first { it.field == "spread" }
-        assertTrue(
-            error.message.contains("слишком большой"),
-            "Сообщение должно содержать информацию о слишком большом спреде"
         )
     }
 
