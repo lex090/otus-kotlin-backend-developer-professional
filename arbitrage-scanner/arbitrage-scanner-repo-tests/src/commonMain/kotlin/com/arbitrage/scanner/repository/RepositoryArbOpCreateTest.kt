@@ -14,10 +14,6 @@ import kotlin.test.assertTrue
  */
 abstract class RepositoryArbOpCreateTest {
 
-    /**
-     * Фабричный метод для создания экземпляра тестируемого репозитория.
-     * Должен быть реализован в классах-наследниках.
-     */
     protected abstract fun createRepository(): IArbOpRepository
 
     @Test
