@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":arbitrage-scanner-common"))
+                implementation(projects.arbitrageScannerCommon)
                 implementation(libs.uuid)
                 implementation(libs.cache4k)
                 implementation(libs.kotlinx.coroutines.core)
@@ -16,7 +16,8 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(project(":arbitrage-scanner-stubs"))
+                implementation(projects.arbitrageScannerStubs)
+                implementation(projects.arbitrageScannerRepoTests)
             }
         }
     }
