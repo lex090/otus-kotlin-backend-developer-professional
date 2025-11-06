@@ -91,7 +91,7 @@ private fun InternalError.toTransportError() = Error(
     message = message.takeIf(String::isNotBlank)
 )
 
-private fun ArbitrageOpportunityId.toTransportId(): String? =
+fun ArbitrageOpportunityId.toTransportId(): String? =
     this.takeIf(ArbitrageOpportunityId::isNotDefault)?.value
 
 private fun CexPrice.toTransportCexPrice(): CexPriceApi {

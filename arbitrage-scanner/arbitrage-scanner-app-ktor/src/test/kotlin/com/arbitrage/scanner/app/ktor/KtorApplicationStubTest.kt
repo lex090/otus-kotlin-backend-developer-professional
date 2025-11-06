@@ -12,6 +12,7 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
 import com.arbitrage.scanner.api.v1.models.IRequest
 import com.arbitrage.scanner.api.v1.models.ResponseResult
+import com.arbitrage.scanner.app.ktor.koin.modules.blModuleTest
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.assertNotNull
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TestApplication {
+class KtorApplicationStubTest {
 
     @Test
     fun `read request success stub test2`() = testApplicationV2(
@@ -99,7 +100,7 @@ class TestApplication {
         method: String,
         crossinline block: suspend (HttpResponse) -> Unit,
     ): Unit = testApplication {
-        application { module() }
+        application { moduleTest(blModuleTest(emptyList(), emptyList())) }
 
         val client = createClient {
             install(ContentNegotiation) {
