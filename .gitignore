@@ -18,3 +18,4 @@ CLAUDE.md
 logs_llm/
 
 /worktrees
+./.specify
