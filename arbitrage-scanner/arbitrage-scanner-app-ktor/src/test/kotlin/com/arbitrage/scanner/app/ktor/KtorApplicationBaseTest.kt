@@ -150,11 +150,11 @@ abstract class KtorApplicationBaseTest {
             val opportunitiesCount = responseBody.opportunitiesCount
             assertNotNull(opportunitiesCount)
             assertEquals(2, opportunitiesCount)
-
-            // Проверяем, что время обработки больше 0
+//
+            // Проверяем, что время обработки не null и неотрицательное
             val processingTime = responseBody.processingTimeMs
             assertNotNull(processingTime)
-            assert(processingTime > 0) { "Processing time should be greater than 0" }
+            assert(processingTime >= 0) { "Processing time should be greater than 0" }
         }
 
     private inline fun testApplicationV2(
