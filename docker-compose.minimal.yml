@@ -1,4 +1,37 @@
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: arbitrage
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: liquibase/liquibase:4.25
+    container_name: liquibase
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      --changelog-file=db.changelog-master.yaml
+      --url=jdbc:postgresql://postgres:5432/arbitrage
+      --username=postgres
+      --password=postgres
+      update
+    volumes:
+      - ./arbitrage-scanner/arbitrage-scanner-repo-postgres/src/main/resources/db/changelog:/liquibase/changelog
+    restart: "no"
+
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
@@ -24,13 +57,24 @@ services:
     image: arbitrage-scanner-app-ktor:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
     container_name: arbitrage-scanner-app-ktor
     depends_on:
-      - fluent-bit
-      - kafka
+      postgres:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+      fluent-bit:
+        condition: service_started
+      kafka:
+        condition: service_started
     environment:
       - LOGS_FB_HOSTS=fluent-bit
       - LOGS_FB_PORT=24224
       - SERVICE_NAME=arbitrage-scanner
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=arbitrage
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
       - "8080:8080"
 
@@ -72,4 +116,5 @@ services:
     command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
 
 volumes:
+  postgres-data:
   kafka-data:
