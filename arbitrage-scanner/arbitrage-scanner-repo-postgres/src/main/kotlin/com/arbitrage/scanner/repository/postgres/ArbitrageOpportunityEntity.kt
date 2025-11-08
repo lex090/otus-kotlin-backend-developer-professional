@@ -1,4 +1,4 @@
-package com.arbitrage.scanner.repository.inmemory
+package com.arbitrage.scanner.repository.postgres
 
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
@@ -10,7 +10,7 @@ import com.arbitrage.scanner.models.CexTokenId
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
 /**
- * DTO модель для хранения арбитражной возможности в in-memory репозитории.
+ * DTO модель для хранения арбитражной возможности в PostgreSQL репозитории.
  * Использует примитивные типы для эффективного хранения и сериализации.
  *
  * @property id Идентификатор возможности
@@ -22,6 +22,7 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
  * @property spread Спред в процентах
  * @property startTimestamp Временная метка начала возможности
  * @property endTimestamp Временная метка окончания возможности (nullable)
+ * @property lockToken UUID токен для optimistic locking
  */
 internal data class ArbitrageOpportunityEntity(
     val id: String,
@@ -32,13 +33,16 @@ internal data class ArbitrageOpportunityEntity(
     val sellPriceRaw: String,
     val spread: Double,
     val startTimestamp: Long,
-    val endTimestamp: Long?
+    val endTimestamp: Long?,
+    val lockToken: String
 )
 
 /**
- * Преобразует доменную модель в DTO для хранения в in-memory репозитории.
+ * Преобразует доменную модель в DTO для хранения в PostgreSQL.
+ *
+ * @param lockToken UUID токен для optimistic locking (должен быть передан явно)
  */
-internal fun CexToCexArbitrageOpportunity.toEntity(): ArbitrageOpportunityEntity {
+internal fun CexToCexArbitrageOpportunity.toEntity(lockToken: String): ArbitrageOpportunityEntity {
     return ArbitrageOpportunityEntity(
         id = id.value,
         tokenId = cexTokenId.value,
@@ -48,7 +52,8 @@ internal fun CexToCexArbitrageOpportunity.toEntity(): ArbitrageOpportunityEntity
         sellPriceRaw = sellCexPriceRaw.value.toString(),
         spread = spread.value,
         startTimestamp = startTimestamp.value,
-        endTimestamp = endTimestamp?.value
+        endTimestamp = endTimestamp?.value,
+        lockToken = lockToken
     )
 }
 

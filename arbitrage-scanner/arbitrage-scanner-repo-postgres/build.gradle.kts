@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     implementation(projects.arbitrageScannerCommon)
-    implementation(projects.arbitrageScannerRepoInmemory)
     implementation(libs.uuid)
     implementation(libs.bignum)
     implementation(libs.kotlinx.coroutines.core)
@@ -18,9 +17,6 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.hikari)
 
-    // Liquibase
-    implementation(libs.liquibase.core)
-
     // Test dependencies
     testImplementation(projects.arbitrageScannerRepoTests)
     testImplementation(projects.arbitrageScannerStubs)
@@ -28,4 +24,5 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.testcontainers.junit)
+    testImplementation(libs.liquibase.core)
 }

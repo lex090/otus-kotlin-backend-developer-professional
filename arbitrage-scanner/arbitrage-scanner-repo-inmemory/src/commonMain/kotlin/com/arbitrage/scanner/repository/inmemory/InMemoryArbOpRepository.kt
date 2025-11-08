@@ -82,8 +82,7 @@ class InMemoryArbOpRepository(
         } else {
             arbOp
         }
-        // Генерируем начальный UUID токен для optimistic locking
-        val entity = itemWithId.toEntity(lockToken = idGenerator())
+        val entity = itemWithId.toEntity()
         cache.put(entity.id, entity)
         ArbOpRepoResponse.Single(itemWithId)
     }
@@ -95,8 +94,7 @@ class InMemoryArbOpRepository(
             } else {
                 item
             }
-            // Генерируем начальный UUID токен для optimistic locking
-            val entity = itemWithId.toEntity(lockToken = idGenerator())
+            val entity = itemWithId.toEntity()
             cache.put(entity.id, entity)
             itemWithId
         }
@@ -115,8 +113,7 @@ class InMemoryArbOpRepository(
     private suspend fun updateItem(arbOp: CexToCexArbitrageOpportunity): ArbOpRepoResponse = mutex.withLock {
         val existing = cache.get(arbOp.id.value)
         if (existing != null) {
-            // Генерируем новый UUID lockToken при каждом update (optimistic locking)
-            val entity = arbOp.toEntity(lockToken = idGenerator())
+            val entity = arbOp.toEntity()
             cache.put(entity.id, entity)
             ArbOpRepoResponse.Single(arbOp)
         } else {
@@ -131,8 +128,7 @@ class InMemoryArbOpRepository(
         arbOps.forEach { item ->
             val existing = cache.get(item.id.value)
             if (existing != null) {
-                // Генерируем новый UUID lockToken при каждом update (optimistic locking)
-                val entity = item.toEntity(lockToken = idGenerator())
+                val entity = item.toEntity()
                 cache.put(entity.id, entity)
                 updated.add(item)
             } else {
