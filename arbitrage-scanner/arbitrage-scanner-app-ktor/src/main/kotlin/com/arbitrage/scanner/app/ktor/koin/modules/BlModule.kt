@@ -12,7 +12,7 @@ import com.arbitrage.scanner.service.CexPriceClientService
 import com.arbitrage.scanner.service.CexPriceClientServiceStub
 import com.arbitrage.scanner.service.CexPriceClientServiceTest
 import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -23,12 +23,14 @@ val blModule = module {
             override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = get()
 
             // TODO Позже поменять
-            override val prodCexPriceClientService: CexPriceClientService = get<CexPriceClientServiceStub>()
+            override val prodCexPriceClientService: CexPriceClientService = get<CexPriceClientServiceTest>()
             override val testCexPriceClientService: CexPriceClientService = get<CexPriceClientServiceTest>()
             override val stubCexPriceClientService: CexPriceClientService = get<CexPriceClientServiceStub>()
 
-            // TODO Позже поменять
-            override val prodArbOpRepository: IArbOpRepository = get<InMemoryArbOpRepository>()
+            // Production использует PostgreSQL репозиторий
+            override val prodArbOpRepository: IArbOpRepository = get(named("postgres"))
+
+            // Test и Stub остаются InMemory для быстрых тестов
             override val testArbOpRepository: IArbOpRepository = get<InMemoryArbOpRepository>()
             override val stubArbOpRepository: IArbOpRepository = get<InMemoryArbOpRepository>()
         }
@@ -37,5 +39,5 @@ val blModule = module {
     factoryOf(::CexPriceClientServiceTest)
     factoryOf(::CexPriceClientServiceStub)
     factoryOf(::CexToCexArbitrageFinderParallelImpl) bind CexToCexArbitrageFinder::class
-    singleOf(::InMemoryArbOpRepository)
+    single<InMemoryArbOpRepository> { InMemoryArbOpRepository() }
 }
