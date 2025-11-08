@@ -66,6 +66,7 @@ dependencies {
     implementation(projects.arbitrageScannerLibs.arbitrageScannerLibLoggingLogback)
     implementation(projects.arbitrageScannerServiceStub)
     implementation(projects.arbitrageScannerRepoInmemory)
+    implementation(projects.arbitrageScannerRepoPostgres)
 
     // Ktor
     implementation(libs.ktor.server.core)
