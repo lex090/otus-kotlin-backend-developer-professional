@@ -5,7 +5,12 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.repository.IArbOpRepository
-import com.arbitrage.scanner.repository.IArbOpRepository.*
+import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
+import com.arbitrage.scanner.repository.IArbOpRepository.CreateArbOpRepoRequest
+import com.arbitrage.scanner.repository.IArbOpRepository.DeleteArbOpRepoRequest
+import com.arbitrage.scanner.repository.IArbOpRepository.ReadArbOpRepoRequest
+import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
+import com.arbitrage.scanner.repository.IArbOpRepository.UpdateArbOpRepoRequest
 import com.arbitrage.scanner.repository.tryExecute
 import com.benasher44.uuid.uuid4
 import io.github.reactivecircus.cache4k.Cache
@@ -77,7 +82,8 @@ class InMemoryArbOpRepository(
         } else {
             arbOp
         }
-        val entity = itemWithId.toEntity()
+        // Генерируем начальный UUID токен для optimistic locking
+        val entity = itemWithId.toEntity(lockToken = idGenerator())
         cache.put(entity.id, entity)
         ArbOpRepoResponse.Single(itemWithId)
     }
@@ -89,7 +95,8 @@ class InMemoryArbOpRepository(
             } else {
                 item
             }
-            val entity = itemWithId.toEntity()
+            // Генерируем начальный UUID токен для optimistic locking
+            val entity = itemWithId.toEntity(lockToken = idGenerator())
             cache.put(entity.id, entity)
             itemWithId
         }
@@ -108,7 +115,8 @@ class InMemoryArbOpRepository(
     private suspend fun updateItem(arbOp: CexToCexArbitrageOpportunity): ArbOpRepoResponse = mutex.withLock {
         val existing = cache.get(arbOp.id.value)
         if (existing != null) {
-            val entity = arbOp.toEntity()
+            // Генерируем новый UUID lockToken при каждом update (optimistic locking)
+            val entity = arbOp.toEntity(lockToken = idGenerator())
             cache.put(entity.id, entity)
             ArbOpRepoResponse.Single(arbOp)
         } else {
@@ -123,7 +131,8 @@ class InMemoryArbOpRepository(
         arbOps.forEach { item ->
             val existing = cache.get(item.id.value)
             if (existing != null) {
-                val entity = item.toEntity()
+                // Генерируем новый UUID lockToken при каждом update (optimistic locking)
+                val entity = item.toEntity(lockToken = idGenerator())
                 cache.put(entity.id, entity)
                 updated.add(item)
             } else {
