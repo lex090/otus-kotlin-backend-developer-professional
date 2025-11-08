@@ -85,4 +85,11 @@ dependencies {
     testImplementation(projects.arbitrageScannerApiV1)
     testImplementation(projects.arbitrageScannerStubs)
     testImplementation(projects.arbitrageScannerRepoTests)
+
+    // TestContainers для PostgreSQL тестов
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.junit)
+    testImplementation(libs.liquibase.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.exposed.core)
 }
