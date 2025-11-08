@@ -3,7 +3,6 @@ package com.arbitrage.scanner.repository
 import com.arbitrage.scanner.StubsDataFactory
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
