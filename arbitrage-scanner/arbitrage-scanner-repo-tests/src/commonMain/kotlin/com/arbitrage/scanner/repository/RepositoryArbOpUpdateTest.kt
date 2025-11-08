@@ -103,6 +103,41 @@ abstract class RepositoryArbOpUpdateTest {
         assertTrue(response.arbOps.isEmpty(), "Should return empty list")
     }
 
+    @Test
+    fun testUpdateMultipleItemsWithOneNonExisting_ShouldRollbackAll() = runTest {
+        // Arrange
+        val repository = createRepository()
+        val existingItem = initObject.first().copy(spread = ArbitrageOpportunitySpread(10.0))
+        val nonExistingItem = StubsDataFactory.createArbitrageOpportunity(
+            id = "non-existing-id",
+            token = "XXX",
+            spread = 20.0
+        )
+
+        // Act
+        val updateRequest = IArbOpRepository.UpdateArbOpRepoRequest.Items(
+            listOf(existingItem, nonExistingItem)
+        )
+        val updateResponse = repository.update(updateRequest)
+
+        // Assert
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(updateResponse)
+        assertTrue(updateResponse.errors.isNotEmpty(), "Should return error")
+        assertEquals("repo-not-found", updateResponse.errors.first().code, "Error code should be repo-not-found")
+
+        // Verify: первый элемент НЕ должен быть обновлен (транзакция откатилась)
+        val readRequest = IArbOpRepository.ReadArbOpRepoRequest.ById(initObject.first().id)
+        val readResponse = repository.read(readRequest)
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(readResponse)
+
+        // Проверяем что spread остался прежним (НЕ изменился на 10.0)
+        assertEquals(
+            initObject.first().spread,
+            readResponse.arbOp.spread,
+            "First item should NOT be updated when batch fails"
+        )
+    }
+
     companion object : InitialObject<CexToCexArbitrageOpportunity> {
         override val initObject: List<CexToCexArbitrageOpportunity> =
             listOf(

@@ -11,6 +11,7 @@ import com.arbitrage.scanner.repository.IArbOpRepository.DeleteArbOpRepoRequest
 import com.arbitrage.scanner.repository.IArbOpRepository.ReadArbOpRepoRequest
 import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
 import com.arbitrage.scanner.repository.IArbOpRepository.UpdateArbOpRepoRequest
+import com.arbitrage.scanner.repository.RepositoryException
 import com.arbitrage.scanner.repository.tryExecute
 import com.benasher44.uuid.uuid4
 import io.github.reactivecircus.cache4k.Cache
@@ -122,25 +123,20 @@ class InMemoryArbOpRepository(
     }
 
     private suspend fun updateItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = mutex.withLock {
-        val errors = mutableListOf<InternalError>()
-        val updated = mutableListOf<CexToCexArbitrageOpportunity>()
-
+        // Сначала проверяем все элементы на существование
         arbOps.forEach { item ->
-            val existing = cache.get(item.id.value)
-            if (existing != null) {
-                val entity = item.toEntity()
-                cache.put(entity.id, entity)
-                updated.add(item)
-            } else {
-                errors.add(createNotFoundError(item.id))
-            }
+            // При первой ошибке выбрасываем исключение - это обеспечит атомарность
+            cache.get(item.id.value) ?: throw RepositoryException(createNotFoundError(item.id))
         }
 
-        if (errors.isNotEmpty()) {
-            ArbOpRepoResponse.Error(errors)
-        } else {
-            ArbOpRepoResponse.Multiple(updated)
+        // Если все элементы существуют, обновляем их
+        val updated = arbOps.map { item ->
+            val entity = item.toEntity()
+            cache.put(entity.id, entity)
+            item
         }
+
+        ArbOpRepoResponse.Multiple(updated)
     }
 
     private suspend fun deleteItem(id: ArbitrageOpportunityId): ArbOpRepoResponse = mutex.withLock {
@@ -154,24 +150,19 @@ class InMemoryArbOpRepository(
     }
 
     private suspend fun deleteItems(ids: List<ArbitrageOpportunityId>): ArbOpRepoResponse = mutex.withLock {
-        val errors = mutableListOf<InternalError>()
-        val deleted = mutableListOf<CexToCexArbitrageOpportunity>()
-
-        ids.forEach { id ->
-            val existing = cache.get(id.value)
-            if (existing != null) {
-                cache.invalidate(id.value)
-                deleted.add(existing.toDomain())
-            } else {
-                errors.add(createNotFoundError(id))
-            }
+        // Сначала проверяем все элементы на существование и собираем их
+        val toDelete = ids.map { id ->
+            // При первой ошибке выбрасываем исключение - это обеспечит атомарность
+            cache.get(id.value) ?: throw RepositoryException(createNotFoundError(id))
         }
 
-        if (errors.isNotEmpty()) {
-            ArbOpRepoResponse.Error(errors)
-        } else {
-            ArbOpRepoResponse.Multiple(deleted)
+        // Если все элементы существуют, удаляем их
+        val deleted = toDelete.map { entity ->
+            cache.invalidate(entity.id)
+            entity.toDomain()
         }
+
+        ArbOpRepoResponse.Multiple(deleted)
     }
 
     private suspend fun deleteAll(): ArbOpRepoResponse = mutex.withLock {

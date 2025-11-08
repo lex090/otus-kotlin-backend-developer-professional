@@ -11,6 +11,7 @@ import com.arbitrage.scanner.repository.IArbOpRepository.DeleteArbOpRepoRequest
 import com.arbitrage.scanner.repository.IArbOpRepository.ReadArbOpRepoRequest
 import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
 import com.arbitrage.scanner.repository.IArbOpRepository.UpdateArbOpRepoRequest
+import com.arbitrage.scanner.repository.RepositoryException
 import com.arbitrage.scanner.repository.tryExecute
 import com.benasher44.uuid.uuid4
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +94,7 @@ class PostgresArbOpRepository(
             arbOp
         }
         // Генерируем начальный UUID токен для optimistic locking
-        val initialLockToken = uuid4().toString()
+        val initialLockToken = idGenerator()
         val entity = itemWithId.toEntity(lockToken = initialLockToken)
 
         ArbitrageOpportunitiesTable.insert {
@@ -124,7 +125,7 @@ class PostgresArbOpRepository(
 
         ArbitrageOpportunitiesTable.batchInsert(createdItems) { item ->
             // Генерируем начальный UUID токен для каждого элемента
-            val initialLockToken = uuid4().toString()
+            val initialLockToken = idGenerator()
             val entity = item.toEntity(lockToken = initialLockToken)
             this[ArbitrageOpportunitiesTable.id] = entity.id
             this[ArbitrageOpportunitiesTable.tokenId] = entity.tokenId
@@ -172,7 +173,7 @@ class PostgresArbOpRepository(
 
         val currentLockToken = existingRow[ArbitrageOpportunitiesTable.lockToken]
         // Генерируем новый UUID токен для optimistic locking
-        val newLockToken = uuid4().toString()
+        val newLockToken = idGenerator()
         val entity = arbOp.toEntity(lockToken = newLockToken)
 
         // Обновляем с проверкой lockToken (optimistic locking на основе UUID)
@@ -208,7 +209,6 @@ class PostgresArbOpRepository(
     }
 
     private suspend fun updateItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = dbQuery {
-        val errors = mutableListOf<InternalError>()
         val updated = mutableListOf<CexToCexArbitrageOpportunity>()
 
         arbOps.forEach { item ->
@@ -218,41 +218,39 @@ class PostgresArbOpRepository(
                 .where { ArbitrageOpportunitiesTable.id eq item.id.value }
                 .singleOrNull()
 
+            // При ошибке сразу выбрасываем исключение - это откатит всю транзакцию
             if (existingRow == null) {
-                errors.add(createNotFoundError(item.id))
-            } else {
-                val currentLockToken = existingRow[ArbitrageOpportunitiesTable.lockToken]
-                // Генерируем новый UUID токен для optimistic locking
-                val newLockToken = uuid4().toString()
-                val entity = item.toEntity(lockToken = newLockToken)
-
-                val updatedCount = ArbitrageOpportunitiesTable.update({
-                    (ArbitrageOpportunitiesTable.id eq item.id.value) and (ArbitrageOpportunitiesTable.lockToken eq currentLockToken)
-                }) {
-                    it[tokenId] = entity.tokenId
-                    it[buyExchangeId] = entity.buyExchangeId
-                    it[sellExchangeId] = entity.sellExchangeId
-                    it[buyPriceRaw] = BigDecimal(entity.buyPriceRaw)
-                    it[sellPriceRaw] = BigDecimal(entity.sellPriceRaw)
-                    it[spread] = entity.spread
-                    it[startTimestamp] = entity.startTimestamp
-                    it[endTimestamp] = entity.endTimestamp
-                    it[lockToken] = newLockToken  // Устанавливаем новый UUID токен
-                }
-
-                if (updatedCount > 0) {
-                    updated.add(item)
-                } else {
-                    errors.add(createVersionConflictError(item.id))
-                }
+                throw RepositoryException(createNotFoundError(item.id))
             }
+
+            val currentLockToken = existingRow[ArbitrageOpportunitiesTable.lockToken]
+            // Генерируем новый UUID токен для optimistic locking
+            val newLockToken = idGenerator()
+            val entity = item.toEntity(lockToken = newLockToken)
+
+            val updatedCount = ArbitrageOpportunitiesTable.update({
+                (ArbitrageOpportunitiesTable.id eq item.id.value) and (ArbitrageOpportunitiesTable.lockToken eq currentLockToken)
+            }) {
+                it[tokenId] = entity.tokenId
+                it[buyExchangeId] = entity.buyExchangeId
+                it[sellExchangeId] = entity.sellExchangeId
+                it[buyPriceRaw] = BigDecimal(entity.buyPriceRaw)
+                it[sellPriceRaw] = BigDecimal(entity.sellPriceRaw)
+                it[spread] = entity.spread
+                it[startTimestamp] = entity.startTimestamp
+                it[endTimestamp] = entity.endTimestamp
+                it[lockToken] = newLockToken  // Устанавливаем новый UUID токен
+            }
+
+            // При конфликте версий сразу выбрасываем исключение - это откатит всю транзакцию
+            if (updatedCount == 0) {
+                throw RepositoryException(createVersionConflictError(item.id))
+            }
+
+            updated.add(item)
         }
 
-        if (errors.isNotEmpty()) {
-            ArbOpRepoResponse.Error(errors)
-        } else {
-            ArbOpRepoResponse.Multiple(updated)
-        }
+        ArbOpRepoResponse.Multiple(updated)
     }
 
     // ========== Private Methods: DELETE ==========
@@ -273,7 +271,6 @@ class PostgresArbOpRepository(
     }
 
     private suspend fun deleteItems(ids: List<ArbitrageOpportunityId>): ArbOpRepoResponse = dbQuery {
-        val errors = mutableListOf<InternalError>()
         val deleted = mutableListOf<CexToCexArbitrageOpportunity>()
 
         ids.forEach { id ->
@@ -282,20 +279,17 @@ class PostgresArbOpRepository(
                 .where { ArbitrageOpportunitiesTable.id eq id.value }
                 .singleOrNull()
 
-            if (row != null) {
-                val entity = mapRowToEntity(row)
-                ArbitrageOpportunitiesTable.deleteWhere { ArbitrageOpportunitiesTable.id eq id.value }
-                deleted.add(entity.toDomain())
-            } else {
-                errors.add(createNotFoundError(id))
+            // При ошибке сразу выбрасываем исключение - это откатит всю транзакцию
+            if (row == null) {
+                throw RepositoryException(createNotFoundError(id))
             }
+
+            val entity = mapRowToEntity(row)
+            ArbitrageOpportunitiesTable.deleteWhere { ArbitrageOpportunitiesTable.id eq id.value }
+            deleted.add(entity.toDomain())
         }
 
-        if (errors.isNotEmpty()) {
-            ArbOpRepoResponse.Error(errors)
-        } else {
-            ArbOpRepoResponse.Multiple(deleted)
-        }
+        ArbOpRepoResponse.Multiple(deleted)
     }
 
     private suspend fun deleteAll(): ArbOpRepoResponse = dbQuery {

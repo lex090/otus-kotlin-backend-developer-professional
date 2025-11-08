@@ -105,6 +105,31 @@ abstract class RepositoryArbOpDeleteTest {
         assertTrue(response.arbOps.isEmpty(), "Should return empty list")
     }
 
+    @Test
+    fun testDeleteMultipleItemsWithOneNonExisting_ShouldRollbackAll() = runTest {
+        // Arrange
+        val repository = createRepository()
+        val existingId = initObject.first().id
+        val nonExistingId = ArbitrageOpportunityId("non-existing-delete-id")
+
+        // Act
+        val deleteRequest = IArbOpRepository.DeleteArbOpRepoRequest.Items(
+            listOf(existingId, nonExistingId)
+        )
+        val deleteResponse = repository.delete(deleteRequest)
+
+        // Assert
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(deleteResponse)
+        assertTrue(deleteResponse.errors.isNotEmpty(), "Should return error")
+        assertEquals("repo-not-found", deleteResponse.errors.first().code, "Error code should be repo-not-found")
+
+        // Verify: первый элемент НЕ должен быть удален (транзакция откатилась)
+        val readRequest = IArbOpRepository.ReadArbOpRepoRequest.ById(existingId)
+        val readResponse = repository.read(readRequest)
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(readResponse)
+        assertEquals(existingId, readResponse.arbOp.id, "First item should NOT be deleted when batch fails")
+    }
+
     companion object : InitialObject<CexToCexArbitrageOpportunity> {
         override val initObject: List<CexToCexArbitrageOpportunity> =
             listOf(
