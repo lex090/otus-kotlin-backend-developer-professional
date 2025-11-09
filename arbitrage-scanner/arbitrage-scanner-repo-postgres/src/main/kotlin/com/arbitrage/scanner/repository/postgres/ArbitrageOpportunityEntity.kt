@@ -7,6 +7,7 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.LockToken
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
 /**
@@ -39,10 +40,9 @@ internal data class ArbitrageOpportunityEntity(
 
 /**
  * Преобразует доменную модель в DTO для хранения в PostgreSQL.
- *
- * @param lockToken UUID токен для optimistic locking (должен быть передан явно)
+ * lockToken берется из доменной модели.
  */
-internal fun CexToCexArbitrageOpportunity.toEntity(lockToken: String): ArbitrageOpportunityEntity {
+internal fun CexToCexArbitrageOpportunity.toEntity(): ArbitrageOpportunityEntity {
     return ArbitrageOpportunityEntity(
         id = id.value,
         tokenId = cexTokenId.value,
@@ -53,7 +53,7 @@ internal fun CexToCexArbitrageOpportunity.toEntity(lockToken: String): Arbitrage
         spread = spread.value,
         startTimestamp = startTimestamp.value,
         endTimestamp = endTimestamp?.value,
-        lockToken = lockToken
+        lockToken = lockToken.value
     )
 }
 
@@ -70,6 +70,7 @@ internal fun ArbitrageOpportunityEntity.toDomain(): CexToCexArbitrageOpportunity
         sellCexPriceRaw = CexPrice.CexPriceRaw(BigDecimal.parseString(sellPriceRaw)),
         spread = ArbitrageOpportunitySpread(spread),
         startTimestamp = Timestamp(startTimestamp),
-        endTimestamp = endTimestamp?.let { Timestamp(it) }
+        endTimestamp = endTimestamp?.let { Timestamp(it) },
+        lockToken = LockToken(lockToken)
     )
 }
