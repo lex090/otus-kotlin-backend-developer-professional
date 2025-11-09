@@ -26,7 +26,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesW
         - Существующие (есть в БД) → обновить
         - Отсутствующие в новых данных (есть в БД) → закрыть
     """.trimIndent()
-    on { state == State.RUNNING && arbOps.isNotEmpty() }
+    on { state == State.RUNNING && (arbOps.isNotEmpty() || existingActiveArbOps.isNotEmpty()) }
     val logger = config.loggerProvider.logger(kFun)
     handle {
         logger.doWithLogging(id = requestId.toString(), level = LogLevel.INFO) {
