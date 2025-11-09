@@ -77,8 +77,8 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesW
 
             logger.info(
                 "Анализ завершен: создать=${arbOpsToCreate.size}, " +
-                "обновить=${arbOpsToUpdate.size}, закрыть=${arbOpsToClose.size}, " +
-                "пропущено=${skippedCount} (нет изменений)"
+                        "обновить=${arbOpsToUpdate.size}, закрыть=${arbOpsToClose.size}, " +
+                        "пропущено=${skippedCount} (нет изменений)"
             )
         }
     }
