@@ -69,13 +69,11 @@ class CexToCexArbitrageFinderParallelImpl : CexToCexArbitrageFinder() {
             return emptyList()
         }
 
-        // 1. Сортируем цены по возрастанию: O(b log b)
         // Это позволяет проверять только пары где sellPrice > buyPrice
         val sortedPrices = prices.sortedBy { it.priceRaw.value }
 
         val opportunities = mutableListOf<CexToCexArbitrageOpportunity>()
 
-        // 2. Проверяем все пары бирж с оптимизацией: O(b²/2)
         // Для каждой цены покупки проверяем только цены ВЫШЕ
         for (i in sortedPrices.indices) {
             val buyPrice = sortedPrices[i]
