@@ -3,6 +3,7 @@ package com.arbitrage.scanner.service
 import com.arbitrage.scanner.StubsDataFactory
 import com.arbitrage.scanner.models.CexPrice
 import kotlin.random.Random
+import kotlin.time.Clock
 
 /**
  * Test реализация сервиса для получения цен с CEX бирж.
@@ -16,6 +17,7 @@ class CexPriceClientServiceTest : CexPriceClientService {
         return StubsDataFactory.generateCexPrices(
             tokenCount = Random.nextInt(5, 50),
             exchangeCount = 5,
+            seed = Clock.System.now().epochSeconds.toInt(),
         ).toSet()
     }
 }

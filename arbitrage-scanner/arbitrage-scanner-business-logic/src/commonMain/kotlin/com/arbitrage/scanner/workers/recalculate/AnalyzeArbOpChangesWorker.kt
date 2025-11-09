@@ -34,19 +34,6 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesW
             val existingMap = existingActiveArbOps.associateBy { it.fastKey }
             val newMap = arbOps.associateBy { it.fastKey }
 
-            // Проверка на дубликаты в новых данных
-            val duplicateKeys = arbOps
-                .groupBy { it.fastKey }
-                .filter { it.value.size > 1 }
-
-            if (duplicateKeys.isNotEmpty()) {
-                logger.error("Обнаружены дубликаты ключей в новых данных: ${duplicateKeys.keys.size} дубликатов")
-                duplicateKeys.forEach { (key, ops) ->
-                    logger.error("Дубликат: $key -> ${ops.size} возможностей")
-                }
-                // Продолжаем работу, но берем первую из дубликатов (Обдумать как с этим работать)
-            }
-
             // Счетчики для статистики
             var skippedCount = 0
 
