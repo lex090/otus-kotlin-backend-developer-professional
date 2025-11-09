@@ -153,8 +153,18 @@ abstract class RepositoryArbOpUpdateTest {
     companion object : InitialObject<CexToCexArbitrageOpportunity> {
         override val initObject: List<CexToCexArbitrageOpportunity> =
             listOf(
-                StubsDataFactory.createArbitrageOpportunity(id = "test-id-1", token = "BTC", spread = 2.0),
-                StubsDataFactory.createArbitrageOpportunity(id = "test-id-2", token = "ETH", spread = 3.0)
+                StubsDataFactory.createArbitrageOpportunity(
+                    id = "test-id-1",
+                    token = "BTC",
+                    spread = 2.0,
+                    lockToken = "test-lock-token-1"
+                ),
+                StubsDataFactory.createArbitrageOpportunity(
+                    id = "test-id-2",
+                    token = "ETH",
+                    spread = 3.0,
+                    lockToken = "test-lock-token-2"
+                )
             )
     }
 }
