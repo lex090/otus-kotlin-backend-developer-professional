@@ -7,6 +7,7 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.LockToken
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
 /**
@@ -22,6 +23,7 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
  * @property spread Спред в процентах
  * @property startTimestamp Временная метка начала возможности
  * @property endTimestamp Временная метка окончания возможности (nullable)
+ * @property lockToken Токен для оптимистичной блокировки
  */
 internal data class ArbitrageOpportunityEntity(
     val id: String,
@@ -32,7 +34,8 @@ internal data class ArbitrageOpportunityEntity(
     val sellPriceRaw: String,
     val spread: Double,
     val startTimestamp: Long,
-    val endTimestamp: Long?
+    val endTimestamp: Long?,
+    val lockToken: String
 )
 
 /**
@@ -48,7 +51,8 @@ internal fun CexToCexArbitrageOpportunity.toEntity(): ArbitrageOpportunityEntity
         sellPriceRaw = sellCexPriceRaw.value.toString(),
         spread = spread.value,
         startTimestamp = startTimestamp.value,
-        endTimestamp = endTimestamp?.value
+        endTimestamp = endTimestamp?.value,
+        lockToken = lockToken.value
     )
 }
 
@@ -65,6 +69,7 @@ internal fun ArbitrageOpportunityEntity.toDomain(): CexToCexArbitrageOpportunity
         sellCexPriceRaw = CexPrice.CexPriceRaw(BigDecimal.parseString(sellPriceRaw)),
         spread = ArbitrageOpportunitySpread(spread),
         startTimestamp = Timestamp(startTimestamp),
-        endTimestamp = endTimestamp?.let { Timestamp(it) }
+        endTimestamp = endTimestamp?.let { Timestamp(it) },
+        lockToken = LockToken(lockToken)
     )
 }
