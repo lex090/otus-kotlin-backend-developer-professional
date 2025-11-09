@@ -5,12 +5,14 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.LogLevel
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.crowdproj.kotlin.cor.ICorAddExecDsl
 import com.crowdproj.kotlin.cor.handlers.worker
 import kotlin.reflect.KFunction
 import kotlin.time.Clock
 
 private val kFun: KFunction<Unit> = ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>::analyzeArbOpChangesWorker
+
 fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesWorker(
     title: String
 ) = worker {
@@ -45,18 +47,30 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesW
                 // Продолжаем работу, но берем первую из дубликатов (Обдумать как с этим работать)
             }
 
+            // Счетчики для статистики
+            var skippedCount = 0
+
             // Анализ: создать или обновить
             newMap.forEach { (key, newOp) ->
                 val existing = existingMap[key]
                 if (existing != null) {
-                    // Существующая возможность - обновляем, сохраняя id, startTimestamp и lockToken
-                    arbOpsToUpdate.add(
-                        newOp.copy(
-                            id = existing.id,
-                            startTimestamp = existing.startTimestamp,
-                            lockToken = existing.lockToken
+                    // Проверяем, изменились ли значимые данные
+                    val hasChanges = hasSignificantChanges(existing, newOp)
+
+                    if (hasChanges) {
+                        // Существующая возможность с изменениями - обновляем, сохраняя id, startTimestamp и lockToken
+                        arbOpsToUpdate.add(
+                            newOp.copy(
+                                id = existing.id,
+                                startTimestamp = existing.startTimestamp,
+                                lockToken = existing.lockToken
+                            )
                         )
-                    )
+                        logger.debug("Обновление: $key (изменения обнаружены)")
+                    } else {
+                        skippedCount++
+                        logger.debug("Пропуск обновления: $key (нет изменений)")
+                    }
                 } else {
                     // Новая возможность - создаем
                     arbOpsToCreate.add(newOp)
@@ -76,8 +90,32 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesW
 
             logger.info(
                 "Анализ завершен: создать=${arbOpsToCreate.size}, " +
-                "обновить=${arbOpsToUpdate.size}, закрыть=${arbOpsToClose.size}"
+                "обновить=${arbOpsToUpdate.size}, закрыть=${arbOpsToClose.size}, " +
+                "пропущено=${skippedCount} (нет изменений)"
             )
         }
     }
+}
+
+/**
+ * Проверяет, изменились ли значимые данные арбитражной возможности.
+ *
+ * Сравниваются только поля, которые влияют на бизнес-логику:
+ * - buyCexPriceRaw - цена покупки
+ * - sellCexPriceRaw - цена продажи
+ * - spread - спред
+ *
+ * Не сравниваются:
+ * - id - идентификатор записи (служебное поле)
+ * - cexTokenId, buyCexExchangeId, sellCexExchangeId - входят в fastKey (уже совпадают)
+ * - startTimestamp - время начала (не меняется для существующей записи)
+ * - lockToken - токен оптимистичной блокировки (служебное поле)
+ */
+private fun hasSignificantChanges(
+    existing: CexToCexArbitrageOpportunity,
+    new: CexToCexArbitrageOpportunity
+): Boolean {
+    return existing.buyCexPriceRaw != new.buyCexPriceRaw ||
+            existing.sellCexPriceRaw != new.sellCexPriceRaw ||
+            existing.spread != new.spread
 }
