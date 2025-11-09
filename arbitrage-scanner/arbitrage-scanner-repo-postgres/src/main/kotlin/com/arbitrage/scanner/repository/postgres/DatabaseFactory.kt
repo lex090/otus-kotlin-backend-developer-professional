@@ -17,6 +17,8 @@ import org.jetbrains.exposed.sql.Database
  */
 object DatabaseFactory {
 
+    private var dataSource: HikariDataSource? = null
+
     /**
      * Инициализирует connection pool к PostgreSQL и подключает Exposed.
      *
@@ -42,8 +44,17 @@ object DatabaseFactory {
             connectionTestQuery = "SELECT 1"
         }
 
-        val dataSource = HikariDataSource(hikariConfig)
+        dataSource = HikariDataSource(hikariConfig)
 
-        return Database.connect(dataSource)
+        return Database.connect(dataSource!!)
+    }
+
+    /**
+     * Закрывает connection pool и освобождает ресурсы.
+     * Должен вызываться при shutdown приложения.
+     */
+    fun close() {
+        dataSource?.close()
+        dataSource = null
     }
 }

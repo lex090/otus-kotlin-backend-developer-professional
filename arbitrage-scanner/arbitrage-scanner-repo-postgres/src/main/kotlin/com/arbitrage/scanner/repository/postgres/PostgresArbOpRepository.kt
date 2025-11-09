@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
@@ -209,21 +210,29 @@ class PostgresArbOpRepository(
     }
 
     private suspend fun updateItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = dbQuery {
+        // Получаем все существующие записи одним запросом
+        val idValues = arbOps.map { it.id.value }
+        val existingRows = ArbitrageOpportunitiesTable
+            .selectAll()
+            .where { ArbitrageOpportunitiesTable.id inList idValues }
+            .toList()
+
+        // Создаем map для быстрого поиска текущих lock tokens
+        val existingMap = existingRows.associateBy { it[ArbitrageOpportunitiesTable.id] }
+
+        // Проверяем наличие всех записей
+        val missingIds = arbOps.filter { !existingMap.containsKey(it.id.value) }
+        if (missingIds.isNotEmpty()) {
+            throw RepositoryException(createNotFoundError(missingIds.first().id))
+        }
+
         val updated = mutableListOf<CexToCexArbitrageOpportunity>()
 
+        // Обновляем каждую запись (N UPDATE запросов, но 1 SELECT вместо N)
         arbOps.forEach { item ->
-            // Для каждого элемента пробуем обновить
-            val existingRow = ArbitrageOpportunitiesTable
-                .selectAll()
-                .where { ArbitrageOpportunitiesTable.id eq item.id.value }
-                .singleOrNull()
-
-            // При ошибке сразу выбрасываем исключение - это откатит всю транзакцию
-            if (existingRow == null) {
-                throw RepositoryException(createNotFoundError(item.id))
-            }
-
+            val existingRow = existingMap[item.id.value] ?: error("Ошибка получения элемента в existingMap")
             val currentLockToken = existingRow[ArbitrageOpportunitiesTable.lockToken]
+
             // Генерируем новый UUID токен для optimistic locking
             val newLockToken = idGenerator()
             val entity = item.toEntity(lockToken = newLockToken)
@@ -271,23 +280,27 @@ class PostgresArbOpRepository(
     }
 
     private suspend fun deleteItems(ids: List<ArbitrageOpportunityId>): ArbOpRepoResponse = dbQuery {
-        val deleted = mutableListOf<CexToCexArbitrageOpportunity>()
+        // Получаем все записи одним запросом вместо N отдельных SELECT
+        val idValues = ids.map { it.value }
+        val rows = ArbitrageOpportunitiesTable
+            .selectAll()
+            .where { ArbitrageOpportunitiesTable.id inList idValues }
+            .toList()
 
-        ids.forEach { id ->
-            val row = ArbitrageOpportunitiesTable
-                .selectAll()
-                .where { ArbitrageOpportunitiesTable.id eq id.value }
-                .singleOrNull()
+        // Создаем map для быстрого поиска
+        val rowsMap = rows.associateBy { it[ArbitrageOpportunitiesTable.id] }
 
-            // При ошибке сразу выбрасываем исключение - это откатит всю транзакцию
-            if (row == null) {
-                throw RepositoryException(createNotFoundError(id))
-            }
-
-            val entity = mapRowToEntity(row)
-            ArbitrageOpportunitiesTable.deleteWhere { ArbitrageOpportunitiesTable.id eq id.value }
-            deleted.add(entity.toDomain())
+        // Проверяем наличие всех ID
+        val missingIds = ids.filter { !rowsMap.containsKey(it.value) }
+        if (missingIds.isNotEmpty()) {
+            throw RepositoryException(createNotFoundError(missingIds.first()))
         }
+
+        // Маппим в domain объекты
+        val deleted = rows.map { mapRowToEntity(it).toDomain() }
+
+        // Удаляем все записи одним запросом
+        ArbitrageOpportunitiesTable.deleteWhere { ArbitrageOpportunitiesTable.id inList idValues }
 
         ArbOpRepoResponse.Multiple(deleted)
     }
