@@ -3,6 +3,7 @@ package com.arbitrage.scanner.repository
 import com.arbitrage.scanner.StubsDataFactory
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
+import com.arbitrage.scanner.models.LockToken
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -68,6 +69,130 @@ abstract class RepositoryArbOpUpdateTest {
         assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(response)
         assertTrue(response.errors.isNotEmpty(), "Should return error")
         assertEquals("repo-not-found", response.errors.first().code, "Error code should be repo-not-found")
+    }
+
+    @Test
+    fun testUpdateWithWrongLockToken() = runTest {
+        // Arrange
+        val repository = createRepository()
+        val existing = initObject.first()
+
+        // Используем неправильный lockToken
+        val itemWithWrongToken = existing.copy(
+            spread = ArbitrageOpportunitySpread(5.0),
+            lockToken = LockToken("wrong-lock-token")
+        )
+
+        // Act
+        val updateRequest = IArbOpRepository.UpdateArbOpRepoRequest.Item(itemWithWrongToken)
+        val updateResponse = repository.update(updateRequest)
+
+        // Assert
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(updateResponse)
+        assertTrue(updateResponse.errors.isNotEmpty(), "Should return error")
+        assertEquals(
+            "repo-version-conflict",
+            updateResponse.errors.first().code,
+            "Error code should be repo-version-conflict"
+        )
+
+        // Verify: запись НЕ должна быть изменена
+        val readRequest = IArbOpRepository.ReadArbOpRepoRequest.ById(existing.id)
+        val readResponse = repository.read(readRequest)
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(readResponse)
+        assertEquals(
+            existing.spread,
+            readResponse.arbOp.spread,
+            "Item should NOT be updated when lockToken is wrong"
+        )
+    }
+
+    @Test
+    fun testUpdateWithOutdatedLockToken_SimulatesLostUpdate() = runTest {
+        // Arrange
+        val repository = createRepository()
+        val original = initObject.first()
+
+        // Первое обновление (lockToken меняется)
+        val firstUpdate = original.copy(spread = ArbitrageOpportunitySpread(5.0))
+        val firstUpdateRequest = IArbOpRepository.UpdateArbOpRepoRequest.Item(firstUpdate)
+        val firstUpdateResponse = repository.update(firstUpdateRequest)
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(firstUpdateResponse)
+        val afterFirstUpdate = firstUpdateResponse.arbOp
+
+        // Проверяем что lockToken действительно изменился
+        assertTrue(
+            original.lockToken != afterFirstUpdate.lockToken,
+            "LockToken should change after first update"
+        )
+
+        // Act: Пытаемся обновить с ОРИГИНАЛЬНЫМ (устаревшим) lockToken
+        // Это симулирует "Lost Update Problem" - два пользователя читают одновременно,
+        // первый обновляет, второй пытается обновить с устаревшими данными
+        val secondUpdateWithOldToken = original.copy(spread = ArbitrageOpportunitySpread(10.0))
+        val secondUpdateRequest = IArbOpRepository.UpdateArbOpRepoRequest.Item(secondUpdateWithOldToken)
+        val secondUpdateResponse = repository.update(secondUpdateRequest)
+
+        // Assert
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(secondUpdateResponse)
+        assertTrue(secondUpdateResponse.errors.isNotEmpty(), "Should return error")
+        assertEquals(
+            "repo-version-conflict",
+            secondUpdateResponse.errors.first().code,
+            "Error code should be repo-version-conflict"
+        )
+
+        // Verify: запись должна сохранить значение после первого обновления
+        val readRequest = IArbOpRepository.ReadArbOpRepoRequest.ById(original.id)
+        val readResponse = repository.read(readRequest)
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(readResponse)
+        assertEquals(
+            ArbitrageOpportunitySpread(5.0),
+            readResponse.arbOp.spread,
+            "Item should keep value from first update (not be overwritten by second)"
+        )
+    }
+
+    @Test
+    fun testUpdateMultipleItemsWithWrongLockToken_ShouldRollbackAll() = runTest {
+        // Arrange
+        val repository = createRepository()
+
+        // Первый элемент с правильным lockToken
+        val firstItem = initObject.first().copy(spread = ArbitrageOpportunitySpread(10.0))
+
+        // Второй элемент с НЕПРАВИЛЬНЫМ lockToken
+        val secondItem = initObject[1].copy(
+            spread = ArbitrageOpportunitySpread(20.0),
+            lockToken = LockToken("wrong-lock-token-2")
+        )
+
+        // Act
+        val updateRequest = IArbOpRepository.UpdateArbOpRepoRequest.Items(
+            listOf(firstItem, secondItem)
+        )
+        val updateResponse = repository.update(updateRequest)
+
+        // Assert
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Error>(updateResponse)
+        assertTrue(updateResponse.errors.isNotEmpty(), "Should return error")
+        assertEquals(
+            "repo-version-conflict",
+            updateResponse.errors.first().code,
+            "Error code should be repo-version-conflict"
+        )
+
+        // Verify: первый элемент НЕ должен быть обновлен (транзакция откатилась)
+        val readRequest = IArbOpRepository.ReadArbOpRepoRequest.ById(initObject.first().id)
+        val readResponse = repository.read(readRequest)
+        assertIs<IArbOpRepository.ArbOpRepoResponse.Single>(readResponse)
+
+        // Проверяем что spread остался прежним (НЕ изменился на 10.0)
+        assertEquals(
+            initObject.first().spread,
+            readResponse.arbOp.spread,
+            "First item should NOT be updated when batch fails due to version conflict"
+        )
     }
 
     @Test
