@@ -4,6 +4,7 @@ import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
+import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.CreateArbOpRepoRequest
@@ -78,26 +79,27 @@ class InMemoryArbOpRepository(
     // === Private methods ===
 
     private suspend fun createItem(arbOp: CexToCexArbitrageOpportunity): ArbOpRepoResponse = mutex.withLock {
-        val itemWithId = if (arbOp.id.isDefault()) {
-            arbOp.copy(id = ArbitrageOpportunityId(idGenerator()))
-        } else {
-            arbOp
-        }
-        val entity = itemWithId.toEntity()
+        // Генерируем ID и lockToken если они по умолчанию
+        val itemToCreate = arbOp.copy(
+            id = if (arbOp.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else arbOp.id,
+            lockToken = if (arbOp.lockToken.isDefault()) LockToken(idGenerator()) else arbOp.lockToken
+        )
+        val entity = itemToCreate.toEntity()
         cache.put(entity.id, entity)
-        ArbOpRepoResponse.Single(itemWithId)
+        ArbOpRepoResponse.Single(itemToCreate)
     }
 
     private suspend fun createItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = mutex.withLock {
         val createdItems = arbOps.map { item ->
-            val itemWithId = if (item.id.isDefault()) {
-                item.copy(id = ArbitrageOpportunityId(idGenerator()))
-            } else {
-                item
-            }
-            val entity = itemWithId.toEntity()
+            // Генерируем ID и lockToken для каждого элемента, если они по умолчанию
+            item.copy(
+                id = if (item.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else item.id,
+                lockToken = if (item.lockToken.isDefault()) LockToken(idGenerator()) else item.lockToken
+            )
+        }
+        createdItems.forEach { item ->
+            val entity = item.toEntity()
             cache.put(entity.id, entity)
-            itemWithId
         }
         ArbOpRepoResponse.Multiple(createdItems)
     }
@@ -112,28 +114,37 @@ class InMemoryArbOpRepository(
     }
 
     private suspend fun updateItem(arbOp: CexToCexArbitrageOpportunity): ArbOpRepoResponse = mutex.withLock {
-        val existing = cache.get(arbOp.id.value)
-        if (existing != null) {
-            val entity = arbOp.toEntity()
-            cache.put(entity.id, entity)
-            ArbOpRepoResponse.Single(arbOp)
-        } else {
-            notFoundError(arbOp.id)
+        val existing = cache.get(arbOp.id.value) ?: return@withLock notFoundError(arbOp.id)
+
+        // Проверка оптимистичной блокировки - lockToken должен совпадать
+        if (existing.lockToken != arbOp.lockToken.value) {
+            return@withLock versionConflictError(arbOp.id)
         }
+
+        // Генерируем новый lockToken
+        val updatedItem = arbOp.copy(lockToken = LockToken(idGenerator()))
+        val entity = updatedItem.toEntity()
+        cache.put(entity.id, entity)
+        ArbOpRepoResponse.Single(updatedItem)
     }
 
     private suspend fun updateItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = mutex.withLock {
-        // Сначала проверяем все элементы на существование
+        // Сначала проверяем все элементы на существование и версии
         arbOps.forEach { item ->
-            // При первой ошибке выбрасываем исключение - это обеспечит атомарность
-            cache.get(item.id.value) ?: throw RepositoryException(createNotFoundError(item.id))
+            val existing = cache.get(item.id.value) ?: throw RepositoryException(createNotFoundError(item.id))
+            // Проверка оптимистичной блокировки
+            if (existing.lockToken != item.lockToken.value) {
+                throw RepositoryException(createVersionConflictError(item.id))
+            }
         }
 
-        // Если все элементы существуют, обновляем их
+        // Если все проверки прошли, обновляем элементы
         val updated = arbOps.map { item ->
-            val entity = item.toEntity()
+            // Генерируем новый lockToken для каждого элемента
+            val updatedItem = item.copy(lockToken = LockToken(idGenerator()))
+            val entity = updatedItem.toEntity()
             cache.put(entity.id, entity)
-            item
+            updatedItem
         }
 
         ArbOpRepoResponse.Multiple(updated)
@@ -208,6 +219,25 @@ class InMemoryArbOpRepository(
             group = "repository",
             field = "id",
             message = "Arbitrage opportunity with id ${id.value} not found"
+        )
+    }
+
+    /**
+     * Создает ошибку version conflict для указанного ID
+     */
+    private fun versionConflictError(id: ArbitrageOpportunityId): ArbOpRepoResponse {
+        return ArbOpRepoResponse.Error(listOf(createVersionConflictError(id)))
+    }
+
+    /**
+     * Создает InternalError с кодом "version conflict"
+     */
+    private fun createVersionConflictError(id: ArbitrageOpportunityId): InternalError {
+        return InternalError(
+            code = "repo-version-conflict",
+            group = "repository",
+            field = "lockVersion",
+            message = "Version conflict: arbitrage opportunity with id ${id.value} was modified by another transaction"
         )
     }
 }
