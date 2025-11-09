@@ -45,6 +45,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.createNewArbOpsWorke
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка создания новых возможностей: ${createResult.errors}")
                     internalErrors.addAll(createResult.errors)
+                    state = State.FAILING
                 }
             }
         }

@@ -49,11 +49,12 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.analyzeArbOpChangesW
             newMap.forEach { (key, newOp) ->
                 val existing = existingMap[key]
                 if (existing != null) {
-                    // Существующая возможность - обновляем, сохраняя id и startTimestamp
+                    // Существующая возможность - обновляем, сохраняя id, startTimestamp и lockToken
                     arbOpsToUpdate.add(
                         newOp.copy(
                             id = existing.id,
-                            startTimestamp = existing.startTimestamp
+                            startTimestamp = existing.startTimestamp,
+                            lockToken = existing.lockToken
                         )
                     )
                 } else {
