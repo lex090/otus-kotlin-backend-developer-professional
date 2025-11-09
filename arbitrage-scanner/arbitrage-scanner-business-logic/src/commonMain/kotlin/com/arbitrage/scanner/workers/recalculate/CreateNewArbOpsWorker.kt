@@ -3,6 +3,7 @@ package com.arbitrage.scanner.workers.recalculate
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
+import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.CreateArbOpRepoRequest
@@ -44,8 +45,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.createNewArbOpsWorke
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка создания новых возможностей: ${createResult.errors}")
-                    internalErrors.addAll(createResult.errors)
-                    state = State.FAILING
+                    fail(createResult.errors)
                 }
             }
         }

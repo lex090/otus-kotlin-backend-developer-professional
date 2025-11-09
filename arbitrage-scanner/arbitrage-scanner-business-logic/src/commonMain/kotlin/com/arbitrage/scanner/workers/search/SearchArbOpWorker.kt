@@ -3,6 +3,7 @@ package com.arbitrage.scanner.workers.search
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
+import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
@@ -42,8 +43,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.searchArbOpWorker(
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка поиска арбитражных возможностей: ${searchResult.errors}")
-                    internalErrors.addAll(searchResult.errors)
-                    state = State.FAILING
+                    fail(searchResult.errors)
                 }
             }
         }

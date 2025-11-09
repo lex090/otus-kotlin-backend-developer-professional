@@ -3,6 +3,7 @@ package com.arbitrage.scanner.workers.recalculate
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
+import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.UpdateArbOpRepoRequest
@@ -44,8 +45,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.closeInactiveArbOpsW
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка закрытия неактуальных возможностей: ${closeResult.errors}")
-                    internalErrors.addAll(closeResult.errors)
-                    state = State.FAILING
+                    fail(closeResult.errors)
                 }
             }
         }

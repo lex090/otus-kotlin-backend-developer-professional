@@ -3,6 +3,7 @@ package com.arbitrage.scanner.workers.read
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
+import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.ReadArbOpRepoRequest
@@ -43,8 +44,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.readArbOpWorker(
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка чтения арбитражной возможности: ${readResult.errors}")
-                    internalErrors.addAll(readResult.errors)
-                    state = State.FAILING
+                    fail(readResult.errors)
                 }
             }
         }
