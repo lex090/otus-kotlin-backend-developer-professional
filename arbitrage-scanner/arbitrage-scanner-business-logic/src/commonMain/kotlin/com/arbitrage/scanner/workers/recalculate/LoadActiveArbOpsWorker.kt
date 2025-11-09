@@ -3,6 +3,7 @@ package com.arbitrage.scanner.workers.recalculate
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
+import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
@@ -37,7 +38,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
 
                 is ArbOpRepoResponse.Error -> {
                     logger.error("Ошибка загрузки существующих возможностей: ${searchResult.errors}")
-                    internalErrors.addAll(searchResult.errors)
+                    fail(searchResult.errors)
                 }
 
                 is ArbOpRepoResponse.Single -> {
