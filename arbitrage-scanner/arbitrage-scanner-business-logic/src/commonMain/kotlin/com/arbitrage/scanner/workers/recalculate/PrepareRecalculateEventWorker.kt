@@ -17,7 +17,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.prepareRecalculateRe
 ) = worker {
     this.title = title
     this.description = """
-        Этот обработчик ищет все возможные арбитражные возможности.
+        Подготовка конечного ответа.
     """.trimIndent()
     on { state == State.RUNNING }
     val logger = config.loggerProvider.logger(kFun)
