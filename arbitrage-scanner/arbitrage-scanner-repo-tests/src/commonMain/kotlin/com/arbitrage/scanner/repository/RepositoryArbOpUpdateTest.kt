@@ -39,7 +39,7 @@ abstract class RepositoryArbOpUpdateTest {
         // Проверяем обновленное поле
         assertEquals(ArbitrageOpportunitySpread(5.0), result.spread, "Spread should be updated")
 
-        // Проверяем что другие поля НЕ изменились
+        // Проверяем что другие поля НЕ изменились (кроме lockToken, который должен измениться)
         assertEquals(existing.cexTokenId, result.cexTokenId, "Token ID should not change")
         assertEquals(existing.buyCexExchangeId, result.buyCexExchangeId, "Buy exchange ID should not change")
         assertEquals(existing.sellCexExchangeId, result.sellCexExchangeId, "Sell exchange ID should not change")
@@ -47,6 +47,10 @@ abstract class RepositoryArbOpUpdateTest {
         assertEquals(existing.sellCexPriceRaw, result.sellCexPriceRaw, "Sell price should not change")
         assertEquals(existing.startTimestamp, result.startTimestamp, "Start timestamp should not change")
         assertEquals(existing.endTimestamp, result.endTimestamp, "End timestamp should not change")
+
+        // Проверяем что lockToken ИЗМЕНИЛСЯ (оптимистичная блокировка)
+        assertTrue(existing.lockToken != result.lockToken, "LockToken should change after update")
+        assertTrue(result.lockToken.isNotDefault(), "LockToken should not be DEFAULT after update")
     }
 
     @Test
@@ -87,6 +91,13 @@ abstract class RepositoryArbOpUpdateTest {
             results.all { it.spread.value == 10.0 },
             "All items should have updated spread"
         )
+        // Проверяем что у всех lockToken изменились
+        results.forEachIndexed { index, result ->
+            assertTrue(
+                initObject[index].lockToken != result.lockToken,
+                "LockToken should change for item $index"
+            )
+        }
     }
 
     @Test
@@ -111,7 +122,8 @@ abstract class RepositoryArbOpUpdateTest {
         val nonExistingItem = StubsDataFactory.createArbitrageOpportunity(
             id = "non-existing-id",
             token = "XXX",
-            spread = 20.0
+            spread = 20.0,
+            lockToken = "some-random-lock-token" // Несуществующий lockToken
         )
 
         // Act
