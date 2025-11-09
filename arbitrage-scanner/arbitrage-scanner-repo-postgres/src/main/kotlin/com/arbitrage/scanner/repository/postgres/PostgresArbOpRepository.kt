@@ -4,6 +4,7 @@ import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
+import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.CreateArbOpRepoRequest
@@ -89,14 +90,12 @@ class PostgresArbOpRepository(
     // ========== Private Methods: CREATE ==========
 
     private suspend fun createItem(arbOp: CexToCexArbitrageOpportunity): ArbOpRepoResponse = dbQuery {
-        val itemWithId = if (arbOp.id.isDefault()) {
-            arbOp.copy(id = ArbitrageOpportunityId(idGenerator()))
-        } else {
-            arbOp
-        }
-        // Генерируем начальный UUID токен для optimistic locking
-        val initialLockToken = idGenerator()
-        val entity = itemWithId.toEntity(lockToken = initialLockToken)
+        // Генерируем ID и lockToken если они по умолчанию
+        val itemToCreate = arbOp.copy(
+            id = if (arbOp.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else arbOp.id,
+            lockToken = if (arbOp.lockToken.isDefault()) LockToken(idGenerator()) else arbOp.lockToken
+        )
+        val entity = itemToCreate.toEntity()
 
         ArbitrageOpportunitiesTable.insert {
             it[id] = entity.id
@@ -111,23 +110,20 @@ class PostgresArbOpRepository(
             it[lockToken] = entity.lockToken
         }
 
-        ArbOpRepoResponse.Single(itemWithId)
+        ArbOpRepoResponse.Single(itemToCreate)
     }
 
     private suspend fun createItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = dbQuery {
+        // Генерируем ID и lockToken для каждого элемента, если они по умолчанию
         val createdItems = arbOps.map { item ->
-            val itemWithId = if (item.id.isDefault()) {
-                item.copy(id = ArbitrageOpportunityId(idGenerator()))
-            } else {
-                item
-            }
-            itemWithId
+            item.copy(
+                id = if (item.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else item.id,
+                lockToken = if (item.lockToken.isDefault()) LockToken(idGenerator()) else item.lockToken
+            )
         }
 
         ArbitrageOpportunitiesTable.batchInsert(createdItems) { item ->
-            // Генерируем начальный UUID токен для каждого элемента
-            val initialLockToken = idGenerator()
-            val entity = item.toEntity(lockToken = initialLockToken)
+            val entity = item.toEntity()
             this[ArbitrageOpportunitiesTable.id] = entity.id
             this[ArbitrageOpportunitiesTable.tokenId] = entity.tokenId
             this[ArbitrageOpportunitiesTable.buyExchangeId] = entity.buyExchangeId
@@ -162,24 +158,15 @@ class PostgresArbOpRepository(
     // ========== Private Methods: UPDATE ==========
 
     private suspend fun updateItem(arbOp: CexToCexArbitrageOpportunity): ArbOpRepoResponse = dbQuery {
-        // Сначала читаем текущую запись
-        val existingRow = ArbitrageOpportunitiesTable
-            .selectAll()
-            .where { ArbitrageOpportunitiesTable.id eq arbOp.id.value }
-            .singleOrNull()
-
-        if (existingRow == null) {
-            return@dbQuery notFoundError(arbOp.id)
-        }
-
-        val currentLockToken = existingRow[ArbitrageOpportunitiesTable.lockToken]
-        // Генерируем новый UUID токен для optimistic locking
+        // Генерируем новый lockToken для optimistic locking
         val newLockToken = idGenerator()
-        val entity = arbOp.toEntity(lockToken = newLockToken)
+        val updatedItem = arbOp.copy(lockToken = LockToken(newLockToken))
+        val entity = updatedItem.toEntity()
 
-        // Обновляем с проверкой lockToken (optimistic locking на основе UUID)
+        // Обновляем с проверкой lockToken (optimistic locking)
         val updatedCount = ArbitrageOpportunitiesTable.update({
-            (ArbitrageOpportunitiesTable.id eq arbOp.id.value) and (ArbitrageOpportunitiesTable.lockToken eq currentLockToken)
+            (ArbitrageOpportunitiesTable.id eq arbOp.id.value) and
+            (ArbitrageOpportunitiesTable.lockToken eq arbOp.lockToken.value)
         }) {
             it[tokenId] = entity.tokenId
             it[buyExchangeId] = entity.buyExchangeId
@@ -189,56 +176,40 @@ class PostgresArbOpRepository(
             it[spread] = entity.spread
             it[startTimestamp] = entity.startTimestamp
             it[endTimestamp] = entity.endTimestamp
-            it[lockToken] = newLockToken  // Устанавливаем новый UUID токен
+            it[lockToken] = newLockToken  // Устанавливаем новый lockToken
         }
 
         if (updatedCount > 0) {
-            // Читаем обновленную версию с новым lockToken
-            val updated = ArbitrageOpportunitiesTable
+            // Возвращаем обновленную модель с новым lockToken
+            ArbOpRepoResponse.Single(updatedItem)
+        } else {
+            // Проверяем, существует ли запись с таким ID
+            val exists = ArbitrageOpportunitiesTable
                 .selectAll()
                 .where { ArbitrageOpportunitiesTable.id eq arbOp.id.value }
-                .singleOrNull()
+                .singleOrNull() != null
 
-            if (updated != null) {
-                ArbOpRepoResponse.Single(mapRowToEntity(updated).toDomain())
+            if (exists) {
+                versionConflictError(arbOp.id)
             } else {
                 notFoundError(arbOp.id)
             }
-        } else {
-            versionConflictError(arbOp.id)
         }
     }
 
     private suspend fun updateItems(arbOps: List<CexToCexArbitrageOpportunity>): ArbOpRepoResponse = dbQuery {
-        // Получаем все существующие записи одним запросом
-        val idValues = arbOps.map { it.id.value }
-        val existingRows = ArbitrageOpportunitiesTable
-            .selectAll()
-            .where { ArbitrageOpportunitiesTable.id inList idValues }
-            .toList()
-
-        // Создаем map для быстрого поиска текущих lock tokens
-        val existingMap = existingRows.associateBy { it[ArbitrageOpportunitiesTable.id] }
-
-        // Проверяем наличие всех записей
-        val missingIds = arbOps.filter { !existingMap.containsKey(it.id.value) }
-        if (missingIds.isNotEmpty()) {
-            throw RepositoryException(createNotFoundError(missingIds.first().id))
-        }
-
         val updated = mutableListOf<CexToCexArbitrageOpportunity>()
 
-        // Обновляем каждую запись (N UPDATE запросов, но 1 SELECT вместо N)
+        // Обновляем каждую запись с проверкой lockToken
         arbOps.forEach { item ->
-            val existingRow = existingMap[item.id.value] ?: error("Ошибка получения элемента в existingMap")
-            val currentLockToken = existingRow[ArbitrageOpportunitiesTable.lockToken]
-
-            // Генерируем новый UUID токен для optimistic locking
+            // Генерируем новый lockToken для optimistic locking
             val newLockToken = idGenerator()
-            val entity = item.toEntity(lockToken = newLockToken)
+            val updatedItem = item.copy(lockToken = LockToken(newLockToken))
+            val entity = updatedItem.toEntity()
 
             val updatedCount = ArbitrageOpportunitiesTable.update({
-                (ArbitrageOpportunitiesTable.id eq item.id.value) and (ArbitrageOpportunitiesTable.lockToken eq currentLockToken)
+                (ArbitrageOpportunitiesTable.id eq item.id.value) and
+                (ArbitrageOpportunitiesTable.lockToken eq item.lockToken.value)
             }) {
                 it[tokenId] = entity.tokenId
                 it[buyExchangeId] = entity.buyExchangeId
@@ -248,15 +219,26 @@ class PostgresArbOpRepository(
                 it[spread] = entity.spread
                 it[startTimestamp] = entity.startTimestamp
                 it[endTimestamp] = entity.endTimestamp
-                it[lockToken] = newLockToken  // Устанавливаем новый UUID токен
+                it[lockToken] = newLockToken
             }
 
-            // При конфликте версий сразу выбрасываем исключение - это откатит всю транзакцию
+            // При конфликте версий или отсутствии записи выбрасываем исключение
+            // Это откатит всю транзакцию
             if (updatedCount == 0) {
-                throw RepositoryException(createVersionConflictError(item.id))
+                // Проверяем, существует ли запись с таким ID
+                val exists = ArbitrageOpportunitiesTable
+                    .selectAll()
+                    .where { ArbitrageOpportunitiesTable.id eq item.id.value }
+                    .singleOrNull() != null
+
+                if (exists) {
+                    throw RepositoryException(createVersionConflictError(item.id))
+                } else {
+                    throw RepositoryException(createNotFoundError(item.id))
+                }
             }
 
-            updated.add(item)
+            updated.add(updatedItem)
         }
 
         ArbOpRepoResponse.Multiple(updated)
