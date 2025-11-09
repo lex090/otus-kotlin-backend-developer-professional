@@ -7,6 +7,7 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.LockToken
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.random.Random
 
@@ -51,6 +52,7 @@ object StubsDataFactory {
      * @param spread Спред в процентах (по умолчанию 2.0)
      * @param startTimestamp Временная метка начала (по умолчанию 1640995200)
      * @param endTimestamp Временная метка окончания (по умолчанию null)
+     * @param lockToken Токен для оптимистичной блокировки (по умолчанию пустая строка, что означает DEFAULT)
      * @return Объект CexToCexArbitrageOpportunity
      */
     fun createArbitrageOpportunity(
@@ -62,7 +64,8 @@ object StubsDataFactory {
         sellPrice: Double = 51000.0,
         spread: Double = 2.0,
         startTimestamp: Long = 1640995200,
-        endTimestamp: Long? = null
+        endTimestamp: Long? = null,
+        lockToken: String = ""
     ): CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity(
         id = if (id.isNotEmpty()) ArbitrageOpportunityId(id) else ArbitrageOpportunityId.DEFAULT,
         cexTokenId = CexTokenId(token),
@@ -72,7 +75,8 @@ object StubsDataFactory {
         sellCexPriceRaw = CexPrice.CexPriceRaw(BigDecimal.fromDouble(sellPrice)),
         spread = ArbitrageOpportunitySpread(spread),
         startTimestamp = Timestamp(startTimestamp),
-        endTimestamp = endTimestamp?.let { Timestamp(it) }
+        endTimestamp = endTimestamp?.let { Timestamp(it) },
+        lockToken = if (lockToken.isNotEmpty()) LockToken(lockToken) else LockToken.DEFAULT
     )
 
     /**
