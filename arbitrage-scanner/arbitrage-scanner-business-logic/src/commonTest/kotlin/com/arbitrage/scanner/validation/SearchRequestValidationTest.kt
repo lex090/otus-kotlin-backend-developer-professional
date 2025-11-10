@@ -10,6 +10,7 @@ import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.repository.IArbOpRepository
@@ -52,9 +53,7 @@ class SearchRequestValidationTest {
                     CexTokenId("test@token"),
                     CexTokenId("-invalid"),
                     CexTokenId("valid-token")
-                ),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread.DEFAULT
+                )
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -71,21 +70,16 @@ class SearchRequestValidationTest {
     }
 
     @Test
-    fun `test validation fails with invalid exchange ID format`() = runTest {
-        // Given: Контекст с некорректным ID биржи
+    fun `test validation fails with invalid buy exchange ID format`() = runTest {
+        // Given: Контекст с некорректным ID биржи покупки
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = setOf(
-                    CexExchangeId("ok"),
-                    CexExchangeId("_bybit"),
-                    CexExchangeId("binance-"),
-                    CexExchangeId("valid")
-                ),
-                spread = ArbitrageOpportunitySpread(1.0)
+                buyExchangeIds = setOf(CexExchangeId("_bybit")),
+                sellExchangeIds = setOf(CexExchangeId("binance"))
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -94,24 +88,23 @@ class SearchRequestValidationTest {
         processor.exec(context)
 
         // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректных ID бирж")
+        assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректном ID биржи покупки")
         assertTrue(
-            context.internalErrors.any { it.code == "validation-format" && it.field == "cexExchangeIds" },
-            "Должна быть ошибка формата для cexExchangeIds"
+            context.internalErrors.any { it.code == "validation-format" && it.field == "buyExchangeIds" },
+            "Должна быть ошибка формата для buyExchangeIds"
         )
     }
 
     @Test
-    fun `test validation fails with negative spread`() = runTest {
-        // Given: Контекст с отрицательным спредом
+    fun `test validation fails with negative minSpread`() = runTest {
+        // Given: Контекст с отрицательным minSpread
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("BTC")),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(-5.0)
+                minSpread = ArbitrageOpportunitySpread(-5.0)
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -120,12 +113,12 @@ class SearchRequestValidationTest {
         processor.exec(context)
 
         // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при отрицательном спреде")
+        assertEquals(State.FAILING, context.state, "State должен быть FAILING при отрицательном minSpread")
         assertTrue(
-            context.internalErrors.any { it.code == "validation-range" && it.field == "spread" },
-            "Должна быть ошибка диапазона для spread"
+            context.internalErrors.any { it.code == "validation-range" && it.field == "minSpread" },
+            "Должна быть ошибка диапазона для minSpread"
         )
-        val error = context.internalErrors.first { it.field == "spread" }
+        val error = context.internalErrors.first { it.field == "minSpread" }
         assertTrue(
             error.message.contains("не может быть отрицательным"),
             "Сообщение должно содержать информацию об отрицательном спреде"
@@ -133,16 +126,15 @@ class SearchRequestValidationTest {
     }
 
     @Test
-    fun `test validation passes with valid filter - only spread`() = runTest {
-        // Given: Контекст с валидным фильтром (только спред)
+    fun `test validation passes with valid filter - only minSpread`() = runTest {
+        // Given: Контекст с валидным фильтром (только minSpread)
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(5.0)
+                minSpread = ArbitrageOpportunitySpread(5.0)
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -157,8 +149,8 @@ class SearchRequestValidationTest {
         )
         assertEquals(
             5.0,
-            context.arbitrageOpportunitySearchRequestValidated.spread.value,
-            "Спред должен быть скопирован в validated после успешной валидации"
+            context.arbitrageOpportunitySearchRequestValidated.minSpread?.value,
+            "minSpread должен быть скопирован в validated после успешной валидации"
         )
     }
 
@@ -171,8 +163,11 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("BTC"), CexTokenId("ETH"), CexTokenId("USDT")),
-                cexExchangeIds = setOf(CexExchangeId("binance"), CexExchangeId("okx"), CexExchangeId("bybit")),
-                spread = ArbitrageOpportunitySpread(2.5)
+                buyExchangeIds = setOf(CexExchangeId("binance")),
+                sellExchangeIds = setOf(CexExchangeId("okx")),
+                minSpread = ArbitrageOpportunitySpread(2.5),
+                maxSpread = ArbitrageOpportunitySpread(10.0),
+                status = ArbitrageOpportunityStatus.ACTIVE
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -191,9 +186,14 @@ class SearchRequestValidationTest {
             "Все CEX токены должны быть скопированы в validated"
         )
         assertEquals(
-            3,
-            context.arbitrageOpportunitySearchRequestValidated.cexExchangeIds.size,
-            "Все CEX биржи должны быть скопированы в validated"
+            setOf(CexExchangeId("binance")),
+            context.arbitrageOpportunitySearchRequestValidated.buyExchangeIds,
+            "buyExchangeIds должен быть скопирован в validated"
+        )
+        assertEquals(
+            setOf(CexExchangeId("okx")),
+            context.arbitrageOpportunitySearchRequestValidated.sellExchangeIds,
+            "sellExchangeIds должен быть скопирован в validated"
         )
     }
 
@@ -206,8 +206,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("  BTC  "), CexTokenId(" ETH"), CexTokenId("USDT  ")),
-                cexExchangeIds = setOf(CexExchangeId(" binance "), CexExchangeId("  okx")),
-                spread = ArbitrageOpportunitySpread(1.0)
+                buyExchangeIds = setOf(CexExchangeId(" binance ")),
+                sellExchangeIds = setOf(CexExchangeId("  okx"))
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -230,12 +230,12 @@ class SearchRequestValidationTest {
             "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
-            validated.cexExchangeIds.contains(CexExchangeId("binance")),
-            "Пробелы должны быть удалены из CEX exchange IDs"
+            validated.buyExchangeIds.contains(CexExchangeId("binance")),
+            "Пробелы должны быть удалены из buyExchangeIds"
         )
         assertTrue(
-            validated.cexExchangeIds.contains(CexExchangeId("okx")),
-            "Пробелы должны быть удалены из CEX exchange IDs"
+            validated.sellExchangeIds.contains(CexExchangeId("okx")),
+            "Пробелы должны быть удалены из sellExchangeIds"
         )
     }
 
@@ -248,8 +248,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("B")), // Слишком короткий
-                cexExchangeIds = setOf(CexExchangeId("ok")), // Слишком короткий
-                spread = ArbitrageOpportunitySpread(-10.0) // Отрицательный
+                buyExchangeIds = setOf(CexExchangeId("ok")), // Слишком короткий
+                minSpread = ArbitrageOpportunitySpread(-10.0) // Отрицательный
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -268,26 +268,25 @@ class SearchRequestValidationTest {
             "Должна быть ошибка для cexTokenIds"
         )
         assertTrue(
-            context.internalErrors.any { it.field == "cexExchangeIds" },
-            "Должна быть ошибка для cexExchangeIds"
+            context.internalErrors.any { it.field == "buyExchangeIds" },
+            "Должна быть ошибка для buyExchangeIds"
         )
         assertTrue(
-            context.internalErrors.any { it.field == "spread" },
-            "Должна быть ошибка для spread"
+            context.internalErrors.any { it.field == "minSpread" },
+            "Должна быть ошибка для minSpread"
         )
     }
 
     @Test
-    fun `test validation with edge case - spread zero is valid`() = runTest {
-        // Given: Контекст со спредом равным нулю (должен быть валидным)
+    fun `test validation with edge case - minSpread zero is valid`() = runTest {
+        // Given: Контекст с minSpread равным нулю (должен быть валидным)
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("BTC")),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(0.0)
+                minSpread = ArbitrageOpportunitySpread(0.0)
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -297,22 +296,21 @@ class SearchRequestValidationTest {
 
         // Then: Проверяем, что валидация прошла успешно
         assertTrue(
-            context.internalErrors.none { it.field == "spread" },
-            "Не должно быть ошибок для спреда равного нулю"
+            context.internalErrors.none { it.field == "minSpread" },
+            "Не должно быть ошибок для minSpread равного нулю"
         )
     }
 
     @Test
-    fun `test validation with edge case - spread 100 is valid`() = runTest {
-        // Given: Контекст со спредом равным 100 (максимальное валидное значение)
+    fun `test validation with edge case - maxSpread 100 is valid`() = runTest {
+        // Given: Контекст с maxSpread равным 100 (максимальное валидное значение)
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("BTC")),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(100.0)
+                maxSpread = ArbitrageOpportunitySpread(100.0)
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -322,8 +320,8 @@ class SearchRequestValidationTest {
 
         // Then: Проверяем, что валидация прошла успешно
         assertTrue(
-            context.internalErrors.none { it.field == "spread" },
-            "Не должно быть ошибок для спреда равного 100"
+            context.internalErrors.none { it.field == "maxSpread" },
+            "Не должно быть ошибок для maxSpread равного 100"
         )
     }
 
@@ -340,9 +338,7 @@ class SearchRequestValidationTest {
                     CexTokenId("B"),         // Слишком короткий
                     CexTokenId("ETH-USDT"), // Валидный с дефисом
                     CexTokenId("@INVALID")   // Начинается со спецсимвола
-                ),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(1.0)
+                )
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -359,21 +355,16 @@ class SearchRequestValidationTest {
     }
 
     @Test
-    fun `test validation with mixed valid and invalid exchange IDs`() = runTest {
-        // Given: Контекст со смешанными валидными и невалидными ID бирж
+    fun `test validation with invalid sellExchangeId format`() = runTest {
+        // Given: Контекст с невалидным sellExchangeId
         val context = Context(
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = setOf(
-                    CexExchangeId("binance"),    // Валидный
-                    CexExchangeId("ok"),          // Слишком короткий
-                    CexExchangeId("okx-futures"), // Валидный с дефисом
-                    CexExchangeId("-bybit")       // Начинается с дефиса
-                ),
-                spread = ArbitrageOpportunitySpread(1.0)
+                buyExchangeIds = setOf(CexExchangeId("binance")),
+                sellExchangeIds = setOf(CexExchangeId("-bybit")) // Начинается с дефиса
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -382,10 +373,10 @@ class SearchRequestValidationTest {
         processor.exec(context)
 
         // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при наличии невалидных бирж")
+        assertEquals(State.FAILING, context.state, "State должен быть FAILING при невалидном sellExchangeId")
         assertTrue(
-            context.internalErrors.any { it.field == "cexExchangeIds" },
-            "Должна быть ошибка для cexExchangeIds"
+            context.internalErrors.any { it.field == "sellExchangeIds" },
+            "Должна быть ошибка для sellExchangeIds"
         )
     }
 }

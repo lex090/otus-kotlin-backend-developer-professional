@@ -3,6 +3,7 @@ package com.arbitrage.scanner.repository.postgres
 import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
@@ -305,18 +306,55 @@ class PostgresArbOpRepository(
             query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
         }
 
-        // Фильтр по биржам (buy OR sell)
-        if (filter.cexExchangeIds.isNotEmpty()) {
-            val exchangeIdValues = filter.cexExchangeIds.map { it.value }
-            query = query.andWhere {
-                (ArbitrageOpportunitiesTable.buyExchangeId inList exchangeIdValues) or
-                        (ArbitrageOpportunitiesTable.sellExchangeId inList exchangeIdValues)
-            }
+        // Фильтр по биржам покупки
+        if (filter.buyExchangeIds.isNotEmpty()) {
+            val buyExchangeIdValues = filter.buyExchangeIds.map { it.value }
+            query = query.andWhere { ArbitrageOpportunitiesTable.buyExchangeId inList buyExchangeIdValues }
+        }
+
+        // Фильтр по биржам продажи
+        if (filter.sellExchangeIds.isNotEmpty()) {
+            val sellExchangeIdValues = filter.sellExchangeIds.map { it.value }
+            query = query.andWhere { ArbitrageOpportunitiesTable.sellExchangeId inList sellExchangeIdValues }
         }
 
         // Фильтр по минимальному спреду
-        if (!filter.spread.isDefault()) {
-            query = query.andWhere { ArbitrageOpportunitiesTable.spread greaterEq filter.spread.value }
+        filter.minSpread?.let { minSpread ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.spread greaterEq minSpread.value }
+        }
+
+        // Фильтр по максимальному спреду
+        filter.maxSpread?.let { maxSpread ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.spread lessEq maxSpread.value }
+        }
+
+        // Фильтр по статусу
+        when (filter.status) {
+            ArbitrageOpportunityStatus.ACTIVE -> {
+                query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp.isNull() }
+            }
+            ArbitrageOpportunityStatus.INACTIVE -> {
+                query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp.isNotNull() }
+            }
+            ArbitrageOpportunityStatus.ALL -> {
+                // Не применяем фильтр
+            }
+        }
+
+        // Фильтр по временному диапазону создания (startTimestamp)
+        filter.startTimestampFrom?.let { from ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp greaterEq from.value }
+        }
+        filter.startTimestampTo?.let { to ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp lessEq to.value }
+        }
+
+        // Фильтр по временному диапазону завершения (endTimestamp)
+        filter.endTimestampFrom?.let { from ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp greaterEq from.value }
+        }
+        filter.endTimestampTo?.let { to ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp lessEq to.value }
         }
 
         val results = query.map { mapRowToEntity(it).toDomain() }

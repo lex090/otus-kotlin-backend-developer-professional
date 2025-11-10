@@ -52,8 +52,15 @@ abstract class KtorApplicationBaseTest {
 
     protected val filter: ArbitrageOpportunitySearchFilterApi = ArbitrageOpportunitySearchFilterApi(
         cexTokenIds = emptySet(),
-        cexExchangeIds = emptySet(),
-        spread = 1.0,
+        buyExchangeIds = emptySet(),
+        sellExchangeIds = emptySet(),
+        minSpread = 1.0,
+        maxSpread = null,
+        status = null,
+        startTimestampFrom = null,
+        startTimestampTo = null,
+        endTimestampFrom = null,
+        endTimestampTo = null
     )
 
     @Test
@@ -100,7 +107,7 @@ abstract class KtorApplicationBaseTest {
 
             val arbitrageOpportunities = responseBody.arbitrageOpportunities
             assertNotNull(arbitrageOpportunities)
-            // Фильтр spread = 1.0, поэтому должны вернуться BTC (1.8) и ETH (2.8), но не USDT (0.8)
+            // Фильтр minSpread = 1.0, поэтому должны вернуться BTC (1.8) и ETH (2.8), но не USDT (0.8)
             assertEquals(2, arbitrageOpportunities.size)
 
             // Проверяем первый элемент (BTC)

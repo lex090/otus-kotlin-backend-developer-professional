@@ -194,6 +194,14 @@ components:
       maximum: 100
       format: double
 
+    ArbitrageOpportunityStatusApi:
+      type: string
+      description: Статус арбитражной возможности
+      enum:
+        - active
+        - inactive
+        - all
+
     ArbitrageOpportunitySearchFilterApi:
       type: object
       description: Фильтр для поиска арбитражных возможностей
@@ -201,15 +209,46 @@ components:
         cexTokenIds:
           type: array
           uniqueItems: true
+          description: Набор идентификаторов токенов для фильтрации
           items:
             $ref: '#/components/schemas/CexTokenIdApi'
-        cexExchangeIds:
+        buyExchangeIds:
           type: array
           uniqueItems: true
+          description: Набор идентификаторов бирж покупки
           items:
             $ref: '#/components/schemas/CexExchangeIdApi'
-        spread:
+        sellExchangeIds:
+          type: array
+          uniqueItems: true
+          description: Набор идентификаторов бирж продажи
+          items:
+            $ref: '#/components/schemas/CexExchangeIdApi'
+        minSpread:
           $ref: '#/components/schemas/ArbitrageOpportunitySpreadApi'
+          description: Минимальный спред в процентах
+        maxSpread:
+          $ref: '#/components/schemas/ArbitrageOpportunitySpreadApi'
+          description: Максимальный спред в процентах
+        status:
+          $ref: '#/components/schemas/ArbitrageOpportunityStatusApi'
+          description: Статус арбитражной возможности
+        startTimestampFrom:
+          type: integer
+          format: int64
+          description: Начало временного диапазона создания (Unix epoch millis)
+        startTimestampTo:
+          type: integer
+          format: int64
+          description: Конец временного диапазона создания (Unix epoch millis)
+        endTimestampFrom:
+          type: integer
+          format: int64
+          description: Начало временного диапазона завершения (Unix epoch millis)
+        endTimestampTo:
+          type: integer
+          format: int64
+          description: Конец временного диапазона завершения (Unix epoch millis)
 
     ArbitrageOpportunityMultiApi:
       allOf:

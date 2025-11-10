@@ -3,6 +3,7 @@ package com.arbitrage.scanner.repository.inmemory
 import com.arbitrage.scanner.base.InternalError
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
@@ -184,18 +185,51 @@ class InMemoryArbOpRepository(
 
     private suspend fun searchByCriteria(filter: ArbitrageOpportunityFilter): ArbOpRepoResponse = mutex.withLock {
         val filtered = cache.asMap().values.asSequence()
+            // Фильтр по токенам
             .filter { entity ->
                 filter.cexTokenIds.isEmpty() || filter.cexTokenIds.any { it.value == entity.tokenId }
             }
+            // Фильтр по биржам покупки
             .filter { entity ->
-                if (filter.cexExchangeIds.isEmpty()) {
-                    true
-                } else {
-                    filter.cexExchangeIds.any { it.value == entity.buyExchangeId || it.value == entity.sellExchangeId }
+                filter.buyExchangeIds.isEmpty() || filter.buyExchangeIds.any { it.value == entity.buyExchangeId }
+            }
+            // Фильтр по биржам продажи
+            .filter { entity ->
+                filter.sellExchangeIds.isEmpty() || filter.sellExchangeIds.any { it.value == entity.sellExchangeId }
+            }
+            // Фильтр по минимальному спреду
+            .filter { entity ->
+                filter.minSpread?.let { entity.spread >= it.value } ?: true
+            }
+            // Фильтр по максимальному спреду
+            .filter { entity ->
+                filter.maxSpread?.let { entity.spread <= it.value } ?: true
+            }
+            // Фильтр по статусу
+            .filter { entity ->
+                when (filter.status) {
+                    ArbitrageOpportunityStatus.ACTIVE -> entity.endTimestamp == null
+                    ArbitrageOpportunityStatus.INACTIVE -> entity.endTimestamp != null
+                    ArbitrageOpportunityStatus.ALL -> true
                 }
             }
+            // Фильтр по временному диапазону создания (startTimestamp)
             .filter { entity ->
-                filter.spread.isDefault() || entity.spread >= filter.spread.value
+                filter.startTimestampFrom?.let { entity.startTimestamp >= it.value } ?: true
+            }
+            .filter { entity ->
+                filter.startTimestampTo?.let { entity.startTimestamp <= it.value } ?: true
+            }
+            // Фильтр по временному диапазону завершения (endTimestamp)
+            .filter { entity ->
+                filter.endTimestampFrom?.let { from ->
+                    entity.endTimestamp?.let { it >= from.value } ?: false
+                } ?: true
+            }
+            .filter { entity ->
+                filter.endTimestampTo?.let { to ->
+                    entity.endTimestamp?.let { it <= to.value } ?: false
+                } ?: true
             }
             .map { it.toDomain() }
             .toList()

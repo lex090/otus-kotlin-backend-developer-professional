@@ -150,8 +150,15 @@ class FromTransportMappersTest {
             ),
             filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = emptySet(),
-                spread = null
+                buyExchangeIds = emptySet(),
+                sellExchangeIds = emptySet(),
+                minSpread = null,
+                maxSpread = null,
+                status = null,
+                startTimestampFrom = null,
+                startTimestampTo = null,
+                endTimestampFrom = null,
+                endTimestampTo = null
             )
         )
 
@@ -232,8 +239,15 @@ class FromTransportMappersTest {
             ),
             filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = setOf("1234567"),
-                cexExchangeIds = setOf("12345678"),
-                spread = 20.0,
+                buyExchangeIds = setOf("binance"),
+                sellExchangeIds = setOf("okx"),
+                minSpread = 10.0,
+                maxSpread = 30.0,
+                status = null,
+                startTimestampFrom = null,
+                startTimestampTo = null,
+                endTimestampFrom = null,
+                endTimestampTo = null
             )
         )
 
@@ -245,8 +259,10 @@ class FromTransportMappersTest {
             stubCase = StubCase.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = setOf(CexTokenId("1234567")),
-                cexExchangeIds = setOf(CexExchangeId("12345678")),
-                spread = ArbitrageOpportunitySpread(20.0)
+                buyExchangeIds = setOf(CexExchangeId("binance")),
+                sellExchangeIds = setOf(CexExchangeId("okx")),
+                minSpread = ArbitrageOpportunitySpread(10.0),
+                maxSpread = ArbitrageOpportunitySpread(30.0)
             ),
         )
 

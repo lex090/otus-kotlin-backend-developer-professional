@@ -10,11 +10,13 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.IRequest
 import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.StubCase
+import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
 
@@ -71,8 +73,15 @@ private fun String?.toArbitrageOpportunityId(): ArbitrageOpportunityId {
 private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter(): ArbitrageOpportunityFilter {
     return ArbitrageOpportunityFilter(
         cexTokenIds = this?.cexTokenIds.transform(String::toCexTokenId),
-        cexExchangeIds = this?.cexExchangeIds.transform(String::toCexExchangeId),
-        spread = this?.spread.toArbitrageOpportunitySpread()
+        buyExchangeIds = this?.buyExchangeIds.transform(String::toCexExchangeId),
+        sellExchangeIds = this?.sellExchangeIds.transform(String::toCexExchangeId),
+        minSpread = this?.minSpread.toArbitrageOpportunitySpread(),
+        maxSpread = this?.maxSpread.toArbitrageOpportunitySpread(),
+        status = this?.status.toArbitrageOpportunityStatus(),
+        startTimestampFrom = this?.startTimestampFrom.toTimestamp(),
+        startTimestampTo = this?.startTimestampTo.toTimestamp(),
+        endTimestampFrom = this?.endTimestampFrom.toTimestamp(),
+        endTimestampTo = this?.endTimestampTo.toTimestamp()
     )
 }
 
@@ -81,5 +90,17 @@ private fun String.toCexExchangeId(): CexExchangeId = CexExchangeId(this)
 
 private fun <T, R> Set<T>?.transform(block: (T) -> R): Set<R> = this.orEmpty().map(block).toSet()
 
-private fun Double?.toArbitrageOpportunitySpread(): ArbitrageOpportunitySpread =
-    this?.let(::ArbitrageOpportunitySpread) ?: ArbitrageOpportunitySpread.DEFAULT
+private fun Double?.toArbitrageOpportunitySpread(): ArbitrageOpportunitySpread? =
+    this?.let(::ArbitrageOpportunitySpread)
+
+private fun Long?.toTimestamp(): Timestamp? =
+    this?.let(::Timestamp)
+
+private fun com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi?.toArbitrageOpportunityStatus(): ArbitrageOpportunityStatus {
+    return when (this) {
+        com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi.ACTIVE -> ArbitrageOpportunityStatus.ACTIVE
+        com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi.INACTIVE -> ArbitrageOpportunityStatus.INACTIVE
+        com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi.ALL -> ArbitrageOpportunityStatus.ALL
+        null -> ArbitrageOpportunityStatus.DEFAULT
+    }
+}

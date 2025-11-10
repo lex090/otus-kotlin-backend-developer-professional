@@ -59,8 +59,15 @@ class KtorApplicationStubTest {
                 ),
                 filter = ArbitrageOpportunitySearchFilterApi(
                     cexTokenIds = emptySet(),
-                    cexExchangeIds = emptySet(),
-                    spread = 1.0,
+                    buyExchangeIds = emptySet(),
+                    sellExchangeIds = emptySet(),
+                    minSpread = 1.0,
+                    maxSpread = null,
+                    status = null,
+                    startTimestampFrom = null,
+                    startTimestampTo = null,
+                    endTimestampFrom = null,
+                    endTimestampTo = null
                 ),
             ),
             method = "search",

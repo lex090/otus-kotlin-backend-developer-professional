@@ -29,13 +29,13 @@ import com.arbitrage.scanner.workers.stubs.readSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
-import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
+import com.arbitrage.scanner.workers.validation.validateExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
 import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
-import com.arbitrage.scanner.workers.validation.validateSpreadMinWorker
+import com.arbitrage.scanner.workers.validation.validateSpreadRangeWorker
 import com.arbitrage.scanner.workers.validationProcessor
 import com.arbitrage.scanner.workers.workModProcessor
 import com.crowdproj.kotlin.cor.handlers.chain
@@ -125,7 +125,9 @@ class BusinessLogicProcessorImpl(
                     val normalizedFilter = arbitrageOpportunitySearchRequestValidating.copy(
                         cexTokenIds = arbitrageOpportunitySearchRequestValidating.cexTokenIds
                             .map { CexTokenId(it.value.trim()) }.toSet(),
-                        cexExchangeIds = arbitrageOpportunitySearchRequestValidating.cexExchangeIds
+                        buyExchangeIds = arbitrageOpportunitySearchRequestValidating.buyExchangeIds
+                            .map { CexExchangeId(it.value.trim()) }.toSet(),
+                        sellExchangeIds = arbitrageOpportunitySearchRequestValidating.sellExchangeIds
                             .map { CexExchangeId(it.value.trim()) }.toSet(),
                     )
                     arbitrageOpportunitySearchRequestValidating = normalizedFilter
@@ -133,8 +135,8 @@ class BusinessLogicProcessorImpl(
 
                 // Последовательность валидации фильтров
                 validateCexTokenIdsWorker("Проверка ID CEX токенов")
-                validateCexExchangeIdsWorker("Проверка ID CEX бирж")
-                validateSpreadMinWorker("Проверка минимального значения спреда")
+                validateExchangeIdsWorker("Проверка ID бирж покупки и продажи")
+                validateSpreadRangeWorker("Проверка диапазона спредов")
 
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunitySearchRequestValidated = arbitrageOpportunitySearchRequestValidating
