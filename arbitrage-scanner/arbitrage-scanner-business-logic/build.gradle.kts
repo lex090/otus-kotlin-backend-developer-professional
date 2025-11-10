@@ -17,6 +17,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlinx.coroutines.test)
+                implementation(project(":arbitrage-scanner-repo-inmemory"))
             }
         }
     }

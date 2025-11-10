@@ -57,6 +57,12 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
                 }
             }
         }
+        // Настраиваем JUnit 5 для JVM тестов
+        testRuns.configureEach {
+            executionTask.configure {
+                useJUnitPlatform()
+            }
+        }
     }
     linuxX64()
     macosArm64()

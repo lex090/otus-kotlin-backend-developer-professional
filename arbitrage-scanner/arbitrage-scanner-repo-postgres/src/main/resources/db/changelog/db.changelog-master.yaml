@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: migrations/V001__create_arbitrage_opportunities_table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/V002__change_lock_version_to_lock_token.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/V003__add_composite_indexes.sql
+      relativeToChangelogFile: true

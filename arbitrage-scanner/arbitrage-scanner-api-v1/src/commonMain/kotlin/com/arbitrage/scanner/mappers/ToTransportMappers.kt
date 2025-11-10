@@ -20,6 +20,7 @@ import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexPrice.CexPriceRaw
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.LockToken
 
 fun Context.toTransport(): IResponse {
     return when (command) {
@@ -48,7 +49,8 @@ fun CexToCexArbitrageOpportunity.toTransport(): CexToCexArbitrageOpportunityApi 
         sellCexPriceRaw = sellCexPriceRaw.toTransportRawPrice(),
         spread = spread.toTransport(),
         timestampStart = startTimestamp.toTransport(),
-        timestampEnd = endTimestamp.toTransport()
+        timestampEnd = endTimestamp.toTransport(),
+        lockToken = lockToken.toTransport()
     )
 }
 
@@ -91,7 +93,7 @@ private fun InternalError.toTransportError() = Error(
     message = message.takeIf(String::isNotBlank)
 )
 
-private fun ArbitrageOpportunityId.toTransportId(): String? =
+fun ArbitrageOpportunityId.toTransportId(): String? =
     this.takeIf(ArbitrageOpportunityId::isNotDefault)?.value
 
 private fun CexPrice.toTransportCexPrice(): CexPriceApi {
@@ -109,10 +111,13 @@ fun CexExchangeId.toTransportId(): String? =
     this.takeIf(CexExchangeId::isNotDefault)?.value
 
 fun CexPriceRaw.toTransportRawPrice(): Double? =
-    this.takeIf(CexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = true)
+    this.takeIf(CexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = false)
 
 fun ArbitrageOpportunitySpread.toTransport(): Double? =
     this.takeIf(ArbitrageOpportunitySpread::isNotDefault)?.value
 
 fun Timestamp?.toTransport(): Long? =
     this?.takeIf(Timestamp::isNotDefault)?.value
+
+fun LockToken.toTransport(): String? =
+    this.takeIf(LockToken::isNotDefault)?.value

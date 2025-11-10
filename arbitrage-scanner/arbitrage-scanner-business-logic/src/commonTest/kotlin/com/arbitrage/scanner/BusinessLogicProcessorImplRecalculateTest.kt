@@ -1,11 +1,15 @@
 package com.arbitrage.scanner
 
+import com.arbitrage.scanner.algorithm.CexToCexArbitrageFinder
 import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.State
+import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.base.StubCase
+import com.arbitrage.scanner.repository.IArbOpRepository
+import com.arbitrage.scanner.repository.inmemory.InMemoryArbOpRepository
+import com.arbitrage.scanner.service.CexPriceClientService
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -22,6 +26,13 @@ class BusinessLogicProcessorImplRecalculateTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
+        override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = CexToCexArbitrageFinder.NONE
+        override val prodCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val testCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val prodArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val stubArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val testArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
     }
 
     /**
@@ -69,7 +80,7 @@ class BusinessLogicProcessorImplRecalculateTest {
             "processingTimeMs должен совпадать со стабом"
         )
         assertTrue(
-            context.errors.isEmpty(),
+            context.internalErrors.isEmpty(),
             "Не должно быть ошибок при успешном выполнении"
         )
     }
@@ -90,11 +101,11 @@ class BusinessLogicProcessorImplRecalculateTest {
         // Then: Проверяем, что возвращается ошибка валидации
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при ошибке")
         assertTrue(
-            context.errors.isNotEmpty(),
+            context.internalErrors.isNotEmpty(),
             "Должна быть хотя бы одна ошибка"
         )
 
-        val error = context.errors.first()
+        val error = context.internalErrors.first()
         assertEquals("validation", error.code, "Код ошибки должен быть 'validation'")
         assertEquals("validation", error.group, "Группа ошибки должна быть 'validation'")
         assertEquals("stub", error.field, "Поле ошибки должно быть 'stub'")
@@ -124,11 +135,11 @@ class BusinessLogicProcessorImplRecalculateTest {
         // Then: Проверяем, что возвращается ошибка валидации
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при ошибке")
         assertTrue(
-            context.errors.isNotEmpty(),
+            context.internalErrors.isNotEmpty(),
             "Должна быть хотя бы одна ошибка"
         )
 
-        val error = context.errors.first()
+        val error = context.internalErrors.first()
         assertEquals("validation", error.code, "Код ошибки должен быть 'validation'")
         assertEquals("validation", error.group, "Группа ошибки должна быть 'validation'")
         assertEquals("stub", error.field, "Поле ошибки должно быть 'stub'")

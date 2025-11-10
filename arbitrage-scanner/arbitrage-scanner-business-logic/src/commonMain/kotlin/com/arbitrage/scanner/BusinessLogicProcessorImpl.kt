@@ -8,6 +8,20 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
+import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
+import com.arbitrage.scanner.workers.read.readArbOpWorker
+import com.arbitrage.scanner.workers.recalculate.analyzeArbOpChangesWorker
+import com.arbitrage.scanner.workers.recalculate.closeInactiveArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.createNewArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.findArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.getCexPricesWorker
+import com.arbitrage.scanner.workers.recalculate.loadActiveArbOpsWorker
+import com.arbitrage.scanner.workers.recalculate.prepareRecalculateResponseWorker
+import com.arbitrage.scanner.workers.recalculate.updateExistingArbOpsWorker
+import com.arbitrage.scanner.workers.search.prepareSearchResponseWorker
+import com.arbitrage.scanner.workers.search.searchArbOpWorker
+import com.arbitrage.scanner.workers.setupArbOpRepoWorker
+import com.arbitrage.scanner.workers.setupCexPriceClientServiceWorker
 import com.arbitrage.scanner.workers.stubs.noStubCaseWorker
 import com.arbitrage.scanner.workers.stubs.readBadIdStubWorker
 import com.arbitrage.scanner.workers.stubs.readNotFoundStubWorker
@@ -16,16 +30,15 @@ import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
 import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
-import com.arbitrage.scanner.workers.validation.validateFilterNotEmptyWorker
+import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
 import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
-import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
-import com.arbitrage.scanner.workers.validation.validateSpreadMaxWorker
 import com.arbitrage.scanner.workers.validation.validateSpreadMinWorker
 import com.arbitrage.scanner.workers.validationProcessor
 import com.arbitrage.scanner.workers.workModProcessor
+import com.crowdproj.kotlin.cor.handlers.chain
 import com.crowdproj.kotlin.cor.handlers.worker
 import com.crowdproj.kotlin.cor.rootChain
 
@@ -37,11 +50,25 @@ class BusinessLogicProcessorImpl(
 
     private val corChain = rootChain(config = deps) {
         initStatus("Инициализация статуса обработки запроса")
+        setupCexPriceClientServiceWorker("Установка сервиса получения цен с CEX криптобирж")
+        setupArbOpRepoWorker("Установка репозитория арбитражных ситуаций")
 
         commandProcessor(title = "Обработка события recalculate", command = Command.RECALCULATE) {
             workModProcessor(title = "Обработка в режиме стабов", workMode = WorkMode.STUB) {
                 recalculateSuccessStubWorker(title = "Обработка стаба SUCCESS")
                 noStubCaseWorker(title = "Валидируем ситуацию, когда запрошен кейс, который не поддерживается в стабах")
+            }
+
+            chain {
+                title = "Основная логика обработки recalculate"
+                getCexPricesWorker("Получение цен с CEX бирж")
+                findArbOpsWorker("Поиск новых арбитражных возможностей")
+                loadActiveArbOpsWorker("Загрузка активных возможностей из БД")
+                analyzeArbOpChangesWorker("Анализ изменений (создать/обновить/закрыть)")
+                createNewArbOpsWorker("Создание новых возможностей")
+                updateExistingArbOpsWorker("Обновление существующих возможностей")
+                closeInactiveArbOpsWorker("Закрытие неактуальных возможностей")
+                prepareRecalculateResponseWorker("Подготовка ответа")
             }
         }
 
@@ -72,6 +99,12 @@ class BusinessLogicProcessorImpl(
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunityReadRequestValidated = arbitrageOpportunityReadRequestValidating
                 }
+
+                chain {
+                    title = "Основная логика обработки read"
+                    readArbOpWorker("Чтение арбитражной возможности из БД")
+                    prepareReadResponseWorker("Подготовка ответа")
+                }
             }
         }
 
@@ -99,14 +132,18 @@ class BusinessLogicProcessorImpl(
                 }
 
                 // Последовательность валидации фильтров
-                validateFilterNotEmptyWorker("Проверка, что фильтр не пустой")
                 validateCexTokenIdsWorker("Проверка ID CEX токенов")
                 validateCexExchangeIdsWorker("Проверка ID CEX бирж")
                 validateSpreadMinWorker("Проверка минимального значения спреда")
-                validateSpreadMaxWorker("Проверка максимального значения спреда")
 
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunitySearchRequestValidated = arbitrageOpportunitySearchRequestValidating
+                }
+
+                chain {
+                    title = "Основная логика обработки search"
+                    searchArbOpWorker("Поиск арбитражных возможностей в БД")
+                    prepareSearchResponseWorker("Подготовка ответа")
                 }
             }
         }

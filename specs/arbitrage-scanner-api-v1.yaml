@@ -174,11 +174,18 @@ components:
         timestampEnd:
           type: integer
           format: int64
+        lockToken:
+          $ref: '#/components/schemas/LockTokenApi'
 
     ArbitrageOpportunityIdApi:
       type: string
       description: Уникальный идентификатор арбитражной возможности
       example: "1893746293640137"
+
+    LockTokenApi:
+      type: string
+      description: Токен для оптимистичной блокировки (UUID)
+      example: "550e8400-e29b-41d4-a716-446655440000"
 
     ArbitrageOpportunitySpreadApi:
       type: number

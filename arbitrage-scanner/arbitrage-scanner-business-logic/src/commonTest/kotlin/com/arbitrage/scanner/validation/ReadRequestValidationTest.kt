@@ -2,12 +2,16 @@ package com.arbitrage.scanner.validation
 
 import com.arbitrage.scanner.BusinessLogicProcessorImpl
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
+import com.arbitrage.scanner.algorithm.CexToCexArbitrageFinder
 import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.repository.IArbOpRepository
+import com.arbitrage.scanner.repository.inmemory.InMemoryArbOpRepository
+import com.arbitrage.scanner.service.CexPriceClientService
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,6 +27,13 @@ class ReadRequestValidationTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
+        override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = CexToCexArbitrageFinder.NONE
+        override val prodCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val testCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val prodArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val stubArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val testArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
     }
 
     @Test
@@ -42,11 +53,11 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при пустом ID")
         assertTrue(
-            context.errors.isNotEmpty(),
+            context.internalErrors.isNotEmpty(),
             "Должна быть хотя бы одна ошибка валидации"
         )
 
-        val error = context.errors.first()
+        val error = context.internalErrors.first()
         assertEquals("validation-empty", error.code, "Код ошибки должен быть 'validation-empty'")
         assertEquals("validation", error.group, "Группа ошибки должна быть 'validation'")
         assertEquals("id", error.field, "Поле ошибки должно быть 'id'")
@@ -73,7 +84,7 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при ID из пробелов")
         assertTrue(
-            context.errors.any { it.code == "validation-empty" },
+            context.internalErrors.any { it.code == "validation-empty" },
             "Должна быть ошибка с кодом 'validation-empty'"
         )
     }
@@ -95,10 +106,10 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при слишком коротком ID")
         assertTrue(
-            context.errors.any { it.code == "validation-length" },
+            context.internalErrors.any { it.code == "validation-length" },
             "Должна быть ошибка с кодом 'validation-length'"
         )
-        val error = context.errors.first { it.code == "validation-length" }
+        val error = context.internalErrors.first { it.code == "validation-length" }
         assertTrue(
             error.message.contains("слишком короткий"),
             "Сообщение должно содержать информацию о слишком коротком ID"
@@ -123,10 +134,10 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при слишком длинном ID")
         assertTrue(
-            context.errors.any { it.code == "validation-length" },
+            context.internalErrors.any { it.code == "validation-length" },
             "Должна быть ошибка с кодом 'validation-length'"
         )
-        val error = context.errors.first { it.code == "validation-length" }
+        val error = context.internalErrors.first { it.code == "validation-length" }
         assertTrue(
             error.message.contains("слишком длинный"),
             "Сообщение должно содержать информацию о слишком длинном ID"
@@ -150,10 +161,10 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректном формате")
         assertTrue(
-            context.errors.any { it.code == "validation-format" },
+            context.internalErrors.any { it.code == "validation-format" },
             "Должна быть ошибка с кодом 'validation-format'"
         )
-        val error = context.errors.first { it.code == "validation-format" }
+        val error = context.internalErrors.first { it.code == "validation-format" }
         assertTrue(
             error.message.contains("недопустимые символы"),
             "Сообщение должно содержать информацию о недопустимых символах"
@@ -177,7 +188,7 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректном формате")
         assertTrue(
-            context.errors.any { it.code == "validation-format" },
+            context.internalErrors.any { it.code == "validation-format" },
             "Должна быть ошибка с кодом 'validation-format'"
         )
     }
@@ -199,7 +210,7 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректном формате")
         assertTrue(
-            context.errors.any { it.code == "validation-format" },
+            context.internalErrors.any { it.code == "validation-format" },
             "Должна быть ошибка с кодом 'validation-format'"
         )
     }
@@ -221,7 +232,7 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректном формате")
         assertTrue(
-            context.errors.any { it.code == "validation-format" },
+            context.internalErrors.any { it.code == "validation-format" },
             "Должна быть ошибка с кодом 'validation-format'"
         )
     }
@@ -255,7 +266,7 @@ class ReadRequestValidationTest {
 
             // Then: Проверяем, что валидация прошла успешно
             assertTrue(
-                context.errors.none { it.group == "validation" },
+                context.internalErrors.none { it.group == "validation" },
                 "Не должно быть ошибок валидации для ID: $id"
             )
             assertEquals(
@@ -287,7 +298,7 @@ class ReadRequestValidationTest {
             "Пробелы должны быть удалены из ID"
         )
         assertTrue(
-            context.errors.none { it.group == "validation" },
+            context.internalErrors.none { it.group == "validation" },
             "Не должно быть ошибок валидации после нормализации"
         )
     }
@@ -309,11 +320,11 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что собраны все применимые ошибки валидации
         assertEquals(State.FAILING, context.state, "State должен быть FAILING")
         assertTrue(
-            context.errors.size >= 1,
+            context.internalErrors.size >= 1,
             "Должна быть как минимум одна ошибка валидации"
         )
         assertTrue(
-            context.errors.any { it.code == "validation-empty" },
+            context.internalErrors.any { it.code == "validation-empty" },
             "Должна быть ошибка пустого ID"
         )
         // Пустая строка также может генерировать ошибки длины и формата
@@ -340,7 +351,7 @@ class ReadRequestValidationTest {
             // Then: Проверяем, что валидация провалилась на минимальной длине
             assertEquals(State.FAILING, context.state, "State должен быть FAILING для ID: $id")
             assertTrue(
-                context.errors.any { it.code == "validation-length" },
+                context.internalErrors.any { it.code == "validation-length" },
                 "Должна быть ошибка длины для односимвольного ID: $id"
             )
         }
@@ -363,7 +374,7 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING")
         assertTrue(
-            context.errors.any { it.code == "validation-length" },
+            context.internalErrors.any { it.code == "validation-length" },
             "Должна быть ошибка с кодом 'validation-length'"
         )
     }
@@ -385,7 +396,7 @@ class ReadRequestValidationTest {
         // Then: Проверяем, что валидация провалилась на формате
         assertEquals(State.FAILING, context.state, "State должен быть FAILING")
         assertTrue(
-            context.errors.any { it.code == "validation-format" },
+            context.internalErrors.any { it.code == "validation-format" },
             "Должна быть ошибка формата для ID с пробелами внутри"
         )
     }

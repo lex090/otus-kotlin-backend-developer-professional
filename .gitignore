@@ -18,3 +18,17 @@ CLAUDE.md
 logs_llm/
 
 /worktrees
+/.specify
+
+### PostgreSQL ###
+*.sql~
+*.backup
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+
+### Logs ###
+*.log
+logs/

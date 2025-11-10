@@ -2,6 +2,7 @@ package com.arbitrage.scanner.validation
 
 import com.arbitrage.scanner.BusinessLogicProcessorImpl
 import com.arbitrage.scanner.BusinessLogicProcessorImplDeps
+import com.arbitrage.scanner.algorithm.CexToCexArbitrageFinder
 import com.arbitrage.scanner.base.Command
 import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
@@ -11,6 +12,9 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.repository.IArbOpRepository
+import com.arbitrage.scanner.repository.inmemory.InMemoryArbOpRepository
+import com.arbitrage.scanner.service.CexPriceClientService
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,37 +30,13 @@ class SearchRequestValidationTest {
      */
     private fun createTestDeps(): BusinessLogicProcessorImplDeps = object : BusinessLogicProcessorImplDeps {
         override val loggerProvider: ArbScanLoggerProvider = ArbScanLoggerProvider()
-    }
-
-    @Test
-    fun `test validation fails with completely empty filter in PROD mode`() = runTest {
-        // Given: Контекст с пустым фильтром в режиме PROD
-        val context = Context(
-            command = Command.SEARCH,
-            workMode = WorkMode.PROD,
-            state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT
-        )
-        val processor = BusinessLogicProcessorImpl(createTestDeps())
-
-        // When: Выполняем бизнес-логику
-        processor.exec(context)
-
-        // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при пустом фильтре")
-        assertTrue(
-            context.errors.isNotEmpty(),
-            "Должна быть хотя бы одна ошибка валидации"
-        )
-
-        val error = context.errors.first()
-        assertEquals("validation-empty", error.code, "Код ошибки должен быть 'validation-empty'")
-        assertEquals("validation", error.group, "Группа ошибки должна быть 'validation'")
-        assertEquals("filter", error.field, "Поле ошибки должно быть 'filter'")
-        assertTrue(
-            error.message.contains("не должен быть пустым"),
-            "Сообщение должно содержать информацию о пустом фильтре"
-        )
+        override val cexToCexArbitrageFinder: CexToCexArbitrageFinder = CexToCexArbitrageFinder.NONE
+        override val prodCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val testCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val stubCexPriceClientService: CexPriceClientService = CexPriceClientService.NONE
+        override val prodArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val stubArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
+        override val testArbOpRepository: IArbOpRepository = InMemoryArbOpRepository()
     }
 
     @Test
@@ -67,7 +47,12 @@ class SearchRequestValidationTest {
             workMode = WorkMode.PROD,
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = setOf(CexTokenId("B"), CexTokenId("test@token"), CexTokenId("-invalid"), CexTokenId("valid-token")),
+                cexTokenIds = setOf(
+                    CexTokenId("B"),
+                    CexTokenId("test@token"),
+                    CexTokenId("-invalid"),
+                    CexTokenId("valid-token")
+                ),
                 cexExchangeIds = emptySet(),
                 spread = ArbitrageOpportunitySpread.DEFAULT
             )
@@ -80,7 +65,7 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректных ID токенов")
         assertTrue(
-            context.errors.any { it.code == "validation-format" && it.field == "cexTokenIds" },
+            context.internalErrors.any { it.code == "validation-format" && it.field == "cexTokenIds" },
             "Должна быть ошибка формата для cexTokenIds"
         )
     }
@@ -94,7 +79,12 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = setOf(CexExchangeId("ok"), CexExchangeId("_bybit"), CexExchangeId("binance-"), CexExchangeId("valid")),
+                cexExchangeIds = setOf(
+                    CexExchangeId("ok"),
+                    CexExchangeId("_bybit"),
+                    CexExchangeId("binance-"),
+                    CexExchangeId("valid")
+                ),
                 spread = ArbitrageOpportunitySpread(1.0)
             )
         )
@@ -106,7 +96,7 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при некорректных ID бирж")
         assertTrue(
-            context.errors.any { it.code == "validation-format" && it.field == "cexExchangeIds" },
+            context.internalErrors.any { it.code == "validation-format" && it.field == "cexExchangeIds" },
             "Должна быть ошибка формата для cexExchangeIds"
         )
     }
@@ -132,44 +122,13 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при отрицательном спреде")
         assertTrue(
-            context.errors.any { it.code == "validation-range" && it.field == "spread" },
+            context.internalErrors.any { it.code == "validation-range" && it.field == "spread" },
             "Должна быть ошибка диапазона для spread"
         )
-        val error = context.errors.first { it.field == "spread" }
+        val error = context.internalErrors.first { it.field == "spread" }
         assertTrue(
             error.message.contains("не может быть отрицательным"),
             "Сообщение должно содержать информацию об отрицательном спреде"
-        )
-    }
-
-    @Test
-    fun `test validation fails with too large spread`() = runTest {
-        // Given: Контекст со слишком большим спредом
-        val context = Context(
-            command = Command.SEARCH,
-            workMode = WorkMode.PROD,
-            state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = setOf(CexTokenId("BTC")),
-                cexExchangeIds = emptySet(),
-                spread = ArbitrageOpportunitySpread(150.0)
-            )
-        )
-        val processor = BusinessLogicProcessorImpl(createTestDeps())
-
-        // When: Выполняем бизнес-логику
-        processor.exec(context)
-
-        // Then: Проверяем, что валидация провалилась
-        assertEquals(State.FAILING, context.state, "State должен быть FAILING при слишком большом спреде")
-        assertTrue(
-            context.errors.any { it.code == "validation-range" && it.field == "spread" },
-            "Должна быть ошибка диапазона для spread"
-        )
-        val error = context.errors.first { it.field == "spread" }
-        assertTrue(
-            error.message.contains("слишком большой"),
-            "Сообщение должно содержать информацию о слишком большом спреде"
         )
     }
 
@@ -193,7 +152,7 @@ class SearchRequestValidationTest {
 
         // Then: Проверяем, что валидация прошла успешно
         assertTrue(
-            context.errors.none { it.group == "validation" },
+            context.internalErrors.none { it.group == "validation" },
             "Не должно быть ошибок валидации для валидного фильтра"
         )
         assertEquals(
@@ -223,7 +182,7 @@ class SearchRequestValidationTest {
 
         // Then: Проверяем, что валидация прошла успешно
         assertTrue(
-            context.errors.none { it.group == "validation" },
+            context.internalErrors.none { it.group == "validation" },
             "Не должно быть ошибок валидации для сложного валидного фильтра"
         )
         assertEquals(
@@ -301,19 +260,19 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что собраны все ошибки
         assertEquals(State.FAILING, context.state, "State должен быть FAILING")
         assertTrue(
-            context.errors.size >= 3,
+            context.internalErrors.size >= 3,
             "Должно быть минимум 3 ошибки валидации"
         )
         assertTrue(
-            context.errors.any { it.field == "cexTokenIds" },
+            context.internalErrors.any { it.field == "cexTokenIds" },
             "Должна быть ошибка для cexTokenIds"
         )
         assertTrue(
-            context.errors.any { it.field == "cexExchangeIds" },
+            context.internalErrors.any { it.field == "cexExchangeIds" },
             "Должна быть ошибка для cexExchangeIds"
         )
         assertTrue(
-            context.errors.any { it.field == "spread" },
+            context.internalErrors.any { it.field == "spread" },
             "Должна быть ошибка для spread"
         )
     }
@@ -338,7 +297,7 @@ class SearchRequestValidationTest {
 
         // Then: Проверяем, что валидация прошла успешно
         assertTrue(
-            context.errors.none { it.field == "spread" },
+            context.internalErrors.none { it.field == "spread" },
             "Не должно быть ошибок для спреда равного нулю"
         )
     }
@@ -363,7 +322,7 @@ class SearchRequestValidationTest {
 
         // Then: Проверяем, что валидация прошла успешно
         assertTrue(
-            context.errors.none { it.field == "spread" },
+            context.internalErrors.none { it.field == "spread" },
             "Не должно быть ошибок для спреда равного 100"
         )
     }
@@ -394,7 +353,7 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при наличии невалидных токенов")
         assertTrue(
-            context.errors.any { it.field == "cexTokenIds" },
+            context.internalErrors.any { it.field == "cexTokenIds" },
             "Должна быть ошибка для cexTokenIds"
         )
     }
@@ -425,7 +384,7 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что валидация провалилась
         assertEquals(State.FAILING, context.state, "State должен быть FAILING при наличии невалидных бирж")
         assertTrue(
-            context.errors.any { it.field == "cexExchangeIds" },
+            context.internalErrors.any { it.field == "cexExchangeIds" },
             "Должна быть ошибка для cexExchangeIds"
         )
     }

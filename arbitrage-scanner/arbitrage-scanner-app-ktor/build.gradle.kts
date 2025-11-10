@@ -58,11 +58,15 @@ jib {
 
 dependencies {
 
-    implementation(project(":arbitrage-scanner-app-common"))
-    implementation(project(":arbitrage-scanner-common"))
-    implementation(project(":arbitrage-scanner-api-v1"))
-    implementation(project(":arbitrage-scanner-business-logic"))
-    implementation(project(":arbitrage-scanner-libs:arbitrage-scanner-lib-logging-logback"))
+    implementation(projects.arbitrageScannerAlgorithm)
+    implementation(projects.arbitrageScannerAppCommon)
+    implementation(projects.arbitrageScannerCommon)
+    implementation(projects.arbitrageScannerApiV1)
+    implementation(projects.arbitrageScannerBusinessLogic)
+    implementation(projects.arbitrageScannerLibs.arbitrageScannerLibLoggingLogback)
+    implementation(projects.arbitrageScannerServiceStub)
+    implementation(projects.arbitrageScannerRepoInmemory)
+    implementation(projects.arbitrageScannerRepoPostgres)
 
     // Ktor
     implementation(libs.ktor.server.core)
@@ -78,4 +82,14 @@ dependencies {
 
     testImplementation(libs.ktor.server.test)
     testImplementation(libs.ktor.client.negotiation)
+    testImplementation(projects.arbitrageScannerApiV1)
+    testImplementation(projects.arbitrageScannerStubs)
+    testImplementation(projects.arbitrageScannerRepoTests)
+
+    // TestContainers для PostgreSQL тестов
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.junit)
+    testImplementation(libs.liquibase.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.exposed.core)
 }
