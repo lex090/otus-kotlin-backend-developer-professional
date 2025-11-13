@@ -105,7 +105,7 @@ private fun CexPrice.toTransportCexPrice(): CexPriceApi {
 }
 
 fun CexTokenId.toTransportId(): String? =
-    this.takeIf(CexTokenId::isNotDefault)?.value
+    this.takeIf(CexTokenId::isNotNone)?.value
 
 fun CexExchangeId.toTransportId(): String? =
     this.takeIf(CexExchangeId::isNotDefault)?.value

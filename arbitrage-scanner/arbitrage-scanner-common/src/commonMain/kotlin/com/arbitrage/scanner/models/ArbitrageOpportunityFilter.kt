@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.Timestamp
 /**
  * Фильтр для поиска арбитражных возможностей.
  *
- * @property cexTokenIds Набор идентификаторов токенов для фильтрации
+ * @property cexTokenIds Набор идентификаторов токенов для фильтрации (NONE = не фильтровать, значение не задано)
  * @property buyExchangeIds Набор идентификаторов бирж покупки (пустой Set = не фильтровать)
  * @property sellExchangeIds Набор идентификаторов бирж продажи (пустой Set = не фильтровать)
  * @property minSpread Минимальный спред в процентах (NONE = не фильтровать, значение не задано)
@@ -17,7 +17,7 @@ import com.arbitrage.scanner.base.Timestamp
  * @property endTimestampTo Конец временного диапазона завершения (null = не фильтровать)
  */
 data class ArbitrageOpportunityFilter(
-    val cexTokenIds: Set<CexTokenId> = emptySet(),
+    val cexTokenIds: CexTokenIds = CexTokenIds.NONE,
     val buyExchangeIds: Set<CexExchangeId> = emptySet(),
     val sellExchangeIds: Set<CexExchangeId> = emptySet(),
     val minSpread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,

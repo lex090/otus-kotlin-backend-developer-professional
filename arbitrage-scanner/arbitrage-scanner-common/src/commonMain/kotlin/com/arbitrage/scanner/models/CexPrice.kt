@@ -5,7 +5,7 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.jvm.JvmInline
 
 data class CexPrice(
-    val tokenId: CexTokenId = CexTokenId.DEFAULT,
+    val tokenId: CexTokenId = CexTokenId.NONE,
     val exchangeId: CexExchangeId = CexExchangeId.DEFAULT,
     val priceRaw: CexPriceRaw = CexPriceRaw.DEFAULT,
     val timeStamp: Timestamp = Timestamp.DEFAULT,

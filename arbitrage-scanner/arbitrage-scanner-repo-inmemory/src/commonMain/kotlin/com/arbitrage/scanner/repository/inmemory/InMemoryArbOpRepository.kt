@@ -187,7 +187,7 @@ class InMemoryArbOpRepository(
         val filtered = cache.asMap().values.asSequence()
             // Фильтр по токенам
             .filter { entity ->
-                filter.cexTokenIds.isEmpty() || filter.cexTokenIds.any { it.value == entity.tokenId }
+                filter.cexTokenIds.value.isEmpty() || filter.cexTokenIds.value.any { it.value == entity.tokenId }
             }
             // Фильтр по биржам покупки
             .filter { entity ->

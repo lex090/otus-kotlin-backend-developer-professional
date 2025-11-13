@@ -5,7 +5,7 @@ import com.arbitrage.scanner.models.CexPrice.CexPriceRaw
 
 data class CexToCexArbitrageOpportunity(
     val id: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
-    val cexTokenId: CexTokenId = CexTokenId.DEFAULT,
+    val cexTokenId: CexTokenId = CexTokenId.NONE,
     val buyCexExchangeId: CexExchangeId = CexExchangeId.DEFAULT,
     val buyCexPriceRaw: CexPriceRaw = CexPriceRaw.DEFAULT,
     val sellCexExchangeId: CexExchangeId = CexExchangeId.DEFAULT,

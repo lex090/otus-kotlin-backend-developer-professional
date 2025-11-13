@@ -301,8 +301,8 @@ class PostgresArbOpRepository(
         var query = ArbitrageOpportunitiesTable.selectAll()
 
         // Фильтр по токенам
-        if (filter.cexTokenIds.isNotEmpty()) {
-            val tokenIdValues = filter.cexTokenIds.map { it.value }
+        if (filter.cexTokenIds.isNotNone() && filter.cexTokenIds.value.isNotEmpty()) {
+            val tokenIdValues = filter.cexTokenIds.value.map { it.value }
             query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
         }
 

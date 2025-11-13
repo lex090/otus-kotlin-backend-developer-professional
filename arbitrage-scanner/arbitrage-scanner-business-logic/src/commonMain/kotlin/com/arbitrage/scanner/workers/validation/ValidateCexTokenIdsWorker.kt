@@ -23,11 +23,11 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.validateCexTokenIdsW
     this.title = title
     on {
         val filter = arbitrageOpportunitySearchRequestValidating
-        filter.cexTokenIds.any { !isValidTokenId(it.value) }
+        filter.cexTokenIds.isNotNone() && filter.cexTokenIds.value.any { !isValidTokenId(it.value) }
     }
     handle {
         val filter = arbitrageOpportunitySearchRequestValidating
-        val invalidCexTokens = filter.cexTokenIds.filter { !isValidTokenId(it.value) }
+        val invalidCexTokens = filter.cexTokenIds.value.filter { !isValidTokenId(it.value) }
 
         fail(
             InternalError(
