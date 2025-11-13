@@ -199,7 +199,7 @@ class InMemoryArbOpRepository(
             }
             // Фильтр по минимальному спреду
             .filter { entity ->
-                filter.minSpread?.let { entity.spread >= it.value } ?: true
+                filter.minSpread.isDefault() || entity.spread >= filter.minSpread.value
             }
             // Фильтр по максимальному спреду
             .filter { entity ->

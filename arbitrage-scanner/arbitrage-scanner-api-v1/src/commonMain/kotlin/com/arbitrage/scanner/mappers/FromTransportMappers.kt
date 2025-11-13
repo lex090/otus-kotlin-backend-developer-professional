@@ -75,7 +75,7 @@ private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter():
         cexTokenIds = this?.cexTokenIds.transform(String::toCexTokenId),
         buyExchangeIds = this?.buyExchangeIds.transform(String::toCexExchangeId),
         sellExchangeIds = this?.sellExchangeIds.transform(String::toCexExchangeId),
-        minSpread = this?.minSpread.toArbitrageOpportunitySpread(),
+        minSpread = this?.minSpread?.let(::ArbitrageOpportunitySpread) ?: ArbitrageOpportunitySpread.DEFAULT,
         maxSpread = this?.maxSpread.toArbitrageOpportunitySpread(),
         status = this?.status.toArbitrageOpportunityStatus(),
         startTimestampFrom = this?.startTimestampFrom.toTimestamp(),

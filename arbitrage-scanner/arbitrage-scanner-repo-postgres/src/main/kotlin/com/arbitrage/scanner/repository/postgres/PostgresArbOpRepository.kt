@@ -319,8 +319,8 @@ class PostgresArbOpRepository(
         }
 
         // Фильтр по минимальному спреду
-        filter.minSpread?.let { minSpread ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.spread greaterEq minSpread.value }
+        if (filter.minSpread.isNotDefault()) {
+            query = query.andWhere { ArbitrageOpportunitiesTable.spread greaterEq filter.minSpread.value }
         }
 
         // Фильтр по максимальному спреду
