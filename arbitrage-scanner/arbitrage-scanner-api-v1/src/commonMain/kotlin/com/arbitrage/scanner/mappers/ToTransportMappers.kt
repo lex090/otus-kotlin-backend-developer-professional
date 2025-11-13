@@ -114,7 +114,7 @@ fun CexPriceRaw.toTransportRawPrice(): Double? =
     this.takeIf(CexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = false)
 
 fun ArbitrageOpportunitySpread.toTransport(): Double? =
-    this.takeIf(ArbitrageOpportunitySpread::isNotDefault)?.value
+    this.takeIf(ArbitrageOpportunitySpread::isNotNone)?.value
 
 fun Timestamp?.toTransport(): Long? =
     this?.takeIf(Timestamp::isNotDefault)?.value

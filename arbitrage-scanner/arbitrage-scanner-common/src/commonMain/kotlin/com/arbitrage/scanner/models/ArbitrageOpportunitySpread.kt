@@ -3,13 +3,17 @@ package com.arbitrage.scanner.models
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class ArbitrageOpportunitySpread(val value: Double = 0.0) {
+value class ArbitrageOpportunitySpread(val value: Double) {
 
-    fun isDefault(): Boolean = this == DEFAULT
+    fun isNone(): Boolean = this == NONE
 
-    fun isNotDefault(): Boolean = !isDefault()
+    fun isNotNone(): Boolean = !isNone()
 
     companion object {
-        val DEFAULT = ArbitrageOpportunitySpread()
+        /**
+         * NONE - маркер "значение не установлено", используется как признак отсутствия фильтрации.
+         * Это невалидное значение (-1.0), которое не должно использоваться в бизнес-логике.
+         */
+        val NONE = ArbitrageOpportunitySpread(-1.0)
     }
 }
