@@ -67,7 +67,7 @@ private fun ArbitrageOpportunityDebugApi?.toStubCase(): StubCase {
 }
 
 private fun String?.toArbitrageOpportunityId(): ArbitrageOpportunityId {
-    return this?.let(::ArbitrageOpportunityId) ?: ArbitrageOpportunityId.DEFAULT
+    return this?.let(::ArbitrageOpportunityId) ?: ArbitrageOpportunityId.NONE
 }
 
 private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter(): ArbitrageOpportunityFilter {

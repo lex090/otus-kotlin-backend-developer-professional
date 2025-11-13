@@ -92,7 +92,7 @@ class CexToCexArbitrageFinderParallelImpl : CexToCexArbitrageFinder() {
                 if (spread.value >= minSpreadPercent) {
                     // Создать возможность
                     val opportunity = CexToCexArbitrageOpportunity(
-                        id = ArbitrageOpportunityId.DEFAULT,
+                        id = ArbitrageOpportunityId.NONE,
                         cexTokenId = tokenId,
                         buyCexExchangeId = buyPrice.exchangeId,
                         buyCexPriceRaw = buyPrice.priceRaw,

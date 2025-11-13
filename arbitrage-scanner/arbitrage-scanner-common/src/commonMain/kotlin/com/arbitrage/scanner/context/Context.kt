@@ -31,9 +31,9 @@ data class Context(
     var arbOpRepo: IArbOpRepository = IArbOpRepository.NONE,
 
     // START READ
-    var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
-    var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
-    var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
+    var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
+    var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
+    var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
 
     var arbitrageOpportunityReadResponse: CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity.DEFAULT,
     // END READ
