@@ -1,7 +1,7 @@
 package com.arbitrage.scanner.repository.postgres
 
 import com.arbitrage.scanner.base.InternalError
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
@@ -28,7 +28,6 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.update
@@ -297,12 +296,12 @@ class PostgresArbOpRepository(
 
     // ========== Private Methods: SEARCH ==========
 
-    private suspend fun searchByCriteria(filter: ArbitrageOpportunityFilter): ArbOpRepoResponse = dbQuery {
+    private suspend fun searchByCriteria(filter: CexToCexArbitrageOpportunityFilter): ArbOpRepoResponse = dbQuery {
         var query = ArbitrageOpportunitiesTable.selectAll()
 
         // Фильтр по токенам
-        if (filter.cexTokenIds.isNotNone() && filter.cexTokenIds.value.isNotEmpty()) {
-            val tokenIdValues = filter.cexTokenIds.value.map { it.value }
+        if (filter.cexTokenIdsFilter.isNotNone() && filter.cexTokenIdsFilter.value.isNotEmpty()) {
+            val tokenIdValues = filter.cexTokenIdsFilter.value.map { it.value }
             query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
         }
 

@@ -1,12 +1,12 @@
 package com.arbitrage.scanner.repository
 
 import com.arbitrage.scanner.StubsDataFactory
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.CexTokenIds
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -30,8 +30,8 @@ abstract class RepositoryArbOpSearchTest {
         // Act
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(
 
-            ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf()),
+            CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
                 status = ArbitrageOpportunityStatus.ALL,
             )
         )
@@ -48,8 +48,8 @@ abstract class RepositoryArbOpSearchTest {
         val repository = createRepository()
 
         // Act
-        val filter = ArbitrageOpportunityFilter(
-            cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"))),
+        val filter = CexToCexArbitrageOpportunityFilter(
+            cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
             status = ArbitrageOpportunityStatus.ALL
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
@@ -60,7 +60,7 @@ abstract class RepositoryArbOpSearchTest {
         val results = response.arbOps
         assertEquals(1, results.size, "Should find exactly 1 BTC item")
         assertTrue(
-            results.all { it.cexTokenId in filter.cexTokenIds.value },
+            results.all { it.cexTokenId in filter.cexTokenIdsFilter.value },
             "All results should match filter"
         )
     }
@@ -71,8 +71,8 @@ abstract class RepositoryArbOpSearchTest {
         val repository = createRepository()
 
         // Act
-        val filter = ArbitrageOpportunityFilter(
-            cexTokenIds = CexTokenIds(setOf()),
+        val filter = CexToCexArbitrageOpportunityFilter(
+            cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
             buyExchangeIds = setOf(CexExchangeId("binance")),
             status = ArbitrageOpportunityStatus.ALL
         )
@@ -95,8 +95,8 @@ abstract class RepositoryArbOpSearchTest {
         val repository = createRepository()
 
         // Act
-        val filter = ArbitrageOpportunityFilter(
-            cexTokenIds = CexTokenIds(setOf()),
+        val filter = CexToCexArbitrageOpportunityFilter(
+            cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
             minSpread = ArbitrageOpportunitySpread(2.5),
             status = ArbitrageOpportunityStatus.ALL
         )
@@ -119,8 +119,8 @@ abstract class RepositoryArbOpSearchTest {
         val repository = createRepository()
 
         // Act
-        val filter = ArbitrageOpportunityFilter(
-            cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"))),
+        val filter = CexToCexArbitrageOpportunityFilter(
+            cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
             buyExchangeIds = setOf(CexExchangeId("binance")),
             minSpread = ArbitrageOpportunitySpread(2.0),
             maxSpread = ArbitrageOpportunitySpread(5.0),
@@ -134,7 +134,7 @@ abstract class RepositoryArbOpSearchTest {
         val results = response.arbOps
         assertEquals(1, results.size, "Should find exactly 1 item matching all filters")
         assertTrue(
-            results.all { it.cexTokenId in filter.cexTokenIds.value },
+            results.all { it.cexTokenId in filter.cexTokenIdsFilter.value },
             "All results should match token filter"
         )
         assertTrue(
@@ -159,8 +159,8 @@ abstract class RepositoryArbOpSearchTest {
         repository.delete(IArbOpRepository.DeleteArbOpRepoRequest.All)
 
         // Act
-        val filter = ArbitrageOpportunityFilter(
-            cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"))),
+        val filter = CexToCexArbitrageOpportunityFilter(
+            cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
             status = ArbitrageOpportunityStatus.ALL
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)

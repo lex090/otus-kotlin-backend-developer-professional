@@ -1,7 +1,7 @@
 package com.arbitrage.scanner.repository.inmemory
 
 import com.arbitrage.scanner.base.InternalError
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
@@ -183,11 +183,11 @@ class InMemoryArbOpRepository(
         ArbOpRepoResponse.Multiple(allItems)
     }
 
-    private suspend fun searchByCriteria(filter: ArbitrageOpportunityFilter): ArbOpRepoResponse = mutex.withLock {
+    private suspend fun searchByCriteria(filter: CexToCexArbitrageOpportunityFilter): ArbOpRepoResponse = mutex.withLock {
         val filtered = cache.asMap().values.asSequence()
             // Фильтр по токенам
             .filter { entity ->
-                filter.cexTokenIds.value.isEmpty() || filter.cexTokenIds.value.any { it.value == entity.tokenId }
+                filter.cexTokenIdsFilter.value.isEmpty() || filter.cexTokenIdsFilter.value.any { it.value == entity.tokenId }
             }
             // Фильтр по биржам покупки
             .filter { entity ->

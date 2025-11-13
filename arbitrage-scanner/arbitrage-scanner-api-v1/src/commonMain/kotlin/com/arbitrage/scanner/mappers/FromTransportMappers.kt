@@ -13,13 +13,13 @@ import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.CexTokenIds
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 
 fun Context.fromTransport(request: IRequest) {
     return when (request) {
@@ -71,9 +71,9 @@ private fun String?.toArbitrageOpportunityId(): ArbitrageOpportunityId {
     return this?.let(::ArbitrageOpportunityId) ?: ArbitrageOpportunityId.NONE
 }
 
-private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter(): ArbitrageOpportunityFilter {
-    return ArbitrageOpportunityFilter(
-        cexTokenIds = this?.cexTokenIds.transformToCexTokenIds(),
+private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter(): CexToCexArbitrageOpportunityFilter {
+    return CexToCexArbitrageOpportunityFilter(
+        cexTokenIdsFilter = this?.cexTokenIds.transformToCexTokenIds(),
         buyExchangeIds = this?.buyExchangeIds.transform(String::toCexExchangeId),
         sellExchangeIds = this?.sellExchangeIds.transform(String::toCexExchangeId),
         minSpread = this?.minSpread?.let(::ArbitrageOpportunitySpread) ?: ArbitrageOpportunitySpread.NONE,
@@ -89,8 +89,8 @@ private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter():
 private fun String.toCexTokenId(): CexTokenId = CexTokenId(this)
 private fun String.toCexExchangeId(): CexExchangeId = CexExchangeId(this)
 
-private fun Set<String>?.transformToCexTokenIds(): CexTokenIds =
-    if (this == null) CexTokenIds.NONE else CexTokenIds(this.map(String::toCexTokenId).toSet())
+private fun Set<String>?.transformToCexTokenIds(): CexTokenIdsFilter =
+    if (this == null) CexTokenIdsFilter.NONE else CexTokenIdsFilter(this.map(String::toCexTokenId).toSet())
 
 private fun <T, R> Set<T>?.transform(block: (T) -> R): Set<R> = this.orEmpty().map(block).toSet()
 

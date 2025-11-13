@@ -6,7 +6,7 @@ import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.CexTokenIds
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
 import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
@@ -124,8 +124,8 @@ class BusinessLogicProcessorImpl(
                 worker("Нормализация ID в фильтрах") {
                     // Нормализуем все ID - удаляем лишние пробелы
                     val normalizedFilter = arbitrageOpportunitySearchRequestValidating.copy(
-                        cexTokenIds = CexTokenIds(
-                            arbitrageOpportunitySearchRequestValidating.cexTokenIds.value
+                        cexTokenIdsFilter = CexTokenIdsFilter(
+                            arbitrageOpportunitySearchRequestValidating.cexTokenIdsFilter.value
                                 .map { CexTokenId(it.value.trim()) }.toSet()
                         ),
                         buyExchangeIds = arbitrageOpportunitySearchRequestValidating.buyExchangeIds

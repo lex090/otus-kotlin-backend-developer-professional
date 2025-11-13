@@ -1,7 +1,7 @@
 package com.arbitrage.scanner.repository
 
 import com.arbitrage.scanner.base.InternalError
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 
@@ -34,7 +34,7 @@ interface IArbOpRepository {
 
     sealed interface SearchArbOpRepoRequest {
         data class SearchCriteria(
-            val arbOpFilter: ArbitrageOpportunityFilter,
+            val arbOpFilter: CexToCexArbitrageOpportunityFilter,
         ) : SearchArbOpRepoRequest
     }
 

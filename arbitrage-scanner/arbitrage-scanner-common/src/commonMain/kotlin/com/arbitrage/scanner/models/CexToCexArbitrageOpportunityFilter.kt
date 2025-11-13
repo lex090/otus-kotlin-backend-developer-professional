@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.Timestamp
 /**
  * Фильтр для поиска арбитражных возможностей.
  *
- * @property cexTokenIds Набор идентификаторов токенов для фильтрации (NONE = не фильтровать, значение не задано)
+ * @property cexTokenIdsFilter Набор идентификаторов токенов для фильтрации (NONE = не фильтровать, значение не задано)
  * @property buyExchangeIds Набор идентификаторов бирж покупки (пустой Set = не фильтровать)
  * @property sellExchangeIds Набор идентификаторов бирж продажи (пустой Set = не фильтровать)
  * @property minSpread Минимальный спред в процентах (NONE = не фильтровать, значение не задано)
@@ -16,8 +16,8 @@ import com.arbitrage.scanner.base.Timestamp
  * @property endTimestampFrom Начало временного диапазона завершения (null = не фильтровать)
  * @property endTimestampTo Конец временного диапазона завершения (null = не фильтровать)
  */
-data class ArbitrageOpportunityFilter(
-    val cexTokenIds: CexTokenIds = CexTokenIds.NONE,
+data class CexToCexArbitrageOpportunityFilter(
+    val cexTokenIdsFilter: CexTokenIdsFilter = CexTokenIdsFilter.NONE,
     val buyExchangeIds: Set<CexExchangeId> = emptySet(),
     val sellExchangeIds: Set<CexExchangeId> = emptySet(),
     val minSpread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,
@@ -29,6 +29,6 @@ data class ArbitrageOpportunityFilter(
     val endTimestampTo: Timestamp? = null,
 ) {
     companion object {
-        val DEFAULT = ArbitrageOpportunityFilter()
+        val DEFAULT = CexToCexArbitrageOpportunityFilter()
     }
 }

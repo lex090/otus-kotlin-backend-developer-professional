@@ -5,7 +5,7 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
@@ -28,7 +28,7 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
         logger.doWithLogging(id = requestId.toString(), level = LogLevel.INFO) {
             val searchResult = arbOpRepo.search(
                 SearchArbOpRepoRequest.SearchCriteria(
-                    ArbitrageOpportunityFilter(status = ArbitrageOpportunityStatus.ALL)
+                    CexToCexArbitrageOpportunityFilter(status = ArbitrageOpportunityStatus.ALL)
                 )
             )
 

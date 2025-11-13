@@ -8,12 +8,12 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.libs.logging.ArbScanLoggerProvider
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexTokenId
-import com.arbitrage.scanner.models.CexTokenIds
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.repository.IArbOpRepository
 import com.arbitrage.scanner.repository.inmemory.InMemoryArbOpRepository
 import com.arbitrage.scanner.service.CexPriceClientService
@@ -48,8 +48,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(
                     CexTokenId("B"),
                     CexTokenId("test@token"),
                     CexTokenId("-invalid"),
@@ -77,8 +77,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds.NONE,
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter.NONE,
                 buyExchangeIds = setOf(CexExchangeId("_bybit")),
                 sellExchangeIds = setOf(CexExchangeId("binance"))
             )
@@ -103,8 +103,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"))),
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
                 minSpread = ArbitrageOpportunitySpread(-5.0)
             )
         )
@@ -133,8 +133,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds.NONE,
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter.NONE,
                 minSpread = ArbitrageOpportunitySpread(5.0)
             )
         )
@@ -162,8 +162,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"), CexTokenId("ETH"), CexTokenId("USDT"))),
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"), CexTokenId("ETH"), CexTokenId("USDT"))),
                 buyExchangeIds = setOf(CexExchangeId("binance")),
                 sellExchangeIds = setOf(CexExchangeId("okx")),
                 minSpread = ArbitrageOpportunitySpread(2.5),
@@ -183,7 +183,7 @@ class SearchRequestValidationTest {
         )
         assertEquals(
             3,
-            context.arbitrageOpportunitySearchRequestValidated.cexTokenIds.value.size,
+            context.arbitrageOpportunitySearchRequestValidated.cexTokenIdsFilter.value.size,
             "Все CEX токены должны быть скопированы в validated"
         )
         assertEquals(
@@ -205,8 +205,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(CexTokenId("  BTC  "), CexTokenId(" ETH"), CexTokenId("USDT  "))),
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("  BTC  "), CexTokenId(" ETH"), CexTokenId("USDT  "))),
                 buyExchangeIds = setOf(CexExchangeId(" binance ")),
                 sellExchangeIds = setOf(CexExchangeId("  okx"))
             )
@@ -219,15 +219,15 @@ class SearchRequestValidationTest {
         // Then: Проверяем, что пробелы были удалены
         val validated = context.arbitrageOpportunitySearchRequestValidated
         assertTrue(
-            validated.cexTokenIds.value.contains(CexTokenId("BTC")),
+            validated.cexTokenIdsFilter.value.contains(CexTokenId("BTC")),
             "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
-            validated.cexTokenIds.value.contains(CexTokenId("ETH")),
+            validated.cexTokenIdsFilter.value.contains(CexTokenId("ETH")),
             "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
-            validated.cexTokenIds.value.contains(CexTokenId("USDT")),
+            validated.cexTokenIdsFilter.value.contains(CexTokenId("USDT")),
             "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
@@ -247,8 +247,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(CexTokenId("B"))), // Слишком короткий
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("B"))), // Слишком короткий
                 buyExchangeIds = setOf(CexExchangeId("ok")), // Слишком короткий
                 minSpread = ArbitrageOpportunitySpread(-10.0) // Отрицательный
             )
@@ -285,8 +285,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"))),
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
                 minSpread = ArbitrageOpportunitySpread(0.0)
             )
         )
@@ -309,8 +309,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(CexTokenId("BTC"))),
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
                 maxSpread = ArbitrageOpportunitySpread(100.0)
             )
         )
@@ -333,8 +333,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds(setOf(
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(
                     CexTokenId("BTC"),      // Валидный
                     CexTokenId("B"),         // Слишком короткий
                     CexTokenId("ETH-USDT"), // Валидный с дефисом
@@ -362,8 +362,8 @@ class SearchRequestValidationTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             state = State.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = CexTokenIds.NONE,
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter.NONE,
                 buyExchangeIds = setOf(CexExchangeId("binance")),
                 sellExchangeIds = setOf(CexExchangeId("-bybit")) // Начинается с дефиса
             )

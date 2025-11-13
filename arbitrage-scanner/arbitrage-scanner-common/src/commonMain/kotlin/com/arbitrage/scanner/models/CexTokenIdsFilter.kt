@@ -7,7 +7,7 @@ import kotlin.jvm.JvmInline
  * Используется для фильтрации арбитражных возможностей по списку токенов.
  */
 @JvmInline
-value class CexTokenIds(val value: Set<CexTokenId>) {
+value class CexTokenIdsFilter(val value: Set<CexTokenId>) {
 
     /**
      * Проверяет, является ли набор невалидным (NONE - значение не задано)
@@ -24,6 +24,6 @@ value class CexTokenIds(val value: Set<CexTokenId>) {
          * NONE - маркер "значение не установлено", используется как признак отсутствия фильтрации по токенам.
          * Представлен набором с невозможным токеном CexTokenId.NONE, так как пустой набор является валидным значением.
          */
-        val NONE = CexTokenIds(setOf(CexTokenId.NONE))
+        val NONE = CexTokenIdsFilter(setOf(CexTokenId.NONE))
     }
 }

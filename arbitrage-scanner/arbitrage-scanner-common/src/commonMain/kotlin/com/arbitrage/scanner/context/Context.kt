@@ -7,7 +7,7 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
@@ -39,9 +39,9 @@ data class Context(
     // END READ
 
     // START SEARCH
-    var arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
-    var arbitrageOpportunitySearchRequestValidating: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
-    var arbitrageOpportunitySearchRequestValidated: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequest: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequestValidating: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequestValidated: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.DEFAULT,
 
     val arbitrageOpportunitySearchResponse: MutableSet<CexToCexArbitrageOpportunity> = mutableSetOf(),
     // END READ
