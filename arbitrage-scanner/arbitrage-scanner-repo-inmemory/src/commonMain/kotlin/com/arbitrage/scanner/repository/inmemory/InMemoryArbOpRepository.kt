@@ -211,6 +211,7 @@ class InMemoryArbOpRepository(
                     ArbitrageOpportunityStatus.ACTIVE -> entity.endTimestamp == null
                     ArbitrageOpportunityStatus.INACTIVE -> entity.endTimestamp != null
                     ArbitrageOpportunityStatus.ALL -> true
+                    ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
                 }
             }
             // Фильтр по временному диапазону создания (startTimestamp)

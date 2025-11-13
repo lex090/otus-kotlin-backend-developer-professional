@@ -339,6 +339,7 @@ class PostgresArbOpRepository(
             ArbitrageOpportunityStatus.ALL -> {
                 // Не применяем фильтр
             }
+            ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
         }
 
         // Фильтр по временному диапазону создания (startTimestamp)

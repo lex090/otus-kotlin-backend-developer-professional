@@ -22,7 +22,7 @@ data class ArbitrageOpportunityFilter(
     val sellExchangeIds: Set<CexExchangeId> = emptySet(),
     val minSpread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.DEFAULT,
     val maxSpread: ArbitrageOpportunitySpread? = null,
-    val status: ArbitrageOpportunityStatus = ArbitrageOpportunityStatus.DEFAULT,
+    val status: ArbitrageOpportunityStatus = ArbitrageOpportunityStatus.NONE,
     val startTimestampFrom: Timestamp? = null,
     val startTimestampTo: Timestamp? = null,
     val endTimestampFrom: Timestamp? = null,

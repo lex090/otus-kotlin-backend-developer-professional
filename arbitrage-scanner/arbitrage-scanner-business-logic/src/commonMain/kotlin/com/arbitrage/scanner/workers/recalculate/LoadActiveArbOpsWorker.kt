@@ -6,6 +6,7 @@ import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
 import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
 import com.crowdproj.kotlin.cor.ICorAddExecDsl
@@ -26,7 +27,9 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
     handle {
         logger.doWithLogging(id = requestId.toString(), level = LogLevel.INFO) {
             val searchResult = arbOpRepo.search(
-                SearchArbOpRepoRequest.SearchCriteria(ArbitrageOpportunityFilter.DEFAULT)
+                SearchArbOpRepoRequest.SearchCriteria(
+                    ArbitrageOpportunityFilter(status = ArbitrageOpportunityStatus.ALL)
+                )
             )
 
             when (searchResult) {

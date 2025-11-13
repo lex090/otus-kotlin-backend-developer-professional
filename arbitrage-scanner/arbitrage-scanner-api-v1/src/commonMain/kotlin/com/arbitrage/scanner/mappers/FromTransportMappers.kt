@@ -101,6 +101,6 @@ private fun com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi?.t
         com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi.ACTIVE -> ArbitrageOpportunityStatus.ACTIVE
         com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi.INACTIVE -> ArbitrageOpportunityStatus.INACTIVE
         com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi.ALL -> ArbitrageOpportunityStatus.ALL
-        null -> ArbitrageOpportunityStatus.DEFAULT
+        null -> ArbitrageOpportunityStatus.NONE
     }
 }

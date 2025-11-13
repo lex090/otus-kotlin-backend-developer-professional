@@ -10,6 +10,7 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugModeA
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilterApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi
 import com.arbitrage.scanner.api.v1.models.IRequest
 import com.arbitrage.scanner.api.v1.models.ResponseResult
 import com.arbitrage.scanner.mappers.toTransport
@@ -56,7 +57,7 @@ abstract class KtorApplicationBaseTest {
         sellExchangeIds = emptySet(),
         minSpread = 1.0,
         maxSpread = null,
-        status = null,
+        status = ArbitrageOpportunityStatusApi.ALL,
         startTimestampFrom = null,
         startTimestampTo = null,
         endTimestampFrom = null,
