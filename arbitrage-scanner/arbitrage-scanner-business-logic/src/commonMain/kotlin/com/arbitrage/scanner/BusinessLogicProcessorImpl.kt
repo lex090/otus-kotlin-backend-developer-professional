@@ -5,6 +5,7 @@ import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.workers.commandProcessor
@@ -128,10 +129,14 @@ class BusinessLogicProcessorImpl(
                             arbitrageOpportunitySearchRequestValidating.cexTokenIdsFilter.value
                                 .map { CexTokenId(it.value.trim()) }.toSet()
                         ),
-                        buyExchangeIds = arbitrageOpportunitySearchRequestValidating.buyExchangeIds
-                            .map { CexExchangeId(it.value.trim()) }.toSet(),
-                        sellExchangeIds = arbitrageOpportunitySearchRequestValidating.sellExchangeIds
-                            .map { CexExchangeId(it.value.trim()) }.toSet(),
+                        buyExchangeIds = CexExchangeIds(
+                            arbitrageOpportunitySearchRequestValidating.buyExchangeIds.value
+                                .map { CexExchangeId(it.value.trim()) }.toSet()
+                        ),
+                        sellExchangeIds = CexExchangeIds(
+                            arbitrageOpportunitySearchRequestValidating.sellExchangeIds.value
+                                .map { CexExchangeId(it.value.trim()) }.toSet()
+                        ),
                     )
                     arbitrageOpportunitySearchRequestValidating = normalizedFilter
                 }

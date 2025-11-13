@@ -5,6 +5,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
@@ -29,9 +30,10 @@ abstract class RepositoryArbOpSearchTest {
 
         // Act
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(
-
             CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet()),
                 status = ArbitrageOpportunityStatus.ALL,
             )
         )
@@ -50,6 +52,8 @@ abstract class RepositoryArbOpSearchTest {
         // Act
         val filter = CexToCexArbitrageOpportunityFilter(
             cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
+            buyExchangeIds = CexExchangeIds(emptySet()),
+            sellExchangeIds = CexExchangeIds(emptySet()),
             status = ArbitrageOpportunityStatus.ALL
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
@@ -73,7 +77,8 @@ abstract class RepositoryArbOpSearchTest {
         // Act
         val filter = CexToCexArbitrageOpportunityFilter(
             cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
-            buyExchangeIds = setOf(CexExchangeId("binance")),
+            buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
+            sellExchangeIds = CexExchangeIds(emptySet()),
             status = ArbitrageOpportunityStatus.ALL
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
@@ -84,7 +89,7 @@ abstract class RepositoryArbOpSearchTest {
         val results = response.arbOps
         assertEquals(2, results.size, "Should find exactly 2 items with binance as buy exchange")
         assertTrue(
-            results.all { it.buyCexExchangeId in filter.buyExchangeIds },
+            results.all { it.buyCexExchangeId in filter.buyExchangeIds.value },
             "Results should match buy exchange filter"
         )
     }
@@ -97,6 +102,8 @@ abstract class RepositoryArbOpSearchTest {
         // Act
         val filter = CexToCexArbitrageOpportunityFilter(
             cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
+            buyExchangeIds = CexExchangeIds(emptySet()),
+            sellExchangeIds = CexExchangeIds(emptySet()),
             minSpread = ArbitrageOpportunitySpread(2.5),
             status = ArbitrageOpportunityStatus.ALL
         )
@@ -121,7 +128,8 @@ abstract class RepositoryArbOpSearchTest {
         // Act
         val filter = CexToCexArbitrageOpportunityFilter(
             cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
-            buyExchangeIds = setOf(CexExchangeId("binance")),
+            buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
+            sellExchangeIds = CexExchangeIds(emptySet()),
             minSpread = ArbitrageOpportunitySpread(2.0),
             maxSpread = ArbitrageOpportunitySpread(5.0),
             status = ArbitrageOpportunityStatus.ALL
@@ -146,7 +154,7 @@ abstract class RepositoryArbOpSearchTest {
             "All results should have spread <= 5.0"
         )
         assertTrue(
-            results.all { it.buyCexExchangeId in filter.buyExchangeIds },
+            results.all { it.buyCexExchangeId in filter.buyExchangeIds.value },
             "All results should have binance as buy exchange"
         )
     }
@@ -161,6 +169,8 @@ abstract class RepositoryArbOpSearchTest {
         // Act
         val filter = CexToCexArbitrageOpportunityFilter(
             cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
+            buyExchangeIds = CexExchangeIds(emptySet()),
+            sellExchangeIds = CexExchangeIds(emptySet()),
             status = ArbitrageOpportunityStatus.ALL
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)

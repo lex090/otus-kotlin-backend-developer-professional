@@ -15,6 +15,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexTokenIdsFilter
 import kotlin.test.Test
@@ -170,7 +171,9 @@ class FromTransportMappersTest {
             workMode = WorkMode.PROD,
             stubCase = StubCase.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
-                cexTokenIdsFilter = CexTokenIdsFilter(emptySet())
+                cexTokenIdsFilter = CexTokenIdsFilter(emptySet()),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet())
             ),
         )
 
@@ -262,8 +265,8 @@ class FromTransportMappersTest {
             stubCase = StubCase.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("1234567"))),
-                buyExchangeIds = setOf(CexExchangeId("binance")),
-                sellExchangeIds = setOf(CexExchangeId("okx")),
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
+                sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("okx"))),
                 minSpread = ArbitrageOpportunitySpread(10.0),
                 maxSpread = ArbitrageOpportunitySpread(30.0)
             ),

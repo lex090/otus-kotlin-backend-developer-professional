@@ -306,14 +306,14 @@ class PostgresArbOpRepository(
         }
 
         // Фильтр по биржам покупки
-        if (filter.buyExchangeIds.isNotEmpty()) {
-            val buyExchangeIdValues = filter.buyExchangeIds.map { it.value }
+        if (filter.buyExchangeIds.value.isNotEmpty()) {
+            val buyExchangeIdValues = filter.buyExchangeIds.value.map { it.value }
             query = query.andWhere { ArbitrageOpportunitiesTable.buyExchangeId inList buyExchangeIdValues }
         }
 
         // Фильтр по биржам продажи
-        if (filter.sellExchangeIds.isNotEmpty()) {
-            val sellExchangeIdValues = filter.sellExchangeIds.map { it.value }
+        if (filter.sellExchangeIds.value.isNotEmpty()) {
+            val sellExchangeIdValues = filter.sellExchangeIds.value.map { it.value }
             query = query.andWhere { ArbitrageOpportunitiesTable.sellExchangeId inList sellExchangeIdValues }
         }
 

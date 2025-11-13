@@ -191,11 +191,11 @@ class InMemoryArbOpRepository(
             }
             // Фильтр по биржам покупки
             .filter { entity ->
-                filter.buyExchangeIds.isEmpty() || filter.buyExchangeIds.any { it.value == entity.buyExchangeId }
+                filter.buyExchangeIds.value.isEmpty() || filter.buyExchangeIds.value.any { it.value == entity.buyExchangeId }
             }
             // Фильтр по биржам продажи
             .filter { entity ->
-                filter.sellExchangeIds.isEmpty() || filter.sellExchangeIds.any { it.value == entity.sellExchangeId }
+                filter.sellExchangeIds.value.isEmpty() || filter.sellExchangeIds.value.any { it.value == entity.sellExchangeId }
             }
             // Фильтр по минимальному спреду
             .filter { entity ->

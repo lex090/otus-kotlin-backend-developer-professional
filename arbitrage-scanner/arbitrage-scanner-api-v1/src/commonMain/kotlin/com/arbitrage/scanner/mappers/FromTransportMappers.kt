@@ -13,11 +13,12 @@ import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
-import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexTokenIdsFilter
 
@@ -74,8 +75,8 @@ private fun String?.toArbitrageOpportunityId(): ArbitrageOpportunityId {
 private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter(): CexToCexArbitrageOpportunityFilter {
     return CexToCexArbitrageOpportunityFilter(
         cexTokenIdsFilter = this?.cexTokenIds.transformToCexTokenIds(),
-        buyExchangeIds = this?.buyExchangeIds.transform(String::toCexExchangeId),
-        sellExchangeIds = this?.sellExchangeIds.transform(String::toCexExchangeId),
+        buyExchangeIds = this?.buyExchangeIds.transformToCexExchangeIds(),
+        sellExchangeIds = this?.sellExchangeIds.transformToCexExchangeIds(),
         minSpread = this?.minSpread?.let(::ArbitrageOpportunitySpread) ?: ArbitrageOpportunitySpread.NONE,
         maxSpread = this?.maxSpread.toArbitrageOpportunitySpread(),
         status = this?.status.toArbitrageOpportunityStatus(),
@@ -92,7 +93,8 @@ private fun String.toCexExchangeId(): CexExchangeId = CexExchangeId(this)
 private fun Set<String>?.transformToCexTokenIds(): CexTokenIdsFilter =
     if (this == null) CexTokenIdsFilter.NONE else CexTokenIdsFilter(this.map(String::toCexTokenId).toSet())
 
-private fun <T, R> Set<T>?.transform(block: (T) -> R): Set<R> = this.orEmpty().map(block).toSet()
+private fun Set<String>?.transformToCexExchangeIds(): CexExchangeIds =
+    if (this == null) CexExchangeIds.NONE else CexExchangeIds(this.map(String::toCexExchangeId).toSet())
 
 private fun Double?.toArbitrageOpportunitySpread(): ArbitrageOpportunitySpread? =
     this?.let(::ArbitrageOpportunitySpread)

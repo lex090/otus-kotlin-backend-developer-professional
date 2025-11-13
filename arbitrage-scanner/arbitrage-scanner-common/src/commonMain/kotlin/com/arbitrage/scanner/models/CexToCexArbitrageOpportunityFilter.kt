@@ -6,8 +6,8 @@ import com.arbitrage.scanner.base.Timestamp
  * Фильтр для поиска арбитражных возможностей.
  *
  * @property cexTokenIdsFilter Набор идентификаторов токенов для фильтрации (NONE = не фильтровать, значение не задано)
- * @property buyExchangeIds Набор идентификаторов бирж покупки (пустой Set = не фильтровать)
- * @property sellExchangeIds Набор идентификаторов бирж продажи (пустой Set = не фильтровать)
+ * @property buyExchangeIds Набор идентификаторов бирж покупки (NONE = не фильтровать, значение не задано)
+ * @property sellExchangeIds Набор идентификаторов бирж продажи (NONE = не фильтровать, значение не задано)
  * @property minSpread Минимальный спред в процентах (NONE = не фильтровать, значение не задано)
  * @property maxSpread Максимальный спред в процентах (null = не фильтровать)
  * @property status Статус арбитражной возможности (ACTIVE/INACTIVE/ALL, NONE = не задан)
@@ -18,8 +18,8 @@ import com.arbitrage.scanner.base.Timestamp
  */
 data class CexToCexArbitrageOpportunityFilter(
     val cexTokenIdsFilter: CexTokenIdsFilter = CexTokenIdsFilter.NONE,
-    val buyExchangeIds: Set<CexExchangeId> = emptySet(),
-    val sellExchangeIds: Set<CexExchangeId> = emptySet(),
+    val buyExchangeIds: CexExchangeIds = CexExchangeIds.NONE,
+    val sellExchangeIds: CexExchangeIds = CexExchangeIds.NONE,
     val minSpread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,
     val maxSpread: ArbitrageOpportunitySpread? = null,
     val status: ArbitrageOpportunityStatus = ArbitrageOpportunityStatus.NONE,

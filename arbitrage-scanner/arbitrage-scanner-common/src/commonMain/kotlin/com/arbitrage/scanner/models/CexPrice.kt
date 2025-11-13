@@ -6,7 +6,7 @@ import kotlin.jvm.JvmInline
 
 data class CexPrice(
     val tokenId: CexTokenId = CexTokenId.NONE,
-    val exchangeId: CexExchangeId = CexExchangeId.DEFAULT,
+    val exchangeId: CexExchangeId = CexExchangeId.NONE,
     val priceRaw: CexPriceRaw = CexPriceRaw.DEFAULT,
     val timeStamp: Timestamp = Timestamp.DEFAULT,
 ) {

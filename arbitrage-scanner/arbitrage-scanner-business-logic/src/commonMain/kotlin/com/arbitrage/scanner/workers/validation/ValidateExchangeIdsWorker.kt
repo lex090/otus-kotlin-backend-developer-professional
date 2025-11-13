@@ -23,14 +23,14 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.validateExchangeIdsW
     this.title = title
     on {
         val filter = arbitrageOpportunitySearchRequestValidating
-        val invalidBuyIds = filter.buyExchangeIds.filter { !isValidExchangeId(it.value) }
-        val invalidSellIds = filter.sellExchangeIds.filter { !isValidExchangeId(it.value) }
+        val invalidBuyIds = filter.buyExchangeIds.value.filter { !isValidExchangeId(it.value) }
+        val invalidSellIds = filter.sellExchangeIds.value.filter { !isValidExchangeId(it.value) }
         invalidBuyIds.isNotEmpty() || invalidSellIds.isNotEmpty()
     }
     handle {
         val filter = arbitrageOpportunitySearchRequestValidating
-        val invalidBuyIds = filter.buyExchangeIds.filter { !isValidExchangeId(it.value) }
-        val invalidSellIds = filter.sellExchangeIds.filter { !isValidExchangeId(it.value) }
+        val invalidBuyIds = filter.buyExchangeIds.value.filter { !isValidExchangeId(it.value) }
+        val invalidSellIds = filter.sellExchangeIds.value.filter { !isValidExchangeId(it.value) }
 
         if (invalidBuyIds.isNotEmpty()) {
             fail(

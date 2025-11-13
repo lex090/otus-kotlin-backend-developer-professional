@@ -12,6 +12,7 @@ import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.repository.IArbOpRepository
@@ -54,7 +55,9 @@ class SearchRequestValidationTest {
                     CexTokenId("test@token"),
                     CexTokenId("-invalid"),
                     CexTokenId("valid-token")
-                ))
+                )),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet())
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -79,8 +82,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter.NONE,
-                buyExchangeIds = setOf(CexExchangeId("_bybit")),
-                sellExchangeIds = setOf(CexExchangeId("binance"))
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("_bybit"))),
+                sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance")))
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -105,6 +108,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet()),
                 minSpread = ArbitrageOpportunitySpread(-5.0)
             )
         )
@@ -135,6 +140,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter.NONE,
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet()),
                 minSpread = ArbitrageOpportunitySpread(5.0)
             )
         )
@@ -164,8 +171,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"), CexTokenId("ETH"), CexTokenId("USDT"))),
-                buyExchangeIds = setOf(CexExchangeId("binance")),
-                sellExchangeIds = setOf(CexExchangeId("okx")),
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
+                sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("okx"))),
                 minSpread = ArbitrageOpportunitySpread(2.5),
                 maxSpread = ArbitrageOpportunitySpread(10.0),
                 status = ArbitrageOpportunityStatus.ACTIVE
@@ -187,12 +194,12 @@ class SearchRequestValidationTest {
             "Все CEX токены должны быть скопированы в validated"
         )
         assertEquals(
-            setOf(CexExchangeId("binance")),
+            CexExchangeIds(setOf(CexExchangeId("binance"))),
             context.arbitrageOpportunitySearchRequestValidated.buyExchangeIds,
             "buyExchangeIds должен быть скопирован в validated"
         )
         assertEquals(
-            setOf(CexExchangeId("okx")),
+            CexExchangeIds(setOf(CexExchangeId("okx"))),
             context.arbitrageOpportunitySearchRequestValidated.sellExchangeIds,
             "sellExchangeIds должен быть скопирован в validated"
         )
@@ -207,8 +214,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("  BTC  "), CexTokenId(" ETH"), CexTokenId("USDT  "))),
-                buyExchangeIds = setOf(CexExchangeId(" binance ")),
-                sellExchangeIds = setOf(CexExchangeId("  okx"))
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId(" binance "))),
+                sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("  okx")))
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -231,11 +238,11 @@ class SearchRequestValidationTest {
             "Пробелы должны быть удалены из CEX token IDs"
         )
         assertTrue(
-            validated.buyExchangeIds.contains(CexExchangeId("binance")),
+            validated.buyExchangeIds.value.contains(CexExchangeId("binance")),
             "Пробелы должны быть удалены из buyExchangeIds"
         )
         assertTrue(
-            validated.sellExchangeIds.contains(CexExchangeId("okx")),
+            validated.sellExchangeIds.value.contains(CexExchangeId("okx")),
             "Пробелы должны быть удалены из sellExchangeIds"
         )
     }
@@ -249,7 +256,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("B"))), // Слишком короткий
-                buyExchangeIds = setOf(CexExchangeId("ok")), // Слишком короткий
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("ok"))), // Слишком короткий
+                sellExchangeIds = CexExchangeIds(emptySet()),
                 minSpread = ArbitrageOpportunitySpread(-10.0) // Отрицательный
             )
         )
@@ -287,6 +295,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet()),
                 minSpread = ArbitrageOpportunitySpread(0.0)
             )
         )
@@ -311,6 +321,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("BTC"))),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet()),
                 maxSpread = ArbitrageOpportunitySpread(100.0)
             )
         )
@@ -339,7 +351,9 @@ class SearchRequestValidationTest {
                     CexTokenId("B"),         // Слишком короткий
                     CexTokenId("ETH-USDT"), // Валидный с дефисом
                     CexTokenId("@INVALID")   // Начинается со спецсимвола
-                ))
+                )),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet())
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -364,8 +378,8 @@ class SearchRequestValidationTest {
             state = State.NONE,
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter.NONE,
-                buyExchangeIds = setOf(CexExchangeId("binance")),
-                sellExchangeIds = setOf(CexExchangeId("-bybit")) // Начинается с дефиса
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
+                sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("-bybit"))) // Начинается с дефиса
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
