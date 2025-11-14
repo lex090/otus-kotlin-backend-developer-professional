@@ -39,9 +39,9 @@ data class Context(
     // END READ
 
     // START SEARCH
-    var arbitrageOpportunitySearchRequest: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.DEFAULT,
-    var arbitrageOpportunitySearchRequestValidating: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.DEFAULT,
-    var arbitrageOpportunitySearchRequestValidated: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequest: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.NONE,
+    var arbitrageOpportunitySearchRequestValidating: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.NONE,
+    var arbitrageOpportunitySearchRequestValidated: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.NONE,
 
     val arbitrageOpportunitySearchResponse: MutableSet<CexToCexArbitrageOpportunity> = mutableSetOf(),
     // END READ

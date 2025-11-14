@@ -4,31 +4,43 @@ import com.arbitrage.scanner.base.Timestamp
 
 /**
  * Фильтр для поиска арбитражных возможностей.
+ * Все поля обязательны для заполнения. NONE означает невалидную/незаполненную модель.
  *
- * @property cexTokenIdsFilter Набор идентификаторов токенов для фильтрации (NONE = не фильтровать, значение не задано)
- * @property buyExchangeIds Набор идентификаторов бирж покупки (NONE = не фильтровать, значение не задано)
- * @property sellExchangeIds Набор идентификаторов бирж продажи (NONE = не фильтровать, значение не задано)
- * @property minSpread Минимальный спред в процентах (NONE = не фильтровать, значение не задано)
+ * @property cexTokenIdsFilter Набор идентификаторов токенов для фильтрации
+ * @property buyExchangeIds Набор идентификаторов бирж покупки
+ * @property sellExchangeIds Набор идентификаторов бирж продажи
+ * @property minSpread Минимальный спред в процентах
  * @property maxSpread Максимальный спред в процентах (null = не фильтровать)
- * @property status Статус арбитражной возможности (ACTIVE/INACTIVE/ALL, NONE = не задан)
+ * @property status Статус арбитражной возможности (ACTIVE/INACTIVE/ALL)
  * @property startTimestampFrom Начало временного диапазона создания (null = не фильтровать)
  * @property startTimestampTo Конец временного диапазона создания (null = не фильтровать)
  * @property endTimestampFrom Начало временного диапазона завершения (null = не фильтровать)
  * @property endTimestampTo Конец временного диапазона завершения (null = не фильтровать)
  */
 data class CexToCexArbitrageOpportunityFilter(
-    val cexTokenIdsFilter: CexTokenIdsFilter = CexTokenIdsFilter.NONE,
-    val buyExchangeIds: CexExchangeIds = CexExchangeIds.NONE,
-    val sellExchangeIds: CexExchangeIds = CexExchangeIds.NONE,
-    val minSpread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,
-    val maxSpread: ArbitrageOpportunitySpread? = null,
-    val status: ArbitrageOpportunityStatus = ArbitrageOpportunityStatus.NONE,
-    val startTimestampFrom: Timestamp? = null,
-    val startTimestampTo: Timestamp? = null,
-    val endTimestampFrom: Timestamp? = null,
-    val endTimestampTo: Timestamp? = null,
+    val cexTokenIdsFilter: CexTokenIdsFilter,
+    val buyExchangeIds: CexExchangeIds,
+    val sellExchangeIds: CexExchangeIds,
+    val minSpread: ArbitrageOpportunitySpread,
+    val maxSpread: ArbitrageOpportunitySpread?,
+    val status: ArbitrageOpportunityStatus,
+    val startTimestampFrom: Timestamp?,
+    val startTimestampTo: Timestamp?,
+    val endTimestampFrom: Timestamp?,
+    val endTimestampTo: Timestamp?,
 ) {
     companion object {
-        val DEFAULT = CexToCexArbitrageOpportunityFilter()
+        val NONE = CexToCexArbitrageOpportunityFilter(
+            cexTokenIdsFilter = CexTokenIdsFilter.NONE,
+            buyExchangeIds = CexExchangeIds.NONE,
+            sellExchangeIds = CexExchangeIds.NONE,
+            minSpread = ArbitrageOpportunitySpread.NONE,
+            maxSpread = null,
+            status = ArbitrageOpportunityStatus.NONE,
+            startTimestampFrom = null,
+            startTimestampTo = null,
+            endTimestampFrom = null,
+            endTimestampTo = null,
+        )
     }
 }

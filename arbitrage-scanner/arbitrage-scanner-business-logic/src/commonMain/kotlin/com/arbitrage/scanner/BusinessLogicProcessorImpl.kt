@@ -137,6 +137,13 @@ class BusinessLogicProcessorImpl(
                             arbitrageOpportunitySearchRequestValidating.sellExchangeIds.value
                                 .map { CexExchangeId(it.value.trim()) }.toSet()
                         ),
+                        minSpread = arbitrageOpportunitySearchRequestValidating.minSpread,
+                        maxSpread = arbitrageOpportunitySearchRequestValidating.maxSpread,
+                        status = arbitrageOpportunitySearchRequestValidating.status,
+                        startTimestampFrom = arbitrageOpportunitySearchRequestValidating.startTimestampFrom,
+                        startTimestampTo = arbitrageOpportunitySearchRequestValidating.startTimestampTo,
+                        endTimestampFrom = arbitrageOpportunitySearchRequestValidating.endTimestampFrom,
+                        endTimestampTo = arbitrageOpportunitySearchRequestValidating.endTimestampTo,
                     )
                     arbitrageOpportunitySearchRequestValidating = normalizedFilter
                 }

@@ -11,11 +11,12 @@ import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.mappers.fromTransport
-import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexExchangeIds
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexTokenIdsFilter
 import kotlin.test.Test
@@ -173,7 +174,14 @@ class FromTransportMappersTest {
             arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
                 cexTokenIdsFilter = CexTokenIdsFilter(emptySet()),
                 buyExchangeIds = CexExchangeIds(emptySet()),
-                sellExchangeIds = CexExchangeIds(emptySet())
+                sellExchangeIds = CexExchangeIds(emptySet()),
+                minSpread = ArbitrageOpportunitySpread.NONE,
+                maxSpread = null,
+                status = ArbitrageOpportunityStatus.NONE,
+                startTimestampFrom = null,
+                startTimestampTo = null,
+                endTimestampFrom = null,
+                endTimestampTo = null,
             ),
         )
 
@@ -268,7 +276,12 @@ class FromTransportMappersTest {
                 buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
                 sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("okx"))),
                 minSpread = ArbitrageOpportunitySpread(10.0),
-                maxSpread = ArbitrageOpportunitySpread(30.0)
+                maxSpread = ArbitrageOpportunitySpread(30.0),
+                status = ArbitrageOpportunityStatus.NONE,
+                startTimestampFrom = null,
+                startTimestampTo = null,
+                endTimestampFrom = null,
+                endTimestampTo = null,
             ),
         )
 
