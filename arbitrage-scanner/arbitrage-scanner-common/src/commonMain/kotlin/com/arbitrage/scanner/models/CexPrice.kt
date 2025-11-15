@@ -23,6 +23,10 @@ data class CexPrice(
         }
     }
 
+    fun isNone(): Boolean = this == NONE
+
+    fun isNotNone(): Boolean = !isNone()
+
     companion object {
         val NONE = CexPrice(
             tokenId = CexTokenId.NONE,

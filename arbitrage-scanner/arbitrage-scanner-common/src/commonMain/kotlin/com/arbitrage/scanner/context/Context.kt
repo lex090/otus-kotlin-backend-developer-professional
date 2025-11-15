@@ -35,7 +35,7 @@ data class Context(
     var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
     var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
 
-    var arbitrageOpportunityReadResponse: CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity.DEFAULT,
+    var arbitrageOpportunityReadResponse: CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity.NONE,
     // END READ
 
     // START SEARCH

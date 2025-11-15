@@ -4,16 +4,16 @@ import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.models.CexPrice.CexPriceRaw
 
 data class CexToCexArbitrageOpportunity(
-    val id: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
-    val cexTokenId: CexTokenId = CexTokenId.NONE,
-    val buyCexExchangeId: CexExchangeId = CexExchangeId.NONE,
-    val buyCexPriceRaw: CexPriceRaw = CexPriceRaw.NONE,
-    val sellCexExchangeId: CexExchangeId = CexExchangeId.NONE,
-    val sellCexPriceRaw: CexPriceRaw = CexPriceRaw.NONE,
-    val spread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,
-    val startTimestamp: Timestamp = Timestamp.NONE,
-    val endTimestamp: Timestamp? = null,
-    val lockToken: LockToken = LockToken.NONE,
+    val id: ArbitrageOpportunityId,
+    val cexTokenId: CexTokenId,
+    val buyCexExchangeId: CexExchangeId,
+    val buyCexPriceRaw: CexPriceRaw,
+    val sellCexExchangeId: CexExchangeId,
+    val sellCexPriceRaw: CexPriceRaw,
+    val spread: ArbitrageOpportunitySpread,
+    val startTimestamp: Timestamp,
+    val endTimestamp: Timestamp?,
+    val lockToken: LockToken,
 ) {
     val fastKey: ArbOpFastKey = ArbOpFastKey(
         cexTokenId = cexTokenId,
@@ -27,7 +27,22 @@ data class CexToCexArbitrageOpportunity(
         val sellCexExchangeId: CexExchangeId
     )
 
+    fun isNone(): Boolean = this == NONE
+
+    fun isNotNone(): Boolean = !isNone()
+
     companion object {
-        val DEFAULT = CexToCexArbitrageOpportunity()
+        val NONE = CexToCexArbitrageOpportunity(
+            id = ArbitrageOpportunityId.NONE,
+            cexTokenId = CexTokenId.NONE,
+            buyCexExchangeId = CexExchangeId.NONE,
+            buyCexPriceRaw = CexPriceRaw.NONE,
+            sellCexExchangeId = CexExchangeId.NONE,
+            sellCexPriceRaw = CexPriceRaw.NONE,
+            spread = ArbitrageOpportunitySpread.NONE,
+            startTimestamp = Timestamp.NONE,
+            endTimestamp = null,
+            lockToken = LockToken.NONE,
+        )
     }
 }

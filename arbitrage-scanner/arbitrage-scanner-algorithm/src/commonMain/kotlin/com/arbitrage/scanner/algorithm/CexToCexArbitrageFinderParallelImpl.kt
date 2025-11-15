@@ -5,6 +5,7 @@ import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.LockToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -100,7 +101,8 @@ class CexToCexArbitrageFinderParallelImpl : CexToCexArbitrageFinder() {
                         sellCexPriceRaw = sellPrice.priceRaw,
                         spread = spread,
                         startTimestamp = timestamp,
-                        endTimestamp = null
+                        endTimestamp = null,
+                        lockToken = LockToken.NONE,
                     )
 
                     opportunities.add(opportunity)

@@ -17,6 +17,7 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexTokenId
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
+import com.arbitrage.scanner.models.LockToken
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,7 +33,8 @@ class ToTransportMappersTest {
         sellCexPriceRaw = CexPrice.CexPriceRaw(BigDecimal.fromDouble(51000.0)),
         spread = ArbitrageOpportunitySpread(2.0),
         startTimestamp = Timestamp(1640995200000),
-        endTimestamp = Timestamp(1640995260000)
+        endTimestamp = Timestamp(1640995260000),
+        lockToken = LockToken("lock-123"),
     )
 
     private val transportStub = CexToCexArbitrageOpportunityApi(

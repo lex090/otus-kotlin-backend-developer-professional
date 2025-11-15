@@ -7,6 +7,7 @@ import com.arbitrage.scanner.models.CexExchangeId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.models.RecalculateResult
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
@@ -20,7 +21,8 @@ object ArbOpStubs {
         sellCexPriceRaw = CexPrice.CexPriceRaw(BigDecimal.fromDouble(51000.0)),
         spread = ArbitrageOpportunitySpread(2.0),
         startTimestamp = Timestamp(1640995200000),
-        endTimestamp = Timestamp(1640995260000)
+        endTimestamp = Timestamp(1640995260000),
+        lockToken = LockToken(value = "lock-token-123"),
     )
 
     val recalculateResult = RecalculateResult(
