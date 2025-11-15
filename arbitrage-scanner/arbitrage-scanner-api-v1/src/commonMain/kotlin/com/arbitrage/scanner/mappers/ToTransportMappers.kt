@@ -117,7 +117,7 @@ fun ArbitrageOpportunitySpread.toTransport(): Double? =
     this.takeIf(ArbitrageOpportunitySpread::isNotNone)?.value
 
 fun Timestamp?.toTransport(): Long? =
-    this?.takeIf(Timestamp::isNotDefault)?.value
+    this?.takeIf(Timestamp::isNotNone)?.value
 
 fun LockToken.toTransport(): String? =
     this.takeIf(LockToken::isNotDefault)?.value

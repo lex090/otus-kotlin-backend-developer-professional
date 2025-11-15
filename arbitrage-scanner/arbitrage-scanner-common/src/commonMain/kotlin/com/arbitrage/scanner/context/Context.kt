@@ -23,7 +23,7 @@ data class Context(
     var stubCase: StubCase = StubCase.NONE,
 
     var requestId: RequestId = RequestId.DEFAULT,
-    var startTimestamp: Timestamp = Timestamp.DEFAULT,
+    var startTimestamp: Timestamp = Timestamp.NONE,
 
     val internalErrors: MutableList<InternalError> = mutableListOf(),
 

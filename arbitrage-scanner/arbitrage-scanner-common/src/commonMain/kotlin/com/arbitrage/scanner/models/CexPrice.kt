@@ -8,7 +8,7 @@ data class CexPrice(
     val tokenId: CexTokenId = CexTokenId.NONE,
     val exchangeId: CexExchangeId = CexExchangeId.NONE,
     val priceRaw: CexPriceRaw = CexPriceRaw.DEFAULT,
-    val timeStamp: Timestamp = Timestamp.DEFAULT,
+    val timeStamp: Timestamp = Timestamp.NONE,
 ) {
 
     @JvmInline

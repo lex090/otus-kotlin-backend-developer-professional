@@ -11,7 +11,7 @@ data class CexToCexArbitrageOpportunity(
     val sellCexExchangeId: CexExchangeId = CexExchangeId.NONE,
     val sellCexPriceRaw: CexPriceRaw = CexPriceRaw.DEFAULT,
     val spread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,
-    val startTimestamp: Timestamp = Timestamp.DEFAULT,
+    val startTimestamp: Timestamp = Timestamp.NONE,
     val endTimestamp: Timestamp? = null,
     val lockToken: LockToken = LockToken.DEFAULT,
 ) {
