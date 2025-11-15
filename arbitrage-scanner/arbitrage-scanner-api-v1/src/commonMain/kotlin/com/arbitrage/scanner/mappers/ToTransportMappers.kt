@@ -111,7 +111,7 @@ fun CexExchangeId.toTransportId(): String? =
     this.takeIf(CexExchangeId::isNotDefault)?.value
 
 fun CexPriceRaw.toTransportRawPrice(): Double? =
-    this.takeIf(CexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = false)
+    this.takeIf(CexPriceRaw::isNotNone)?.value?.doubleValue(exactRequired = false)
 
 fun ArbitrageOpportunitySpread.toTransport(): Double? =
     this.takeIf(ArbitrageOpportunitySpread::isNotNone)?.value
