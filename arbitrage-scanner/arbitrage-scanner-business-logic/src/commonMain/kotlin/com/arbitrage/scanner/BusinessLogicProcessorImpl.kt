@@ -86,6 +86,7 @@ class BusinessLogicProcessorImpl(
                 worker("Копируем поля в arbitrageOpportunityReadRequestValidating") {
                     arbitrageOpportunityReadRequestValidating = arbitrageOpportunityReadRequest
                 }
+
                 worker("Нормализация ID - удаление лишних пробелов") {
                     arbitrageOpportunityReadRequestValidating = ArbitrageOpportunityId(
                         arbitrageOpportunityReadRequestValidating.value.trim()
