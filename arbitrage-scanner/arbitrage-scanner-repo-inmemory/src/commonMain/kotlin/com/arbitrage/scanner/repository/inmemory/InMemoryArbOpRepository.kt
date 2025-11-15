@@ -188,15 +188,24 @@ class InMemoryArbOpRepository(
             val filtered = cache.asMap().values.asSequence()
                 // Фильтр по токенам
                 .filter { entity ->
-                    filter.cexTokenIdsFilter.value.isEmpty() || filter.cexTokenIdsFilter.value.any { it.value == entity.tokenId }
+                    val validTokenIds = filter.cexTokenIdsFilter.value.filter { it.isNotNone() }
+                    filter.cexTokenIdsFilter.isNone() ||
+                    validTokenIds.isEmpty() ||
+                    validTokenIds.any { it.value == entity.tokenId }
                 }
                 // Фильтр по биржам покупки
                 .filter { entity ->
-                    filter.buyExchangeIds.value.isEmpty() || filter.buyExchangeIds.value.any { it.value == entity.buyExchangeId }
+                    val validBuyExchangeIds = filter.buyExchangeIds.value.filter { it.isNotDefault() }
+                    filter.buyExchangeIds.isNone() ||
+                    validBuyExchangeIds.isEmpty() ||
+                    validBuyExchangeIds.any { it.value == entity.buyExchangeId }
                 }
                 // Фильтр по биржам продажи
                 .filter { entity ->
-                    filter.sellExchangeIds.value.isEmpty() || filter.sellExchangeIds.value.any { it.value == entity.sellExchangeId }
+                    val validSellExchangeIds = filter.sellExchangeIds.value.filter { it.isNotDefault() }
+                    filter.sellExchangeIds.isNone() ||
+                    validSellExchangeIds.isEmpty() ||
+                    validSellExchangeIds.any { it.value == entity.sellExchangeId }
                 }
                 // Фильтр по минимальному спреду
                 .filter { entity ->
@@ -204,7 +213,9 @@ class InMemoryArbOpRepository(
                 }
                 // Фильтр по максимальному спреду
                 .filter { entity ->
-                    filter.maxSpread?.let { entity.spread <= it.value } ?: true
+                    filter.maxSpread?.let { maxSpread ->
+                        maxSpread.isNone() || entity.spread <= maxSpread.value
+                    } ?: true
                 }
                 // Фильтр по статусу
                 .filter { entity ->
@@ -212,17 +223,19 @@ class InMemoryArbOpRepository(
                         ArbitrageOpportunityStatus.ACTIVE -> entity.endTimestamp == null
                         ArbitrageOpportunityStatus.INACTIVE -> entity.endTimestamp != null
                         ArbitrageOpportunityStatus.ALL -> true
-                        ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
+                        ArbitrageOpportunityStatus.NONE -> true
                     }
                 }
                 // Фильтр по времени начала (startTimestamp >= filter.startTimestamp)
                 .filter { entity ->
-                    filter.startTimestamp?.let { entity.startTimestamp >= it.value } ?: true
+                    filter.startTimestamp?.let { filterTime ->
+                        filterTime.isNone() || entity.startTimestamp >= filterTime.value
+                    } ?: true
                 }
                 // Фильтр по времени окончания (endTimestamp <= filter.endTimestamp)
                 .filter { entity ->
                     filter.endTimestamp?.let { filterTime ->
-                        entity.endTimestamp?.let { it <= filterTime.value } ?: false
+                        filterTime.isNone() || entity.endTimestamp?.let { it <= filterTime.value } ?: false
                     } ?: true
                 }
                 .map { it.toDomain() }

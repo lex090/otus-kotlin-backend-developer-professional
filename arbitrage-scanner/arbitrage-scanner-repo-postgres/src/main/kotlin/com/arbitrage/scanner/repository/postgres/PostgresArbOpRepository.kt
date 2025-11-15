@@ -301,20 +301,32 @@ class PostgresArbOpRepository(
 
         // Фильтр по токенам
         if (filter.cexTokenIdsFilter.isNotNone() && filter.cexTokenIdsFilter.value.isNotEmpty()) {
-            val tokenIdValues = filter.cexTokenIdsFilter.value.map { it.value }
-            query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
+            val tokenIdValues = filter.cexTokenIdsFilter.value
+                .filter { it.isNotNone() }
+                .map { it.value }
+            if (tokenIdValues.isNotEmpty()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
+            }
         }
 
         // Фильтр по биржам покупки
-        if (filter.buyExchangeIds.value.isNotEmpty()) {
-            val buyExchangeIdValues = filter.buyExchangeIds.value.map { it.value }
-            query = query.andWhere { ArbitrageOpportunitiesTable.buyExchangeId inList buyExchangeIdValues }
+        if (filter.buyExchangeIds.isNotNone() && filter.buyExchangeIds.value.isNotEmpty()) {
+            val buyExchangeIdValues = filter.buyExchangeIds.value
+                .filter { it.isNotDefault() }
+                .map { it.value }
+            if (buyExchangeIdValues.isNotEmpty()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.buyExchangeId inList buyExchangeIdValues }
+            }
         }
 
         // Фильтр по биржам продажи
-        if (filter.sellExchangeIds.value.isNotEmpty()) {
-            val sellExchangeIdValues = filter.sellExchangeIds.value.map { it.value }
-            query = query.andWhere { ArbitrageOpportunitiesTable.sellExchangeId inList sellExchangeIdValues }
+        if (filter.sellExchangeIds.isNotNone() && filter.sellExchangeIds.value.isNotEmpty()) {
+            val sellExchangeIdValues = filter.sellExchangeIds.value
+                .filter { it.isNotDefault() }
+                .map { it.value }
+            if (sellExchangeIdValues.isNotEmpty()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.sellExchangeId inList sellExchangeIdValues }
+            }
         }
 
         // Фильтр по минимальному спреду
@@ -324,7 +336,9 @@ class PostgresArbOpRepository(
 
         // Фильтр по максимальному спреду
         filter.maxSpread?.let { maxSpread ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.spread lessEq maxSpread.value }
+            if (maxSpread.isNotNone()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.spread lessEq maxSpread.value }
+            }
         }
 
         // Фильтр по статусу
@@ -335,20 +349,22 @@ class PostgresArbOpRepository(
             ArbitrageOpportunityStatus.INACTIVE -> {
                 query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp.isNotNull() }
             }
-            ArbitrageOpportunityStatus.ALL -> {
-                // Не применяем фильтр
-            }
-            ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
+            ArbitrageOpportunityStatus.ALL -> Unit
+            ArbitrageOpportunityStatus.NONE -> Unit
         }
 
         // Фильтр по времени начала (startTimestamp >= filter.startTimestamp)
         filter.startTimestamp?.let { filterTime ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp greaterEq filterTime.value }
+            if (filterTime.isNotNone()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp greaterEq filterTime.value }
+            }
         }
 
         // Фильтр по времени окончания (endTimestamp <= filter.endTimestamp)
         filter.endTimestamp?.let { filterTime ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp lessEq filterTime.value }
+            if (filterTime.isNotNone()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp lessEq filterTime.value }
+            }
         }
 
         val results = query.map { mapRowToEntity(it).toDomain() }
