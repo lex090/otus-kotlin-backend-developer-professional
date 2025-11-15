@@ -5,11 +5,11 @@ import kotlin.jvm.JvmInline
 @JvmInline
 value class Timestamp(val value: Long) {
 
-    fun isDefault(): Boolean = this == DEFAULT
+    fun isNone(): Boolean = this == NONE
 
-    fun isNotDefault(): Boolean = !isDefault()
+    fun isNotNone(): Boolean = !isNone()
 
     companion object {
-        val DEFAULT = Timestamp(0L)
+        val NONE = Timestamp(0L)
     }
 }

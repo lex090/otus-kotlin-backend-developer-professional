@@ -10,6 +10,7 @@ import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityRequestDebugModeA
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchFilterApi
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchRequest
 import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunitySearchResponse
+import com.arbitrage.scanner.api.v1.models.ArbitrageOpportunityStatusApi
 import com.arbitrage.scanner.api.v1.models.IRequest
 import com.arbitrage.scanner.api.v1.models.ResponseResult
 import com.arbitrage.scanner.mappers.toTransport
@@ -52,8 +53,13 @@ abstract class KtorApplicationBaseTest {
 
     protected val filter: ArbitrageOpportunitySearchFilterApi = ArbitrageOpportunitySearchFilterApi(
         cexTokenIds = emptySet(),
-        cexExchangeIds = emptySet(),
-        spread = 1.0,
+        buyExchangeIds = emptySet(),
+        sellExchangeIds = emptySet(),
+        minSpread = 1.0,
+        maxSpread = null,
+        status = ArbitrageOpportunityStatusApi.ALL,
+        startTimestamp = null,
+        endTimestamp = null
     )
 
     @Test
@@ -100,7 +106,7 @@ abstract class KtorApplicationBaseTest {
 
             val arbitrageOpportunities = responseBody.arbitrageOpportunities
             assertNotNull(arbitrageOpportunities)
-            // Фильтр spread = 1.0, поэтому должны вернуться BTC (1.8) и ETH (2.8), но не USDT (0.8)
+            // Фильтр minSpread = 1.0, поэтому должны вернуться BTC (1.8) и ETH (2.8), но не USDT (0.8)
             assertEquals(2, arbitrageOpportunities.size)
 
             // Проверяем первый элемент (BTC)

@@ -1,8 +1,9 @@
 package com.arbitrage.scanner.repository.postgres
 
 import com.arbitrage.scanner.base.InternalError
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
 import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
@@ -27,7 +28,6 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.update
@@ -93,7 +93,7 @@ class PostgresArbOpRepository(
         // Генерируем ID и lockToken если они по умолчанию
         val itemToCreate = arbOp.copy(
             id = if (arbOp.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else arbOp.id,
-            lockToken = if (arbOp.lockToken.isDefault()) LockToken(idGenerator()) else arbOp.lockToken
+            lockToken = if (arbOp.lockToken.isNone()) LockToken(idGenerator()) else arbOp.lockToken
         )
         val entity = itemToCreate.toEntity()
 
@@ -118,7 +118,7 @@ class PostgresArbOpRepository(
         val createdItems = arbOps.map { item ->
             item.copy(
                 id = if (item.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else item.id,
-                lockToken = if (item.lockToken.isDefault()) LockToken(idGenerator()) else item.lockToken
+                lockToken = if (item.lockToken.isNone()) LockToken(idGenerator()) else item.lockToken
             )
         }
 
@@ -296,27 +296,75 @@ class PostgresArbOpRepository(
 
     // ========== Private Methods: SEARCH ==========
 
-    private suspend fun searchByCriteria(filter: ArbitrageOpportunityFilter): ArbOpRepoResponse = dbQuery {
+    private suspend fun searchByCriteria(filter: CexToCexArbitrageOpportunityFilter): ArbOpRepoResponse = dbQuery {
         var query = ArbitrageOpportunitiesTable.selectAll()
 
         // Фильтр по токенам
-        if (filter.cexTokenIds.isNotEmpty()) {
-            val tokenIdValues = filter.cexTokenIds.map { it.value }
-            query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
+        if (filter.cexTokenIdsFilter.isNotNone() && filter.cexTokenIdsFilter.value.isNotEmpty()) {
+            val tokenIdValues = filter.cexTokenIdsFilter.value
+                .filter { it.isNotNone() }
+                .map { it.value }
+            if (tokenIdValues.isNotEmpty()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.tokenId inList tokenIdValues }
+            }
         }
 
-        // Фильтр по биржам (buy OR sell)
-        if (filter.cexExchangeIds.isNotEmpty()) {
-            val exchangeIdValues = filter.cexExchangeIds.map { it.value }
-            query = query.andWhere {
-                (ArbitrageOpportunitiesTable.buyExchangeId inList exchangeIdValues) or
-                        (ArbitrageOpportunitiesTable.sellExchangeId inList exchangeIdValues)
+        // Фильтр по биржам покупки
+        if (filter.buyExchangeIds.isNotNone() && filter.buyExchangeIds.value.isNotEmpty()) {
+            val buyExchangeIdValues = filter.buyExchangeIds.value
+                .filter { it.isNotDefault() }
+                .map { it.value }
+            if (buyExchangeIdValues.isNotEmpty()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.buyExchangeId inList buyExchangeIdValues }
+            }
+        }
+
+        // Фильтр по биржам продажи
+        if (filter.sellExchangeIds.isNotNone() && filter.sellExchangeIds.value.isNotEmpty()) {
+            val sellExchangeIdValues = filter.sellExchangeIds.value
+                .filter { it.isNotDefault() }
+                .map { it.value }
+            if (sellExchangeIdValues.isNotEmpty()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.sellExchangeId inList sellExchangeIdValues }
             }
         }
 
         // Фильтр по минимальному спреду
-        if (!filter.spread.isDefault()) {
-            query = query.andWhere { ArbitrageOpportunitiesTable.spread greaterEq filter.spread.value }
+        if (filter.minSpread.isNotNone()) {
+            query = query.andWhere { ArbitrageOpportunitiesTable.spread greaterEq filter.minSpread.value }
+        }
+
+        // Фильтр по максимальному спреду
+        filter.maxSpread?.let { maxSpread ->
+            if (maxSpread.isNotNone()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.spread lessEq maxSpread.value }
+            }
+        }
+
+        // Фильтр по статусу
+        when (filter.status) {
+            ArbitrageOpportunityStatus.ACTIVE -> {
+                query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp.isNull() }
+            }
+            ArbitrageOpportunityStatus.INACTIVE -> {
+                query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp.isNotNull() }
+            }
+            ArbitrageOpportunityStatus.ALL -> Unit
+            ArbitrageOpportunityStatus.NONE -> Unit
+        }
+
+        // Фильтр по времени начала (startTimestamp >= filter.startTimestamp)
+        filter.startTimestamp?.let { filterTime ->
+            if (filterTime.isNotNone()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp greaterEq filterTime.value }
+            }
+        }
+
+        // Фильтр по времени окончания (endTimestamp <= filter.endTimestamp)
+        filter.endTimestamp?.let { filterTime ->
+            if (filterTime.isNotNone()) {
+                query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp lessEq filterTime.value }
+            }
         }
 
         val results = query.map { mapRowToEntity(it).toDomain() }

@@ -1,9 +1,10 @@
 package com.arbitrage.scanner.repository.inmemory
 
 import com.arbitrage.scanner.base.InternalError
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
@@ -82,7 +83,7 @@ class InMemoryArbOpRepository(
         // Генерируем ID и lockToken если они по умолчанию
         val itemToCreate = arbOp.copy(
             id = if (arbOp.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else arbOp.id,
-            lockToken = if (arbOp.lockToken.isDefault()) LockToken(idGenerator()) else arbOp.lockToken
+            lockToken = if (arbOp.lockToken.isNone()) LockToken(idGenerator()) else arbOp.lockToken
         )
         val entity = itemToCreate.toEntity()
         cache.put(entity.id, entity)
@@ -94,7 +95,7 @@ class InMemoryArbOpRepository(
             // Генерируем ID и lockToken для каждого элемента, если они по умолчанию
             item.copy(
                 id = if (item.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else item.id,
-                lockToken = if (item.lockToken.isDefault()) LockToken(idGenerator()) else item.lockToken
+                lockToken = if (item.lockToken.isNone()) LockToken(idGenerator()) else item.lockToken
             )
         }
         createdItems.forEach { item ->
@@ -182,26 +183,66 @@ class InMemoryArbOpRepository(
         ArbOpRepoResponse.Multiple(allItems)
     }
 
-    private suspend fun searchByCriteria(filter: ArbitrageOpportunityFilter): ArbOpRepoResponse = mutex.withLock {
-        val filtered = cache.asMap().values.asSequence()
-            .filter { entity ->
-                filter.cexTokenIds.isEmpty() || filter.cexTokenIds.any { it.value == entity.tokenId }
-            }
-            .filter { entity ->
-                if (filter.cexExchangeIds.isEmpty()) {
-                    true
-                } else {
-                    filter.cexExchangeIds.any { it.value == entity.buyExchangeId || it.value == entity.sellExchangeId }
+    private suspend fun searchByCriteria(filter: CexToCexArbitrageOpportunityFilter): ArbOpRepoResponse =
+        mutex.withLock {
+            val filtered = cache.asMap().values.asSequence()
+                // Фильтр по токенам
+                .filter { entity ->
+                    val validTokenIds = filter.cexTokenIdsFilter.value.filter { it.isNotNone() }
+                    filter.cexTokenIdsFilter.isNone() ||
+                    validTokenIds.isEmpty() ||
+                    validTokenIds.any { it.value == entity.tokenId }
                 }
-            }
-            .filter { entity ->
-                filter.spread.isDefault() || entity.spread >= filter.spread.value
-            }
-            .map { it.toDomain() }
-            .toList()
+                // Фильтр по биржам покупки
+                .filter { entity ->
+                    val validBuyExchangeIds = filter.buyExchangeIds.value.filter { it.isNotDefault() }
+                    filter.buyExchangeIds.isNone() ||
+                    validBuyExchangeIds.isEmpty() ||
+                    validBuyExchangeIds.any { it.value == entity.buyExchangeId }
+                }
+                // Фильтр по биржам продажи
+                .filter { entity ->
+                    val validSellExchangeIds = filter.sellExchangeIds.value.filter { it.isNotDefault() }
+                    filter.sellExchangeIds.isNone() ||
+                    validSellExchangeIds.isEmpty() ||
+                    validSellExchangeIds.any { it.value == entity.sellExchangeId }
+                }
+                // Фильтр по минимальному спреду
+                .filter { entity ->
+                    filter.minSpread.isNone() || entity.spread >= filter.minSpread.value
+                }
+                // Фильтр по максимальному спреду
+                .filter { entity ->
+                    filter.maxSpread?.let { maxSpread ->
+                        maxSpread.isNone() || entity.spread <= maxSpread.value
+                    } ?: true
+                }
+                // Фильтр по статусу
+                .filter { entity ->
+                    when (filter.status) {
+                        ArbitrageOpportunityStatus.ACTIVE -> entity.endTimestamp == null
+                        ArbitrageOpportunityStatus.INACTIVE -> entity.endTimestamp != null
+                        ArbitrageOpportunityStatus.ALL -> true
+                        ArbitrageOpportunityStatus.NONE -> true
+                    }
+                }
+                // Фильтр по времени начала (startTimestamp >= filter.startTimestamp)
+                .filter { entity ->
+                    filter.startTimestamp?.let { filterTime ->
+                        filterTime.isNone() || entity.startTimestamp >= filterTime.value
+                    } ?: true
+                }
+                // Фильтр по времени окончания (endTimestamp <= filter.endTimestamp)
+                .filter { entity ->
+                    filter.endTimestamp?.let { filterTime ->
+                        filterTime.isNone() || entity.endTimestamp?.let { it <= filterTime.value } ?: false
+                    } ?: true
+                }
+                .map { it.toDomain() }
+                .toList()
 
-        ArbOpRepoResponse.Multiple(filtered)
-    }
+            ArbOpRepoResponse.Multiple(filtered)
+        }
 
     /**
      * Создает ошибку "не найдено" для указанного ID

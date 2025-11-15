@@ -266,7 +266,7 @@ class CexToCexArbitrageFinderParallelImplTest {
 
         opportunities.forEach { opportunity ->
             assertTrue(
-                opportunity.startTimestamp != Timestamp.DEFAULT,
+                opportunity.startTimestamp != Timestamp.NONE,
                 "startTimestamp должен быть установлен"
             )
             assertEquals(

@@ -51,7 +51,7 @@ abstract class RepositoryArbOpUpdateTest {
 
         // Проверяем что lockToken ИЗМЕНИЛСЯ (оптимистичная блокировка)
         assertTrue(existing.lockToken != result.lockToken, "LockToken should change after update")
-        assertTrue(result.lockToken.isNotDefault(), "LockToken should not be DEFAULT after update")
+        assertTrue(result.lockToken.isNotNone(), "LockToken should not be DEFAULT after update")
     }
 
     @Test

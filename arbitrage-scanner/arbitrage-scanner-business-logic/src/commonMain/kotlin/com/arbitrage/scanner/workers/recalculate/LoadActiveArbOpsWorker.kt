@@ -5,7 +5,11 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.fail
 import com.arbitrage.scanner.libs.logging.LogLevel
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
+import com.arbitrage.scanner.models.CexExchangeIds
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
 import com.arbitrage.scanner.repository.IArbOpRepository.SearchArbOpRepoRequest
 import com.crowdproj.kotlin.cor.ICorAddExecDsl
@@ -26,7 +30,18 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
     handle {
         logger.doWithLogging(id = requestId.toString(), level = LogLevel.INFO) {
             val searchResult = arbOpRepo.search(
-                SearchArbOpRepoRequest.SearchCriteria(ArbitrageOpportunityFilter.DEFAULT)
+                SearchArbOpRepoRequest.SearchCriteria(
+                    CexToCexArbitrageOpportunityFilter(
+                        cexTokenIdsFilter = CexTokenIdsFilter(setOf()),
+                        buyExchangeIds = CexExchangeIds(emptySet()),
+                        sellExchangeIds = CexExchangeIds(emptySet()),
+                        minSpread = ArbitrageOpportunitySpread(value = 0.0),
+                        maxSpread = null,
+                        status = ArbitrageOpportunityStatus.ALL,
+                        startTimestamp = null,
+                        endTimestamp = null,
+                    )
+                )
             )
 
             when (searchResult) {

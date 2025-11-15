@@ -38,8 +38,8 @@ abstract class CexToCexArbitrageFinder {
      * @throws IllegalArgumentException если цены невалидны
      */
     protected fun calculateSpread(buyPrice: CexPriceRaw, sellPrice: CexPriceRaw): ArbitrageOpportunitySpread {
-        require(!buyPrice.isDefault()) { "Buy price must not be default" }
-        require(!sellPrice.isDefault()) { "Sell price must not be default" }
+        require(!buyPrice.isNone()) { "Buy price must not be default" }
+        require(!sellPrice.isNone()) { "Sell price must not be default" }
         require(buyPrice.value > BigDecimal.ZERO) { "Buy price must be positive" }
         require(sellPrice.value > BigDecimal.ZERO) { "Sell price must be positive" }
         require(sellPrice.value >= buyPrice.value) { "Sell price must be >= buy price" }

@@ -11,11 +11,14 @@ import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.mappers.fromTransport
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunitySpread
+import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -150,8 +153,13 @@ class FromTransportMappersTest {
             ),
             filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = emptySet(),
-                spread = null
+                buyExchangeIds = emptySet(),
+                sellExchangeIds = emptySet(),
+                minSpread = null,
+                maxSpread = null,
+                status = null,
+                startTimestamp = null,
+                endTimestamp = null
             )
         )
 
@@ -161,7 +169,16 @@ class FromTransportMappersTest {
             command = Command.SEARCH,
             workMode = WorkMode.PROD,
             stubCase = StubCase.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter.DEFAULT,
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(emptySet()),
+                buyExchangeIds = CexExchangeIds(emptySet()),
+                sellExchangeIds = CexExchangeIds(emptySet()),
+                minSpread = ArbitrageOpportunitySpread.NONE,
+                maxSpread = null,
+                status = ArbitrageOpportunityStatus.NONE,
+                startTimestamp = null,
+                endTimestamp = null,
+            ),
         )
 
         context.fromTransport(givenTransport)
@@ -232,8 +249,13 @@ class FromTransportMappersTest {
             ),
             filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = setOf("1234567"),
-                cexExchangeIds = setOf("12345678"),
-                spread = 20.0,
+                buyExchangeIds = setOf("binance"),
+                sellExchangeIds = setOf("okx"),
+                minSpread = 10.0,
+                maxSpread = 30.0,
+                status = null,
+                startTimestamp = null,
+                endTimestamp = null
             )
         )
 
@@ -243,10 +265,15 @@ class FromTransportMappersTest {
             command = Command.SEARCH,
             workMode = WorkMode.TEST,
             stubCase = StubCase.NONE,
-            arbitrageOpportunitySearchRequest = ArbitrageOpportunityFilter(
-                cexTokenIds = setOf(CexTokenId("1234567")),
-                cexExchangeIds = setOf(CexExchangeId("12345678")),
-                spread = ArbitrageOpportunitySpread(20.0)
+            arbitrageOpportunitySearchRequest = CexToCexArbitrageOpportunityFilter(
+                cexTokenIdsFilter = CexTokenIdsFilter(setOf(CexTokenId("1234567"))),
+                buyExchangeIds = CexExchangeIds(setOf(CexExchangeId("binance"))),
+                sellExchangeIds = CexExchangeIds(setOf(CexExchangeId("okx"))),
+                minSpread = ArbitrageOpportunitySpread(10.0),
+                maxSpread = ArbitrageOpportunitySpread(30.0),
+                status = ArbitrageOpportunityStatus.NONE,
+                startTimestamp = null,
+                endTimestamp = null,
             ),
         )
 

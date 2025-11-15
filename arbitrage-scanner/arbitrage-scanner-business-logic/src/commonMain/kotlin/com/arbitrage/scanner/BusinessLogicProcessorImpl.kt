@@ -5,7 +5,9 @@ import com.arbitrage.scanner.base.WorkMode
 import com.arbitrage.scanner.context.Context
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexExchangeId
+import com.arbitrage.scanner.models.CexExchangeIds
 import com.arbitrage.scanner.models.CexTokenId
+import com.arbitrage.scanner.models.CexTokenIdsFilter
 import com.arbitrage.scanner.workers.commandProcessor
 import com.arbitrage.scanner.workers.initStatus
 import com.arbitrage.scanner.workers.read.prepareReadResponseWorker
@@ -29,13 +31,13 @@ import com.arbitrage.scanner.workers.stubs.readSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.recalculateSuccessStubWorker
 import com.arbitrage.scanner.workers.stubs.searchNotFoundStubWorker
 import com.arbitrage.scanner.workers.stubs.searchSuccessStubWorker
-import com.arbitrage.scanner.workers.validation.validateCexExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateCexTokenIdsWorker
+import com.arbitrage.scanner.workers.validation.validateExchangeIdsWorker
 import com.arbitrage.scanner.workers.validation.validateIdFormatWorker
 import com.arbitrage.scanner.workers.validation.validateIdMaxLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdMinLengthWorker
 import com.arbitrage.scanner.workers.validation.validateIdNotEmptyWorker
-import com.arbitrage.scanner.workers.validation.validateSpreadMinWorker
+import com.arbitrage.scanner.workers.validation.validateSpreadRangeWorker
 import com.arbitrage.scanner.workers.validationProcessor
 import com.arbitrage.scanner.workers.workModProcessor
 import com.crowdproj.kotlin.cor.handlers.chain
@@ -123,18 +125,31 @@ class BusinessLogicProcessorImpl(
                 worker("Нормализация ID в фильтрах") {
                     // Нормализуем все ID - удаляем лишние пробелы
                     val normalizedFilter = arbitrageOpportunitySearchRequestValidating.copy(
-                        cexTokenIds = arbitrageOpportunitySearchRequestValidating.cexTokenIds
-                            .map { CexTokenId(it.value.trim()) }.toSet(),
-                        cexExchangeIds = arbitrageOpportunitySearchRequestValidating.cexExchangeIds
-                            .map { CexExchangeId(it.value.trim()) }.toSet(),
+                        cexTokenIdsFilter = CexTokenIdsFilter(
+                            arbitrageOpportunitySearchRequestValidating.cexTokenIdsFilter.value
+                                .map { CexTokenId(it.value.trim()) }.toSet()
+                        ),
+                        buyExchangeIds = CexExchangeIds(
+                            arbitrageOpportunitySearchRequestValidating.buyExchangeIds.value
+                                .map { CexExchangeId(it.value.trim()) }.toSet()
+                        ),
+                        sellExchangeIds = CexExchangeIds(
+                            arbitrageOpportunitySearchRequestValidating.sellExchangeIds.value
+                                .map { CexExchangeId(it.value.trim()) }.toSet()
+                        ),
+                        minSpread = arbitrageOpportunitySearchRequestValidating.minSpread,
+                        maxSpread = arbitrageOpportunitySearchRequestValidating.maxSpread,
+                        status = arbitrageOpportunitySearchRequestValidating.status,
+                        startTimestamp = arbitrageOpportunitySearchRequestValidating.startTimestamp,
+                        endTimestamp = arbitrageOpportunitySearchRequestValidating.endTimestamp,
                     )
                     arbitrageOpportunitySearchRequestValidating = normalizedFilter
                 }
 
                 // Последовательность валидации фильтров
                 validateCexTokenIdsWorker("Проверка ID CEX токенов")
-                validateCexExchangeIdsWorker("Проверка ID CEX бирж")
-                validateSpreadMinWorker("Проверка минимального значения спреда")
+                validateExchangeIdsWorker("Проверка ID бирж покупки и продажи")
+                validateSpreadRangeWorker("Проверка диапазона спредов")
 
                 worker("Финализация валидированных данных") {
                     arbitrageOpportunitySearchRequestValidated = arbitrageOpportunitySearchRequestValidating

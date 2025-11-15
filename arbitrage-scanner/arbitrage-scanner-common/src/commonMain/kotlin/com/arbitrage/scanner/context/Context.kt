@@ -7,7 +7,7 @@ import com.arbitrage.scanner.base.State
 import com.arbitrage.scanner.base.StubCase
 import com.arbitrage.scanner.base.Timestamp
 import com.arbitrage.scanner.base.WorkMode
-import com.arbitrage.scanner.models.ArbitrageOpportunityFilter
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.CexPrice
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
@@ -23,7 +23,7 @@ data class Context(
     var stubCase: StubCase = StubCase.NONE,
 
     var requestId: RequestId = RequestId.DEFAULT,
-    var startTimestamp: Timestamp = Timestamp.DEFAULT,
+    var startTimestamp: Timestamp = Timestamp.NONE,
 
     val internalErrors: MutableList<InternalError> = mutableListOf(),
 
@@ -31,17 +31,17 @@ data class Context(
     var arbOpRepo: IArbOpRepository = IArbOpRepository.NONE,
 
     // START READ
-    var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
-    var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
-    var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.DEFAULT,
+    var arbitrageOpportunityReadRequest: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
+    var arbitrageOpportunityReadRequestValidating: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
+    var arbitrageOpportunityReadRequestValidated: ArbitrageOpportunityId = ArbitrageOpportunityId.NONE,
 
-    var arbitrageOpportunityReadResponse: CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity.DEFAULT,
+    var arbitrageOpportunityReadResponse: CexToCexArbitrageOpportunity = CexToCexArbitrageOpportunity.NONE,
     // END READ
 
     // START SEARCH
-    var arbitrageOpportunitySearchRequest: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
-    var arbitrageOpportunitySearchRequestValidating: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
-    var arbitrageOpportunitySearchRequestValidated: ArbitrageOpportunityFilter = ArbitrageOpportunityFilter.DEFAULT,
+    var arbitrageOpportunitySearchRequest: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.NONE,
+    var arbitrageOpportunitySearchRequestValidating: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.NONE,
+    var arbitrageOpportunitySearchRequestValidated: CexToCexArbitrageOpportunityFilter = CexToCexArbitrageOpportunityFilter.NONE,
 
     val arbitrageOpportunitySearchResponse: MutableSet<CexToCexArbitrageOpportunity> = mutableSetOf(),
     // END READ
@@ -54,6 +54,6 @@ data class Context(
     val arbOpsToUpdate: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
     val arbOpsToClose: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
     var executionTimeOfFindArbOps: Duration = Duration.ZERO,
-    var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
+    var recalculateResponse: RecalculateResult = RecalculateResult.NONE,
     // END RECALCULATE
 )

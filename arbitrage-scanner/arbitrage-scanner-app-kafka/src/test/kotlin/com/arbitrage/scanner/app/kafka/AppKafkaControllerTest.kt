@@ -393,8 +393,13 @@ class AppKafkaControllerTest {
             ),
             filter = ArbitrageOpportunitySearchFilterApi(
                 cexTokenIds = emptySet(),
-                cexExchangeIds = emptySet(),
-                spread = null
+                buyExchangeIds = emptySet(),
+                sellExchangeIds = emptySet(),
+                minSpread = null,
+                maxSpread = null,
+                status = null,
+                startTimestamp = null,
+                endTimestamp = null
             )
         )
         val testMessage = json.toRequestJsonString(request)

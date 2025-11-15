@@ -105,19 +105,19 @@ private fun CexPrice.toTransportCexPrice(): CexPriceApi {
 }
 
 fun CexTokenId.toTransportId(): String? =
-    this.takeIf(CexTokenId::isNotDefault)?.value
+    this.takeIf(CexTokenId::isNotNone)?.value
 
 fun CexExchangeId.toTransportId(): String? =
     this.takeIf(CexExchangeId::isNotDefault)?.value
 
 fun CexPriceRaw.toTransportRawPrice(): Double? =
-    this.takeIf(CexPriceRaw::isNotDefault)?.value?.doubleValue(exactRequired = false)
+    this.takeIf(CexPriceRaw::isNotNone)?.value?.doubleValue(exactRequired = false)
 
 fun ArbitrageOpportunitySpread.toTransport(): Double? =
-    this.takeIf(ArbitrageOpportunitySpread::isNotDefault)?.value
+    this.takeIf(ArbitrageOpportunitySpread::isNotNone)?.value
 
 fun Timestamp?.toTransport(): Long? =
-    this?.takeIf(Timestamp::isNotDefault)?.value
+    this?.takeIf(Timestamp::isNotNone)?.value
 
 fun LockToken.toTransport(): String? =
-    this.takeIf(LockToken::isNotDefault)?.value
+    this.takeIf(LockToken::isNotNone)?.value

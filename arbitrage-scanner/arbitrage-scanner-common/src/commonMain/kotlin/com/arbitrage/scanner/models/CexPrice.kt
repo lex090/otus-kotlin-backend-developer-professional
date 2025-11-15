@@ -5,25 +5,34 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlin.jvm.JvmInline
 
 data class CexPrice(
-    val tokenId: CexTokenId = CexTokenId.DEFAULT,
-    val exchangeId: CexExchangeId = CexExchangeId.DEFAULT,
-    val priceRaw: CexPriceRaw = CexPriceRaw.DEFAULT,
-    val timeStamp: Timestamp = Timestamp.DEFAULT,
+    val tokenId: CexTokenId,
+    val exchangeId: CexExchangeId,
+    val priceRaw: CexPriceRaw,
+    val timeStamp: Timestamp,
 ) {
 
     @JvmInline
-    value class CexPriceRaw(val value: BigDecimal = BigDecimal.ZERO) {
+    value class CexPriceRaw(val value: BigDecimal) {
 
-        fun isDefault(): Boolean = this == DEFAULT
+        fun isNone(): Boolean = this == NONE
 
-        fun isNotDefault(): Boolean = !isDefault()
+        fun isNotNone(): Boolean = !isNone()
 
         companion object {
-            val DEFAULT = CexPriceRaw()
+            val NONE = CexPriceRaw(value = BigDecimal.fromInt(-1))
         }
     }
 
+    fun isNone(): Boolean = this == NONE
+
+    fun isNotNone(): Boolean = !isNone()
+
     companion object {
-        val DEFAULT = CexPrice()
+        val NONE = CexPrice(
+            tokenId = CexTokenId.NONE,
+            exchangeId = CexExchangeId.NONE,
+            priceRaw = CexPriceRaw.NONE,
+            timeStamp = Timestamp.NONE,
+        )
     }
 }

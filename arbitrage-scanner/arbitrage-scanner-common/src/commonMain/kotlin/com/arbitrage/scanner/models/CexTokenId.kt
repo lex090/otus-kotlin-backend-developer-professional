@@ -3,13 +3,17 @@ package com.arbitrage.scanner.models
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class CexTokenId(val value: String = "") {
+value class CexTokenId(val value: String) {
 
-    fun isDefault(): Boolean = this == DEFAULT
+    fun isNone(): Boolean = this == NONE
 
-    fun isNotDefault(): Boolean = !isDefault()
+    fun isNotNone(): Boolean = !isNone()
 
     companion object {
-        val DEFAULT = CexTokenId()
+        /**
+         * NONE - маркер "значение не установлено", используется как признак невалидного токена.
+         * Это невозможное значение (пустая строка), которое не должно использоваться в бизнес-логике.
+         */
+        val NONE = CexTokenId("")
     }
 }
