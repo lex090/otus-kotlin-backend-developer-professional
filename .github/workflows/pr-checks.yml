@@ -1,0 +1,50 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test-and-check:
+    name: Запуск тестов и проверок
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout код
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Установка Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Проверка прав на выполнение gradlew
+        run: chmod +x ./gradlew
+
+      - name: Запуск всех проверок и тестов
+        run: ./gradlew checkAll --no-daemon --stacktrace
+
+      - name: Публикация результатов тестов
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: |
+            **/build/test-results/**/*.xml
+          check_name: Результаты тестов
+          comment_mode: failures
+
+      - name: Загрузка отчетов о тестах
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/
+            **/build/test-results/
+          retention-days: 7
