@@ -54,6 +54,6 @@ data class Context(
     val arbOpsToUpdate: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
     val arbOpsToClose: MutableList<CexToCexArbitrageOpportunity> = mutableListOf(),
     var executionTimeOfFindArbOps: Duration = Duration.ZERO,
-    var recalculateResponse: RecalculateResult = RecalculateResult.DEFAULT,
+    var recalculateResponse: RecalculateResult = RecalculateResult.NONE,
     // END RECALCULATE
 )
