@@ -37,10 +37,8 @@ abstract class RepositoryArbOpSearchTest {
                 minSpread = ArbitrageOpportunitySpread(value = 0.0),
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val response = repository.search(searchRequest)
@@ -63,10 +61,8 @@ abstract class RepositoryArbOpSearchTest {
             minSpread = ArbitrageOpportunitySpread(value = 0.0),
             maxSpread = null,
             status = ArbitrageOpportunityStatus.ALL,
-            startTimestampFrom = null,
-            startTimestampTo = null,
-            endTimestampFrom = null,
-            endTimestampTo = null,
+            startTimestamp = null,
+            endTimestamp = null,
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
         val response = repository.search(searchRequest)
@@ -94,10 +90,8 @@ abstract class RepositoryArbOpSearchTest {
             minSpread = ArbitrageOpportunitySpread(value = 0.0),
             maxSpread = null,
             status = ArbitrageOpportunityStatus.ALL,
-            startTimestampFrom = null,
-            startTimestampTo = null,
-            endTimestampFrom = null,
-            endTimestampTo = null,
+            startTimestamp = null,
+            endTimestamp = null,
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
         val response = repository.search(searchRequest)
@@ -125,10 +119,8 @@ abstract class RepositoryArbOpSearchTest {
             minSpread = ArbitrageOpportunitySpread(2.5),
             maxSpread = null,
             status = ArbitrageOpportunityStatus.ALL,
-            startTimestampFrom = null,
-            startTimestampTo = null,
-            endTimestampFrom = null,
-            endTimestampTo = null,
+            startTimestamp = null,
+            endTimestamp = null,
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
         val response = repository.search(searchRequest)
@@ -156,10 +148,8 @@ abstract class RepositoryArbOpSearchTest {
             minSpread = ArbitrageOpportunitySpread(2.0),
             maxSpread = ArbitrageOpportunitySpread(5.0),
             status = ArbitrageOpportunityStatus.ALL,
-            startTimestampFrom = null,
-            startTimestampTo = null,
-            endTimestampFrom = null,
-            endTimestampTo = null,
+            startTimestamp = null,
+            endTimestamp = null,
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
         val response = repository.search(searchRequest)
@@ -201,10 +191,8 @@ abstract class RepositoryArbOpSearchTest {
             minSpread = ArbitrageOpportunitySpread(value = 0.0),
             maxSpread = null,
             status = ArbitrageOpportunityStatus.ALL,
-            startTimestampFrom = null,
-            startTimestampTo = null,
-            endTimestampFrom = null,
-            endTimestampTo = null,
+            startTimestamp = null,
+            endTimestamp = null,
         )
         val searchRequest = IArbOpRepository.SearchArbOpRepoRequest.SearchCriteria(filter)
         val response = repository.search(searchRequest)

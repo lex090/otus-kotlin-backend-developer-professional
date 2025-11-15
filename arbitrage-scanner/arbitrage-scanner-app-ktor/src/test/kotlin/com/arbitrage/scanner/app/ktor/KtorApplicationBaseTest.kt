@@ -58,10 +58,8 @@ abstract class KtorApplicationBaseTest {
         minSpread = 1.0,
         maxSpread = null,
         status = ArbitrageOpportunityStatusApi.ALL,
-        startTimestampFrom = null,
-        startTimestampTo = null,
-        endTimestampFrom = null,
-        endTimestampTo = null
+        startTimestamp = null,
+        endTimestamp = null
     )
 
     @Test

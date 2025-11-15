@@ -398,10 +398,8 @@ class AppKafkaControllerTest {
                 minSpread = null,
                 maxSpread = null,
                 status = null,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null
+                startTimestamp = null,
+                endTimestamp = null
             )
         )
         val testMessage = json.toRequestJsonString(request)

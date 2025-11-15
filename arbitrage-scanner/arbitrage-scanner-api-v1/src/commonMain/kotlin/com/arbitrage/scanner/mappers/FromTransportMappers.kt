@@ -80,10 +80,8 @@ private fun ArbitrageOpportunitySearchFilterApi?.toArbitrageOpportunityFilter():
         minSpread = this?.minSpread?.let(::ArbitrageOpportunitySpread) ?: ArbitrageOpportunitySpread.NONE,
         maxSpread = this?.maxSpread.toArbitrageOpportunitySpread(),
         status = this?.status.toArbitrageOpportunityStatus(),
-        startTimestampFrom = this?.startTimestampFrom.toTimestamp(),
-        startTimestampTo = this?.startTimestampTo.toTimestamp(),
-        endTimestampFrom = this?.endTimestampFrom.toTimestamp(),
-        endTimestampTo = this?.endTimestampTo.toTimestamp()
+        startTimestamp = this?.startTimestamp.toTimestamp(),
+        endTimestamp = this?.endTimestamp.toTimestamp()
     )
 }
 

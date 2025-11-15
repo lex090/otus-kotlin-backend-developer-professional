@@ -61,10 +61,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -94,10 +92,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -127,10 +123,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread(-5.0),
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -165,10 +159,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread(5.0),
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -202,10 +194,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread(2.5),
                 maxSpread = ArbitrageOpportunitySpread(10.0),
                 status = ArbitrageOpportunityStatus.ACTIVE,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -249,10 +239,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -298,10 +286,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread(-10.0), // Отрицательный
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -343,10 +329,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread(0.0),
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -375,10 +359,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = ArbitrageOpportunitySpread(100.0),
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -412,10 +394,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())
@@ -445,10 +425,8 @@ class SearchRequestValidationTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.ALL,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             )
         )
         val processor = BusinessLogicProcessorImpl(createTestDeps())

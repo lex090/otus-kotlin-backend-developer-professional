@@ -38,10 +38,8 @@ fun ICorAddExecDsl<Context, BusinessLogicProcessorImplDeps>.loadActiveArbOpsWork
                         minSpread = ArbitrageOpportunitySpread(value = 0.0),
                         maxSpread = null,
                         status = ArbitrageOpportunityStatus.ALL,
-                        startTimestampFrom = null,
-                        startTimestampTo = null,
-                        endTimestampFrom = null,
-                        endTimestampTo = null,
+                        startTimestamp = null,
+                        endTimestamp = null,
                     )
                 )
             )

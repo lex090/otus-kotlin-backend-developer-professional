@@ -1,10 +1,10 @@
 package com.arbitrage.scanner.repository.inmemory
 
 import com.arbitrage.scanner.base.InternalError
-import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.ArbitrageOpportunityId
 import com.arbitrage.scanner.models.ArbitrageOpportunityStatus
 import com.arbitrage.scanner.models.CexToCexArbitrageOpportunity
+import com.arbitrage.scanner.models.CexToCexArbitrageOpportunityFilter
 import com.arbitrage.scanner.models.LockToken
 import com.arbitrage.scanner.repository.IArbOpRepository
 import com.arbitrage.scanner.repository.IArbOpRepository.ArbOpRepoResponse
@@ -183,60 +183,53 @@ class InMemoryArbOpRepository(
         ArbOpRepoResponse.Multiple(allItems)
     }
 
-    private suspend fun searchByCriteria(filter: CexToCexArbitrageOpportunityFilter): ArbOpRepoResponse = mutex.withLock {
-        val filtered = cache.asMap().values.asSequence()
-            // Фильтр по токенам
-            .filter { entity ->
-                filter.cexTokenIdsFilter.value.isEmpty() || filter.cexTokenIdsFilter.value.any { it.value == entity.tokenId }
-            }
-            // Фильтр по биржам покупки
-            .filter { entity ->
-                filter.buyExchangeIds.value.isEmpty() || filter.buyExchangeIds.value.any { it.value == entity.buyExchangeId }
-            }
-            // Фильтр по биржам продажи
-            .filter { entity ->
-                filter.sellExchangeIds.value.isEmpty() || filter.sellExchangeIds.value.any { it.value == entity.sellExchangeId }
-            }
-            // Фильтр по минимальному спреду
-            .filter { entity ->
-                filter.minSpread.isNone() || entity.spread >= filter.minSpread.value
-            }
-            // Фильтр по максимальному спреду
-            .filter { entity ->
-                filter.maxSpread?.let { entity.spread <= it.value } ?: true
-            }
-            // Фильтр по статусу
-            .filter { entity ->
-                when (filter.status) {
-                    ArbitrageOpportunityStatus.ACTIVE -> entity.endTimestamp == null
-                    ArbitrageOpportunityStatus.INACTIVE -> entity.endTimestamp != null
-                    ArbitrageOpportunityStatus.ALL -> true
-                    ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
+    private suspend fun searchByCriteria(filter: CexToCexArbitrageOpportunityFilter): ArbOpRepoResponse =
+        mutex.withLock {
+            val filtered = cache.asMap().values.asSequence()
+                // Фильтр по токенам
+                .filter { entity ->
+                    filter.cexTokenIdsFilter.value.isEmpty() || filter.cexTokenIdsFilter.value.any { it.value == entity.tokenId }
                 }
-            }
-            // Фильтр по временному диапазону создания (startTimestamp)
-            .filter { entity ->
-                filter.startTimestampFrom?.let { entity.startTimestamp >= it.value } ?: true
-            }
-            .filter { entity ->
-                filter.startTimestampTo?.let { entity.startTimestamp <= it.value } ?: true
-            }
-            // Фильтр по временному диапазону завершения (endTimestamp)
-            .filter { entity ->
-                filter.endTimestampFrom?.let { from ->
-                    entity.endTimestamp?.let { it >= from.value } ?: false
-                } ?: true
-            }
-            .filter { entity ->
-                filter.endTimestampTo?.let { to ->
-                    entity.endTimestamp?.let { it <= to.value } ?: false
-                } ?: true
-            }
-            .map { it.toDomain() }
-            .toList()
+                // Фильтр по биржам покупки
+                .filter { entity ->
+                    filter.buyExchangeIds.value.isEmpty() || filter.buyExchangeIds.value.any { it.value == entity.buyExchangeId }
+                }
+                // Фильтр по биржам продажи
+                .filter { entity ->
+                    filter.sellExchangeIds.value.isEmpty() || filter.sellExchangeIds.value.any { it.value == entity.sellExchangeId }
+                }
+                // Фильтр по минимальному спреду
+                .filter { entity ->
+                    filter.minSpread.isNone() || entity.spread >= filter.minSpread.value
+                }
+                // Фильтр по максимальному спреду
+                .filter { entity ->
+                    filter.maxSpread?.let { entity.spread <= it.value } ?: true
+                }
+                // Фильтр по статусу
+                .filter { entity ->
+                    when (filter.status) {
+                        ArbitrageOpportunityStatus.ACTIVE -> entity.endTimestamp == null
+                        ArbitrageOpportunityStatus.INACTIVE -> entity.endTimestamp != null
+                        ArbitrageOpportunityStatus.ALL -> true
+                        ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
+                    }
+                }
+                // Фильтр по времени начала (startTimestamp >= filter.startTimestamp)
+                .filter { entity ->
+                    filter.startTimestamp?.let { entity.startTimestamp >= it.value } ?: true
+                }
+                // Фильтр по времени окончания (endTimestamp <= filter.endTimestamp)
+                .filter { entity ->
+                    filter.endTimestamp?.let { filterTime ->
+                        entity.endTimestamp?.let { it <= filterTime.value } ?: false
+                    } ?: true
+                }
+                .map { it.toDomain() }
+                .toList()
 
-        ArbOpRepoResponse.Multiple(filtered)
-    }
+            ArbOpRepoResponse.Multiple(filtered)
+        }
 
     /**
      * Создает ошибку "не найдено" для указанного ID

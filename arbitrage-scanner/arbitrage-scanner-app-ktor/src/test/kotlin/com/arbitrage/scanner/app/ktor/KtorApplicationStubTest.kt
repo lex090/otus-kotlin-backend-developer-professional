@@ -64,10 +64,8 @@ class KtorApplicationStubTest {
                     minSpread = 1.0,
                     maxSpread = null,
                     status = null,
-                    startTimestampFrom = null,
-                    startTimestampTo = null,
-                    endTimestampFrom = null,
-                    endTimestampTo = null
+                    startTimestamp = null,
+                    endTimestamp = null
                 ),
             ),
             method = "search",

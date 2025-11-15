@@ -158,10 +158,8 @@ class FromTransportMappersTest {
                 minSpread = null,
                 maxSpread = null,
                 status = null,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null
+                startTimestamp = null,
+                endTimestamp = null
             )
         )
 
@@ -178,10 +176,8 @@ class FromTransportMappersTest {
                 minSpread = ArbitrageOpportunitySpread.NONE,
                 maxSpread = null,
                 status = ArbitrageOpportunityStatus.NONE,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             ),
         )
 
@@ -258,10 +254,8 @@ class FromTransportMappersTest {
                 minSpread = 10.0,
                 maxSpread = 30.0,
                 status = null,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null
+                startTimestamp = null,
+                endTimestamp = null
             )
         )
 
@@ -278,10 +272,8 @@ class FromTransportMappersTest {
                 minSpread = ArbitrageOpportunitySpread(10.0),
                 maxSpread = ArbitrageOpportunitySpread(30.0),
                 status = ArbitrageOpportunityStatus.NONE,
-                startTimestampFrom = null,
-                startTimestampTo = null,
-                endTimestampFrom = null,
-                endTimestampTo = null,
+                startTimestamp = null,
+                endTimestamp = null,
             ),
         )
 

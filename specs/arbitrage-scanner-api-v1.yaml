@@ -233,22 +233,14 @@ components:
         status:
           $ref: '#/components/schemas/ArbitrageOpportunityStatusApi'
           description: Статус арбитражной возможности
-        startTimestampFrom:
+        startTimestamp:
           type: integer
           format: int64
-          description: Начало временного диапазона создания (Unix epoch millis)
-        startTimestampTo:
+          description: Метка времени начала (Unix epoch millis)
+        endTimestamp:
           type: integer
           format: int64
-          description: Конец временного диапазона создания (Unix epoch millis)
-        endTimestampFrom:
-          type: integer
-          format: int64
-          description: Начало временного диапазона завершения (Unix epoch millis)
-        endTimestampTo:
-          type: integer
-          format: int64
-          description: Конец временного диапазона завершения (Unix epoch millis)
+          description: Метка времени завершения (Unix epoch millis)
 
     ArbitrageOpportunityMultiApi:
       allOf:

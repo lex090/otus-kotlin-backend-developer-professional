@@ -140,10 +140,8 @@ class BusinessLogicProcessorImpl(
                         minSpread = arbitrageOpportunitySearchRequestValidating.minSpread,
                         maxSpread = arbitrageOpportunitySearchRequestValidating.maxSpread,
                         status = arbitrageOpportunitySearchRequestValidating.status,
-                        startTimestampFrom = arbitrageOpportunitySearchRequestValidating.startTimestampFrom,
-                        startTimestampTo = arbitrageOpportunitySearchRequestValidating.startTimestampTo,
-                        endTimestampFrom = arbitrageOpportunitySearchRequestValidating.endTimestampFrom,
-                        endTimestampTo = arbitrageOpportunitySearchRequestValidating.endTimestampTo,
+                        startTimestamp = arbitrageOpportunitySearchRequestValidating.startTimestamp,
+                        endTimestamp = arbitrageOpportunitySearchRequestValidating.endTimestamp,
                     )
                     arbitrageOpportunitySearchRequestValidating = normalizedFilter
                 }

@@ -341,20 +341,14 @@ class PostgresArbOpRepository(
             ArbitrageOpportunityStatus.NONE -> error("Status filter NONE is not supported in search. This is a validation error.")
         }
 
-        // Фильтр по временному диапазону создания (startTimestamp)
-        filter.startTimestampFrom?.let { from ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp greaterEq from.value }
-        }
-        filter.startTimestampTo?.let { to ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp lessEq to.value }
+        // Фильтр по времени начала (startTimestamp >= filter.startTimestamp)
+        filter.startTimestamp?.let { filterTime ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.startTimestamp greaterEq filterTime.value }
         }
 
-        // Фильтр по временному диапазону завершения (endTimestamp)
-        filter.endTimestampFrom?.let { from ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp greaterEq from.value }
-        }
-        filter.endTimestampTo?.let { to ->
-            query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp lessEq to.value }
+        // Фильтр по времени окончания (endTimestamp <= filter.endTimestamp)
+        filter.endTimestamp?.let { filterTime ->
+            query = query.andWhere { ArbitrageOpportunitiesTable.endTimestamp lessEq filterTime.value }
         }
 
         val results = query.map { mapRowToEntity(it).toDomain() }
