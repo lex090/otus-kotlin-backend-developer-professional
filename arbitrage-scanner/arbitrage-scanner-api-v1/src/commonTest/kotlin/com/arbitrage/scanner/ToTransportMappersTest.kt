@@ -46,7 +46,8 @@ class ToTransportMappersTest {
         sellCexPriceRaw = 51000.0,
         spread = 2.0,
         timestampStart = 1640995200000,
-        timestampEnd = 1640995260000
+        timestampEnd = 1640995260000,
+        lockToken = "lock-123"
     )
 
     @Test
