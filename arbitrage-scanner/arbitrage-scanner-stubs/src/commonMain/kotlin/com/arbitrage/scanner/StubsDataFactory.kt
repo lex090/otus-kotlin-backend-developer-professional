@@ -76,7 +76,7 @@ object StubsDataFactory {
         spread = ArbitrageOpportunitySpread(spread),
         startTimestamp = Timestamp(startTimestamp),
         endTimestamp = endTimestamp?.let { Timestamp(it) },
-        lockToken = if (lockToken.isNotEmpty()) LockToken(lockToken) else LockToken.DEFAULT
+        lockToken = if (lockToken.isNotEmpty()) LockToken(lockToken) else LockToken.NONE
     )
 
     /**

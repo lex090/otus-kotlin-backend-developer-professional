@@ -93,7 +93,7 @@ class PostgresArbOpRepository(
         // Генерируем ID и lockToken если они по умолчанию
         val itemToCreate = arbOp.copy(
             id = if (arbOp.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else arbOp.id,
-            lockToken = if (arbOp.lockToken.isDefault()) LockToken(idGenerator()) else arbOp.lockToken
+            lockToken = if (arbOp.lockToken.isNone()) LockToken(idGenerator()) else arbOp.lockToken
         )
         val entity = itemToCreate.toEntity()
 
@@ -118,7 +118,7 @@ class PostgresArbOpRepository(
         val createdItems = arbOps.map { item ->
             item.copy(
                 id = if (item.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else item.id,
-                lockToken = if (item.lockToken.isDefault()) LockToken(idGenerator()) else item.lockToken
+                lockToken = if (item.lockToken.isNone()) LockToken(idGenerator()) else item.lockToken
             )
         }
 

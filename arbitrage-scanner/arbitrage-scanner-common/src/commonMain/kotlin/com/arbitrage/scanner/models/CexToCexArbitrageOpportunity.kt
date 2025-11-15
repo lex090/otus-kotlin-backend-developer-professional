@@ -13,7 +13,7 @@ data class CexToCexArbitrageOpportunity(
     val spread: ArbitrageOpportunitySpread = ArbitrageOpportunitySpread.NONE,
     val startTimestamp: Timestamp = Timestamp.NONE,
     val endTimestamp: Timestamp? = null,
-    val lockToken: LockToken = LockToken.DEFAULT,
+    val lockToken: LockToken = LockToken.NONE,
 ) {
     val fastKey: ArbOpFastKey = ArbOpFastKey(
         cexTokenId = cexTokenId,

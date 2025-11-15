@@ -83,7 +83,7 @@ class InMemoryArbOpRepository(
         // Генерируем ID и lockToken если они по умолчанию
         val itemToCreate = arbOp.copy(
             id = if (arbOp.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else arbOp.id,
-            lockToken = if (arbOp.lockToken.isDefault()) LockToken(idGenerator()) else arbOp.lockToken
+            lockToken = if (arbOp.lockToken.isNone()) LockToken(idGenerator()) else arbOp.lockToken
         )
         val entity = itemToCreate.toEntity()
         cache.put(entity.id, entity)
@@ -95,7 +95,7 @@ class InMemoryArbOpRepository(
             // Генерируем ID и lockToken для каждого элемента, если они по умолчанию
             item.copy(
                 id = if (item.id.isDefault()) ArbitrageOpportunityId(idGenerator()) else item.id,
-                lockToken = if (item.lockToken.isDefault()) LockToken(idGenerator()) else item.lockToken
+                lockToken = if (item.lockToken.isNone()) LockToken(idGenerator()) else item.lockToken
             )
         }
         createdItems.forEach { item ->

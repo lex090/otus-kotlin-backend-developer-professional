@@ -120,4 +120,4 @@ fun Timestamp?.toTransport(): Long? =
     this?.takeIf(Timestamp::isNotNone)?.value
 
 fun LockToken.toTransport(): String? =
-    this.takeIf(LockToken::isNotDefault)?.value
+    this.takeIf(LockToken::isNotNone)?.value

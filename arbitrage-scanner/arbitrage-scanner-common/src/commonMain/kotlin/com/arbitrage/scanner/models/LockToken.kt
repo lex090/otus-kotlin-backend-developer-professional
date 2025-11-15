@@ -9,13 +9,13 @@ import kotlin.jvm.JvmInline
  * UPDATE операция должна проверять, что lockToken не изменился с момента чтения.
  */
 @JvmInline
-value class LockToken(val value: String = "") {
+value class LockToken(val value: String) {
 
-    fun isDefault(): Boolean = this == DEFAULT
+    fun isNone(): Boolean = this == NONE
 
-    fun isNotDefault(): Boolean = !isDefault()
+    fun isNotNone(): Boolean = !isNone()
 
     companion object {
-        val DEFAULT = LockToken()
+        val NONE = LockToken(value = "")
     }
 }
