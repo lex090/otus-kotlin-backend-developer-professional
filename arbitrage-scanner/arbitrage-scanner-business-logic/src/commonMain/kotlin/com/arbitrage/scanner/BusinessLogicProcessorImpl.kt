@@ -80,6 +80,7 @@ class BusinessLogicProcessorImpl(
                 readNotFoundStubWorker(title = "Обработка стаба NOT_FOUND")
                 readBadIdStubWorker(title = "Обработка стаба BAD_ID")
                 noStubCaseWorker(title = "Валидируем ситуацию, когда запрошен кейс, который не поддерживается в стабах")
+
             }
 
             validationProcessor {
