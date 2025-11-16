@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "description": "ISM Policy для автоматического удаления индексов старше 7 дней",
+    "apply_to": "fluentbit-* indices"
+  },
+  "policy": {
+    "policy_id": "7-day-retention",
+    "description": "Delete indices older than 7 days for log retention compliance",
+    "default_state": "hot",
+    "schema_version": 1,
+    "states": [
+      {
+        "name": "hot",
+        "actions": [],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "7d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ],
+        "transitions": []
+      }
+    ],
+    "ism_template": [
+      {
+        "index_patterns": ["fluentbit-*"],
+        "priority": 100
+      }
+    ]
+  }
+}
