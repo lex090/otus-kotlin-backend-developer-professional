@@ -13,6 +13,10 @@
     </appender>
 
     <appender name="fluentd" class="ch.qos.logback.more.appenders.DataFluentAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
         <tag>app.logs</tag>
         <label>normal</label>
         <remoteHost>${LOGS_FB_HOSTS}</remoteHost>
@@ -22,31 +26,17 @@
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp/>
-                <version/>
-                <pattern>
-                    <pattern>
-                        {
-                        "component": "${SERVICE_NAME}",
-                        "container-id": "${HOSTNAME}"
-                        }
-                    </pattern>
-                </pattern>
                 <message/>
-                <loggerName/>
-                <threadName/>
                 <logLevel/>
-                <logstashMarkers/>
-                <callerData/>
                 <stackTrace/>
                 <context/>
                 <mdc/>
                 <arguments/>
-                <tags/>
             </providers>
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root>
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="fluentd"/>
     </root>
