@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "description": "Index template для автоматической конфигурации новых индексов fluentbit-*",
+    "version": "1.0.0"
+  },
+  "index_patterns": ["fluentbit-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.lifecycle.name": "7-day-retention",
+      "refresh_interval": "1s",
+      "codec": "best_compression"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "service_name": {
+          "type": "keyword"
+        },
+        "message": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "logger": {
+          "type": "keyword"
+        },
+        "thread": {
+          "type": "keyword"
+        },
+        "hostname": {
+          "type": "keyword"
+        },
+        "cluster": {
+          "type": "keyword"
+        },
+        "context": {
+          "type": "object",
+          "enabled": true
+        },
+        "tags": {
+          "type": "keyword"
+        },
+        "http_method": {
+          "type": "keyword"
+        },
+        "http_path": {
+          "type": "keyword"
+        },
+        "http_status": {
+          "type": "integer"
+        },
+        "response_time_ms": {
+          "type": "long"
+        },
+        "client_ip": {
+          "type": "ip"
+        },
+        "user_agent": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "request_id": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "priority": 100,
+  "version": 1
+}

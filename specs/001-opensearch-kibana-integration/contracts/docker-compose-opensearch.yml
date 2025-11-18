@@ -1,0 +1,94 @@
+# Contract: Docker Compose Services для OpenSearch и Kibana
+# Этот файл содержит полную конфигурацию сервисов для добавления в docker-compose.minimal.yml
+
+services:
+  # OpenSearch - поисковый и аналитический движок для логов
+  opensearch:
+    image: opensearchproject/opensearch:2.11.1
+    container_name: opensearch
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=Admin123!"  # Базовая аутентификация
+      - plugins.security.ssl.http.enabled=false  # TLS отключен для dev
+      - plugins.security.ssl.transport.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "9200:9200"  # REST API
+      - "9600:9600"  # Performance Analyzer
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    networks:
+      - arbitrage-network
+    mem_limit: 1.5g
+    healthcheck:
+      test: ["CMD-SHELL", "curl -u admin:Admin123! -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # OpenSearch Dashboards - UI для визуализации логов и метрик
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.11.1
+    container_name: opensearch-dashboards
+    depends_on:
+      opensearch:
+        condition: service_healthy
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=false"
+      - "SERVER_HOST=0.0.0.0"
+    ports:
+      - "5601:5601"  # Web UI
+    networks:
+      - arbitrage-network
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+# Обновление существующего сервиса fluent-bit
+# (добавить зависимость от opensearch)
+  fluent-bit:
+    depends_on:
+      opensearch:
+        condition: service_healthy
+
+# Обновление существующего сервиса arbitrage-scanner
+# (добавить зависимость от opensearch для правильного порядка запуска)
+  arbitrage-scanner:
+    depends_on:
+      postgres:
+        condition: service_healthy
+      liquibase:
+        condition: service_completed_successfully
+      fluent-bit:
+        condition: service_started
+      opensearch:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+# Volumes
+volumes:
+  opensearch-data:
+    driver: local
+
+# Networks
+networks:
+  arbitrage-network:
+    driver: bridge
