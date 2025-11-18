@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.config.yaml)
-    implementation("io.ktor:ktor-server-call-logging:3.2.3")
+    implementation(libs.ktor.server.call.logging)
 
     // Koin
     implementation(libs.koin.ktor)
