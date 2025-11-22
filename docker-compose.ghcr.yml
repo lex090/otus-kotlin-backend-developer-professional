@@ -24,8 +24,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - dokploy-network
 
   liquibase:
     image: liquibase/liquibase:4.25
@@ -42,8 +40,6 @@ services:
     volumes:
       - ./arbitrage-scanner/arbitrage-scanner-repo-postgres/src/main/resources/db/changelog:/liquibase/changelog
     restart: "no"
-    networks:
-      - dokploy-network
 
   # Ktor приложение - образ из GitHub Container Registry
   arbitrage-scanner:
