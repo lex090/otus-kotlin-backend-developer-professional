@@ -24,6 +24,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - dokploy-network
 
   liquibase:
     image: liquibase/liquibase:4.25
@@ -40,6 +42,8 @@ services:
     volumes:
       - ./arbitrage-scanner/arbitrage-scanner-repo-postgres/src/main/resources/db/changelog:/liquibase/changelog
     restart: "no"
+    networks:
+      - dokploy-network
 
   # Ktor приложение - образ из GitHub Container Registry
   arbitrage-scanner:
@@ -50,25 +54,13 @@ services:
         condition: service_healthy
       liquibase:
         condition: service_completed_successfully
-      fluent-bit:
-        condition: service_started
     environment:
-      - LOGS_FB_HOSTS=fluent-bit
-      - LOGS_FB_PORT=24224
       - SERVICE_NAME=arbitrage-scanner
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_DB=arbitrage
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
-  # Fluent Bit для сбора stdout логов
-  fluent-bit:
-    image: fluent/fluent-bit:3.0
-    container_name: fluent-bit
-    volumes:
-      - ./config/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-    command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
 
 volumes:
   postgres-data:
