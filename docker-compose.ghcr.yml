@@ -118,16 +118,16 @@ services:
     ports:
       - "8090:8080"
 
-#  # Fluent Bit для сбора stdout логов
-#  fluent-bit:
-#    image: fluent/fluent-bit:3.0
-#    container_name: fluent-bit
-#    ports:
-#      - "24224:24224"
-#      - "2020:2020"
-#    volumes:
-#      - ./config/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-#    command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
+  # Fluent Bit для сбора stdout логов
+  fluent-bit:
+    image: fluent/fluent-bit:3.0
+    container_name: fluent-bit
+    ports:
+      - "24224:24224"
+      - "2020:2020"
+    volumes:
+      - ./config/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    command: ["/fluent-bit/bin/fluent-bit", "--config=/fluent-bit/etc/fluent-bit.conf"]
 
 volumes:
   postgres-data:
