@@ -1,14 +1,3 @@
-# Docker Compose конфигурация для запуска с образами из GitHub Container Registry
-#
-# Использование:
-#   docker-compose -f docker-compose.ghcr.yml up -d
-#
-# Для приватных образов необходима аутентификация:
-#   echo "ghp_your_token" | docker login ghcr.io -u lex090 --password-stdin
-#
-# Переменные окружения:
-#   ARBITRAGE_SCANNER_IMAGE_VERSION - версия образа ktor приложения (по умолчанию: latest)
-
 services:
   postgres:
     image: postgres:15-alpine
