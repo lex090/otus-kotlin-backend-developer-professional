@@ -12,7 +12,6 @@
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: postgres
     environment:
       POSTGRES_DB: arbitrage
       POSTGRES_USER: postgres
@@ -27,7 +26,6 @@ services:
 
   liquibase:
     image: liquibase/liquibase:4.25
-    container_name: liquibase
     depends_on:
       postgres:
         condition: service_healthy
@@ -42,9 +40,8 @@ services:
     restart: "no"
 
   # Ktor приложение - образ из GitHub Container Registry
-  arbitrage-scanner:
+  arbitrage-scanner-app-ktor:
     image: ghcr.io/lex090/arbitrage-scanner-app-ktor:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
-    container_name: arbitrage-scanner-app-ktor
     expose:
       - 8080
     depends_on:
@@ -62,4 +59,3 @@ services:
 
 volumes:
   postgres-data:
-  kafka-data:
