@@ -42,8 +42,6 @@ services:
   # Ktor приложение - образ из GitHub Container Registry
   arbitrage-scanner-app-ktor:
     image: ghcr.io/lex090/arbitrage-scanner-app-ktor:${ARBITRAGE_SCANNER_IMAGE_VERSION:-latest}
-    expose:
-      - 8080
     depends_on:
       postgres:
         condition: service_healthy
